@@ -15,7 +15,7 @@ import be.niels.billen.presentation.Style
 import org.koin.compose.koinInject
 
 @Composable
-fun PlayersView(modifier: Modifier) {
+fun PlayersView(modifier: Modifier = Modifier) {
     val viewModel: PlayersViewModel = koinInject()
     val players = viewModel.players.collectAsState().value
 

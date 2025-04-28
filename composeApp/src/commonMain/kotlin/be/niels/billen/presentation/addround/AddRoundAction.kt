@@ -14,4 +14,5 @@ sealed interface AddRoundAction {
         }
     }
     data class AddRound(val round: Round) : AddRoundAction
+    data object Cancel: AddRoundAction
 }

@@ -15,13 +15,11 @@ sealed interface Round {
         }
 
         override fun points(player: PlayerId) =
-            if (winner(player))
-                score.toInt() * (if (players.size == 1) 3 else 1)
-            else
-                -score.toInt()
-
-
-        private fun winner(playerId: PlayerId) = players.contains(playerId) && slams >= requiredSlams
+            if (players.contains(player)) {
+                (if (slams >= requiredSlams) score.toInt() else -score.toInt()) * (if (players.size == 1) 3 else 1)
+            } else {
+                if (slams >= requiredSlams) -score.toInt() else score.toInt()
+            }
     }
 
     data class Abandonce(val player: PlayerId, val slams: UInt = 0u) : Round {

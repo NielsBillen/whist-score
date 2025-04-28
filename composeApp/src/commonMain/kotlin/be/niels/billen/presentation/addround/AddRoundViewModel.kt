@@ -16,7 +16,6 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
         initialValue = emptyMap(),
     )
 
-
     fun onAction(action: AddRoundAction) {
         when (action) {
             is AddRoundAction.SetRoundType -> onAction(action)
@@ -24,6 +23,7 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
             is AddRoundAction.SetPlayers -> onAction(action)
             is AddRoundAction.SetSlams -> onAction(action)
             is AddRoundAction.AddRound -> onAction(action)
+            is AddRoundAction.Cancel -> onAction(action)
         }
     }
 
@@ -44,6 +44,9 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
     }
 
     fun onAction(action: AddRoundAction.AddRound) {
-       roundsRepository.update { it + action.round }
+        roundsRepository.update { it + action.round }
+    }
+
+    fun onAction(action: AddRoundAction.Cancel) {
     }
 }

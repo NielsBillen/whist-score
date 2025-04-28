@@ -70,7 +70,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

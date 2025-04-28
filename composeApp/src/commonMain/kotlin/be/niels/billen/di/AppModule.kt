@@ -13,7 +13,7 @@ val appModule = module {
     single { DefaultPlayerRepository() }.bind<PlayerRepository>()
     single { DefaultRoundsRepository() }.bind<RoundsRepository>()
     //single { DefaultGameRepository(get(), get()) }.bind<GameRepository>()
-    single { PlayersViewModel(get()) }
+    single { PlayersViewModel(get(),get()) }
     single { AppViewModel() }
     single { AddRoundViewModel(get(), get()) }
 }

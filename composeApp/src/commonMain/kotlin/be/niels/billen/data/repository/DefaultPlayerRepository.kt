@@ -19,10 +19,10 @@ class DefaultPlayerRepository : PlayerRepository {
 
     companion object {
         val defaultPlayers = mapOf(
-            PlayerId.Player1 to Player("Player 1", Color(0xFFFFB703)),
-            PlayerId.Player2 to Player("Player 2", Color(0xFF219EBC)),
-            PlayerId.Player3 to Player("Player 3", Color(0xFF8ECAE6)),
-            PlayerId.Player4 to Player("Player 4", Color(0xFFFB8500))
+            PlayerId.Player1 to Player("Player 1", Color(0xFF3b4863)),
+            PlayerId.Player2 to Player("Player 2", Color(0xFFaf945a)),
+            PlayerId.Player3 to Player("Player 3", Color(0xFF9a4a4b)),
+            PlayerId.Player4 to Player("Player 4", Color(0xFF405850))
         )
     }
 }
