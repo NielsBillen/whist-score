@@ -3,7 +3,7 @@ package be.niels.billen.domain
 import androidx.compose.ui.graphics.Color
 
 data class Game(val players: Map<PlayerId, Player> = defaultPlayers, val rounds: List<Round> = emptyList()) {
-    fun score(playerId: PlayerId) = scores.getOrElse(playerId, { 0 })
+    fun score(playerId: PlayerId) = scores.getOrElse(playerId) { 0 }
 
     private val scores: Map<PlayerId, Int> by lazy {
         PlayerId.entries.associateWith { player -> rounds.fold(0) { score, round -> score + round.points(player) } }

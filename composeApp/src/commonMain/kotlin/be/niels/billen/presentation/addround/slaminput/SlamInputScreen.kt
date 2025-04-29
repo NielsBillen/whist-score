@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.addround
+package be.niels.billen.presentation.addround.slaminput
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
+import be.niels.billen.presentation.addround.AddRoundAction
 
 @Composable
 fun SlamInputScreen(selectedSlams: UInt?, onAction: (AddRoundAction) -> Unit) {

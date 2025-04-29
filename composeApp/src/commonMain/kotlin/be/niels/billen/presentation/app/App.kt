@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.AppTheme
 import be.niels.billen.presentation.addround.AddRound
+import be.niels.billen.presentation.background.Background
 import be.niels.billen.presentation.overview.Overview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -17,6 +18,8 @@ import org.koin.compose.koinInject
 fun App() {
     AppTheme {
         Surface(Modifier.fillMaxSize()) {
+            Background(Modifier.fillMaxSize())
+
             val viewModel: AppViewModel = koinInject()
             val screen = viewModel.screen.collectAsState()
 

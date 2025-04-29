@@ -7,6 +7,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.Style
+import be.niels.billen.presentation.addround.playerselection.PlayerSelectionScreen
+import be.niels.billen.presentation.addround.roundinput.RoundTypeInputScreen
+import be.niels.billen.presentation.addround.slaminput.SlamInputScreen
 import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
 import org.koin.compose.koinInject
@@ -26,7 +29,7 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
     }, contentAlignment = Alignment.Center, content = { state ->
         if (state.roundType == null) {
             RoundTypeInputScreen(
-                selectedRoundType = state.roundType, onAction = { viewModel.onAction(it) }, onCancel = {
+                initialRoundType = state.roundType, onAction = { viewModel.onAction(it) }, onCancel = {
                     onAction(AppAction.Navigate(AppScreen.OVERVIEW))
                 })
         } else if (state.players.isEmpty()) {
