@@ -1,50 +1,78 @@
 package be.niels.billen.presentation.addround.playerselection
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.RadioButton
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.RoundType
+import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.addround.AddRoundAction
+import be.niels.billen.presentation.addround.AddRoundPanel
+import be.niels.billen.presentation.components.Selectable
 
 @Composable
 fun PlayerSelectionScreen(
     modifier: Modifier = Modifier,
     roundType: RoundType,
     players: Map<PlayerId, Player>,
-    selectedPlayers: Set<PlayerId>,
-    onAction: (AddRoundAction) -> Unit
+    initialSelection: Set<PlayerId>,
+    onAction: (AddRoundAction) -> Unit,
+    onCancel: () -> Unit,
 ) {
-    when (roundType) {
-        RoundType.Regular -> MultiPlayerChoice(modifier, players, selectedPlayers, onAction)
-        RoundType.Abandonce -> SinglePlayerChoice(modifier, players, selectedPlayers, onAction)
+    var selection by remember { mutableStateOf(initialSelection) }
+
+    AddRoundPanel(
+        title = roundType.title,
+        description = roundType.description,
+        onBack = onCancel,
+        onNext = { onAction(AddRoundAction.SetPlayers(selection)) },
+        nextEnabled = { selection.isNotEmpty() },
+        modifier = modifier
+    ) {
+        when (roundType) {
+            RoundType.Regular, RoundType.Treble -> MultiPlayerChoice(
+                players,
+                selection,
+                onSelectionChange = { id, selected ->
+                    selection = if (selected) selection + id
+                    else selection - id
+                })
+
+
+            RoundType.Abandonce, RoundType.Misere -> SinglePlayerChoice(
+                players, selection, onSelection = { selection = setOf(it) })
+
+        }
     }
 }
 
 @Composable
 private fun MultiPlayerChoice(
-    modifier: Modifier = Modifier,
     players: Map<PlayerId, Player>,
     selectedPlayers: Set<PlayerId>,
-    onAction: (AddRoundAction) -> Unit,
+    modifier: Modifier = Modifier,
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    Column(modifier) {
-        Text("Select player(s)")
-
-        Column {
-            players.forEach { (id, player) ->
-                val checked = selectedPlayers.contains(id)
-                val enabled = checked || selectedPlayers.size < 2
-                PlayerCheckBox(id, player, selectedPlayers.contains(id), enabled, onAction)
-            }
+    Column(
+        modifier,
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+    ) {
+        players.forEach { (id, player) ->
+            val checked = selectedPlayers.contains(id)
+            val enabled = checked || selectedPlayers.size < 2
+            PlayerCheckBox(id, player, selectedPlayers.contains(id), enabled, onSelectionChange)
         }
     }
+
 }
 
 
@@ -54,41 +82,59 @@ private fun PlayerCheckBox(
     player: Player,
     selected: Boolean,
     enabled: Boolean,
-    onAction: (AddRoundAction) -> Unit
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Checkbox(
-            checked = selected,
-            enabled = enabled,
-            onCheckedChange = { onAction(AddRoundAction.SelectPlayer(id, !selected)) })
-        Text(player.name)
+    Selectable(
+        selected = selected,
+        enabled = enabled,
+        onClick = { onSelectionChange(id, !selected) },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            player.name, Modifier.padding(Style.Dimensions.paddingLarge),
+        )
     }
 }
 
 @Composable
 private fun SinglePlayerChoice(
-    modifier: Modifier = Modifier,
     players: Map<PlayerId, Player>,
     selectedPlayers: Set<PlayerId>,
-    onAction: (AddRoundAction) -> Unit
+    modifier: Modifier = Modifier,
+    onSelection: (PlayerId) -> Unit,
 ) {
-    Column {
-        Text("Select player:")
-
-        Column(modifier) {
-            players.forEach { (id, player) ->
-                PlayerRadioButton(id, player, selectedPlayers.contains(id), onAction)
-            }
+    Column(
+        modifier,
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+    ) {
+        players.forEach { (id, player) ->
+            PlayerRadioButton(id, player, selectedPlayers.contains(id), onSelection)
         }
     }
+
 }
 
 @Composable
-private fun PlayerRadioButton(id: PlayerId, player: Player, selected: Boolean, onAction: (AddRoundAction) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        RadioButton(
-            selected = selected,
-            onClick = { onAction(AddRoundAction.SetPlayers(setOf(id))) })
-        Text(player.name)
+private fun PlayerRadioButton(
+    id: PlayerId,
+    player: Player,
+    selected: Boolean,
+    onSelection: (PlayerId) -> Unit
+) {
+    Selectable(
+        selected = selected,
+        onClick = { onSelection(id) },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            player.name, Modifier.padding(Style.Dimensions.paddingLarge),
+        )
     }
 }
+
+private val RoundType.title: String
+    get() = if (singlePlayer) "Select player:" else "Select player(s)"
+
+
+private val RoundType.description: String
+    get() = if (singlePlayer) "Choose the player that played this round" else "Choose between the one player or two players that played this round"

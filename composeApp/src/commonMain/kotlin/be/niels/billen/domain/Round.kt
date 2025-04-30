@@ -1,37 +1,80 @@
 package be.niels.billen.domain
 
+import kotlin.math.abs
+
 sealed interface Round {
+    val players: Set<PlayerId>
+    val requiredSlams: Int
+    val slams: Int
+    val baseScore: Int
+    val overScoreMultiplier: Int
 
-    fun points(player: PlayerId): Int
+    fun points(player: PlayerId) =
+        if (isWinner(player))
+            basePoints * loserCount / winnerCount
+        else
+            -basePoints
 
-    data class Regular(val players: Set<PlayerId>, val slams: UInt = 0u) : Round {
-        private val requiredSlams = if (players.size == 1) 5u else 8u
-        private val score = 2u + if (slams > requiredSlams) slams - requiredSlams else requiredSlams - slams
+
+    val winnerCount: Int
+        get() = if (slams >= requiredSlams) players.size else PlayerId.entries.size - players.size
+
+    val loserCount: Int
+        get() = if (slams < requiredSlams) players.size else PlayerId.entries.size - players.size
+
+    fun isWinner(playerId: PlayerId) =
+        if (requiredSlams >= slams) players.contains(playerId) else !players.contains(playerId)
+
+    private val basePoints: Int
+        get() = baseScore + abs(slams - requiredSlams) * overScoreMultiplier
+
+
+    data class Regular(override val players: Set<PlayerId>, override val slams: Int = 0) : Round {
+        override val requiredSlams = if (players.size == 1) 5 else 8
+        override val baseScore = 2
+        override val overScoreMultiplier = 1
 
         init {
             require(players.isNotEmpty()) { "there must be at least one winner" }
             require(players.size < 3) { "there can be at most two winners" }
-            require(slams in 0u..13u) { "the number of slams must be between 0 and 13 " }
+            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
         }
-
-        override fun points(player: PlayerId) =
-            if (players.contains(player)) {
-                (if (slams >= requiredSlams) score.toInt() else -score.toInt()) * (if (players.size == 1) 3 else 1)
-            } else {
-                if (slams >= requiredSlams) -score.toInt() else score.toInt()
-            }
     }
 
-    data class Abandonce(val player: PlayerId, val slams: UInt = 0u) : Round {
-        override fun points(player: PlayerId) =
-            if (this.player == player)
-                if (slams >= REQUIRED_SLAMS) 9 else -9
-            else
-                if (slams >= REQUIRED_SLAMS) -3 else 3
-
-        companion object {
-            const val REQUIRED_SLAMS = 9u
+    data class Abandonce(override val players: Set<PlayerId>, override val slams: Int = 0) :
+        Round {
+        init {
+            require(players.size == 1) { "Abandonce is a single player round" }
+            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
         }
+
+        override val requiredSlams = 9
+        override val baseScore = 3
+        override val overScoreMultiplier = 0
+    }
+
+    data class Misere(override val players: Set<PlayerId>, override val slams: Int = 0) :
+        Round {
+        init {
+            require(players.size == 1) { "Misere is a single player round" }
+            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
+        }
+
+        override val requiredSlams = 0
+        override val baseScore = 5
+        override val overScoreMultiplier = 0
+    }
+
+    data class Treble(override val players: Set<PlayerId>, override val slams: Int = 0) :
+        Round {
+        init {
+            require(players.size == 2) { "Treble is a two player round" }
+            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
+        }
+
+        override val requiredSlams = 8
+        override val baseScore = 4
+        override val overScoreMultiplier = 2
     }
 }
 

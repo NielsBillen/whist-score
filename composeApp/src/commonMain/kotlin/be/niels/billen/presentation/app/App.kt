@@ -1,6 +1,8 @@
 package be.niels.billen.presentation.app
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,9 +25,11 @@ fun App() {
             val viewModel: AppViewModel = koinInject()
             val screen = viewModel.screen.collectAsState()
 
-            when (screen.value) {
-                AppScreen.OVERVIEW -> Overview { viewModel.onAction(it) }
-                AppScreen.ADD_ROUND -> AddRound { viewModel.onAction(it) }
+            Box(Modifier.safeDrawingPadding()) {
+                when (screen.value) {
+                    AppScreen.OVERVIEW -> Overview { viewModel.onAction(it) }
+                    AppScreen.ADD_ROUND -> AddRound { viewModel.onAction(it) }
+                }
             }
         }
     }

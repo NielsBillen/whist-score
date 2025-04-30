@@ -35,15 +35,16 @@ fun Background(modifier: Modifier = Modifier, tint: Color = Color(0xFF1a1a1f)) {
         val scale = 0.3f
         val maxSize = painters.maxOf { max(it.intrinsicSize.width, it.intrinsicSize.height) } * scale
         val spacing = 0.25f * maxSize
+        val offset = (0.1f * maxSize).mod(maxSize)
         val horizontalCount = ceil((size.width + spacing) / (maxSize + spacing)).toInt()
         val verticalCount = ceil((size.height + spacing) / (maxSize + spacing)).toInt()
 
-        for (j in 0..verticalCount) {
+        for (j in -1..verticalCount) {
             val indent = (j % 2) * (maxSize + spacing) * 0.5f
-            val y = j * (maxSize + spacing) + maxSize * 0.5f
+            val y = j * (maxSize + spacing) + maxSize * 0.5f + offset
             for (i in 0..horizontalCount) {
-                val x = i * (maxSize + spacing) + maxSize * 0.5f - indent
-                val painter = painters[(i + 2 * j) % painters.size]
+                val x = i * (maxSize + spacing) + maxSize * 0.5f - indent +offset
+                val painter = painters[(i + 2 * j).mod(painters.size)]
                 drawCentered(Offset(x, y), painter, scale, colorFilter)
             }
         }

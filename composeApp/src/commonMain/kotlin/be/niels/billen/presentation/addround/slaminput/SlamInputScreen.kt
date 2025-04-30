@@ -1,37 +1,63 @@
 package be.niels.billen.presentation.addround.slaminput
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.IconToggleButton
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.addround.AddRoundAction
+import be.niels.billen.presentation.addround.AddRoundPanel
+import be.niels.billen.presentation.components.Selectable
 
 @Composable
-fun SlamInputScreen(selectedSlams: UInt?, onAction: (AddRoundAction) -> Unit) {
-    Column {
-        Text("Select slams:")
+fun SlamInputScreen(
+    modifier: Modifier = Modifier,
+    initialSlams: Int?,
+    onCancel: () -> Unit,
+    onAction: (AddRoundAction) -> Unit
+) {
+    var selectedSlams by remember { mutableStateOf(initialSlams) }
 
+    AddRoundPanel(
+        title = "Select slams",
+        description = "Choose the number of slams the player(s) achieved this round.",
+        onBack = onCancel,
+        onNext = { selectedSlams?.let { onAction(AddRoundAction.SetSlams(it)) } },
+        nextEnabled = { selectedSlams != null },
+        modifier = modifier,
+    ) {
         FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
-            verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
+            maxItemsInEachRow = 7,
+            horizontalArrangement = Arrangement.spacedBy(
+                Style.Dimensions.paddingLarge,
+                Alignment.CenterHorizontally
+            ),
+            verticalArrangement = Arrangement.spacedBy(
+                Style.Dimensions.paddingLarge,
+                Alignment.CenterVertically
+            )
         ) {
-            for (slams in 0u..13u) {
+            for (slams in 0..13) {
                 val selected = selectedSlams == slams
 
-                IconToggleButton(
-                    checked = selected,
-                    onCheckedChange = { onAction(AddRoundAction.SetSlams(slams)) },
-                    modifier = Modifier.border(1.dp, Color.Black, CircleShape)
+                Selectable(
+                    selected,
+                    onClick = { selectedSlams = slams },
+                    Modifier.requiredSize(56.dp)
                 ) {
-                    Text("$slams")
+                    Text(
+                        "$slams",
+                        Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                    )
                 }
             }
         }
