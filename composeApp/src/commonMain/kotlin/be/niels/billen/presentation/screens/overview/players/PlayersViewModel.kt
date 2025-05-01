@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.players
+package be.niels.billen.presentation.screens.overview.players
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

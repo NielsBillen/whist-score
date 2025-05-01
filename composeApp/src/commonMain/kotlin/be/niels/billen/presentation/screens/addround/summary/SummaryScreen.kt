@@ -1,8 +1,8 @@
-package be.niels.billen.presentation.addround.summary
+package be.niels.billen.presentation.screens.addround.summary
 
 import androidx.compose.runtime.Composable
 import be.niels.billen.domain.Round
-import be.niels.billen.presentation.addround.AddRoundPanel
+import be.niels.billen.presentation.screens.addround.AddRoundPanel
 
 @Composable
 fun SummaryScreen(

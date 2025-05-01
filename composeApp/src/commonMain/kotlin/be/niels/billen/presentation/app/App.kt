@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.AppTheme
-import be.niels.billen.presentation.addround.AddRound
+import be.niels.billen.presentation.screens.addround.AddRound
 import be.niels.billen.presentation.background.Background
-import be.niels.billen.presentation.overview.Overview
+import be.niels.billen.presentation.screens.overview.Overview
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 

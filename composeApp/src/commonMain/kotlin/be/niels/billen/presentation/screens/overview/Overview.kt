@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.overview
+package be.niels.billen.presentation.screens.overview
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
-import be.niels.billen.presentation.players.PlayersView
+import be.niels.billen.presentation.screens.overview.players.PlayersView
 
 @Composable
 fun Overview(onAction: (AppAction) -> Unit) {

@@ -41,14 +41,18 @@ sealed interface Round {
         }
     }
 
-    data class Abandonce(override val players: Set<PlayerId>, override val slams: Int = 0) :
+    data class Abandonce(
+        override val players: Set<PlayerId>,
+        override val slams: Int = 0,
+        override val requiredSlams: Int = 9
+    ) :
         Round {
         init {
             require(players.size == 1) { "Abandonce is a single player round" }
             require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
+            require(requiredSlams in 9..12) { "the bid must be between 0 and 12" }
         }
 
-        override val requiredSlams = 9
         override val baseScore = 3
         override val overScoreMultiplier = 0
     }

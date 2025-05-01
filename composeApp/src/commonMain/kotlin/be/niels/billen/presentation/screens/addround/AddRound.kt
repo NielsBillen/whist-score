@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.addround
+package be.niels.billen.presentation.screens.addround
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
@@ -7,12 +7,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.Style
-import be.niels.billen.presentation.addround.playerselection.PlayerSelectionScreen
-import be.niels.billen.presentation.addround.roundinput.RoundTypeInputScreen
-import be.niels.billen.presentation.addround.slaminput.SlamInputScreen
-import be.niels.billen.presentation.addround.summary.SummaryScreen
 import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
+import be.niels.billen.presentation.screens.addround.bidinput.BidInputScreen
+import be.niels.billen.presentation.screens.addround.playerselection.PlayerSelectionScreen
+import be.niels.billen.presentation.screens.addround.roundinput.RoundTypeInputScreen
+import be.niels.billen.presentation.screens.addround.slaminput.SlamInputScreen
+import be.niels.billen.presentation.screens.addround.summary.SummaryScreen
 import org.koin.compose.koinInject
 
 
@@ -47,13 +48,18 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
                         roundType = it,
                         players = players.value,
                         initialSelection = state.players,
-                        onCancel = { viewModel.onAction(AddRoundAction.Navigate(AddRoundScreen.SELECT_ROUND_TYPE)) },
+                        onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                         onAction = { viewModel.onAction(it) })
                 }
 
                 AddRoundScreen.SELECT_SLAMS -> SlamInputScreen(
                     initialSlams = state.slams,
-                    onCancel = { viewModel.onAction(AddRoundAction.Navigate(AddRoundScreen.SELECT_PLAYERS)) },
+                    onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
+                    onAction = { viewModel.onAction(it) })
+
+                AddRoundScreen.SELECT_BID -> BidInputScreen(
+                    initialBid = state.bid,
+                    onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                     onAction = { viewModel.onAction(it) })
 
                 AddRoundScreen.SUMMARY -> state.round.let {
@@ -61,7 +67,7 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
 
                     SummaryScreen(
                         round = it,
-                        onBack = { viewModel.onAction(AddRoundAction.Navigate(AddRoundScreen.SELECT_SLAMS)) },
+                        onBack = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                         onNext = { onAction(AppAction.AddRound(it)) }
                     )
                 }

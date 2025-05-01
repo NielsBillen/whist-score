@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.addround
+package be.niels.billen.presentation.screens.addround
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

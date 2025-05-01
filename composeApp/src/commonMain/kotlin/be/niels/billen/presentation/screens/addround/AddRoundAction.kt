@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.addround
+package be.niels.billen.presentation.screens.addround
 
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.RoundType
@@ -12,5 +12,11 @@ sealed interface AddRoundAction {
         }
     }
 
-    data class Navigate(val screen: AddRoundScreen) : AddRoundAction
+    data class SetBid(val bid: Int) : AddRoundAction {
+        init {
+            require(bid in 9..13) { "the bid of slams must be between [9..13]" }
+        }
+    }
+
+    data object PreviousScreen: AddRoundAction
 }

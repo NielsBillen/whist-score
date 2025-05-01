@@ -1,4 +1,4 @@
-package be.niels.billen.presentation.addround.roundinput
+package be.niels.billen.presentation.screens.addround.roundinput
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import be.niels.billen.domain.RoundType
 import be.niels.billen.presentation.Style
-import be.niels.billen.presentation.addround.AddRoundAction
-import be.niels.billen.presentation.addround.AddRoundPanel
+import be.niels.billen.presentation.screens.addround.AddRoundAction
+import be.niels.billen.presentation.screens.addround.AddRoundPanel
 import be.niels.billen.presentation.components.Selectable
 
 @Composable

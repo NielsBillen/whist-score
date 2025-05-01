@@ -1,23 +1,19 @@
-package be.niels.billen.presentation.addround.playerselection
+package be.niels.billen.presentation.screens.addround.playerselection
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.RoundType
 import be.niels.billen.presentation.Style
-import be.niels.billen.presentation.addround.AddRoundAction
-import be.niels.billen.presentation.addround.AddRoundPanel
 import be.niels.billen.presentation.components.Selectable
+import be.niels.billen.presentation.screens.addround.AddRoundAction
+import be.niels.billen.presentation.screens.addround.AddRoundPanel
 
 @Composable
 fun PlayerSelectionScreen(
@@ -35,22 +31,20 @@ fun PlayerSelectionScreen(
         description = roundType.description,
         onBack = onCancel,
         onNext = { onAction(AddRoundAction.SetPlayers(selection)) },
-        nextEnabled = { selection.isNotEmpty() },
+        nextEnabled = { selection.size in roundType.playerCountRange },
         modifier = modifier
     ) {
-        when (roundType) {
-            RoundType.Regular, RoundType.Treble -> MultiPlayerChoice(
+        if (roundType.singlePlayer) {
+            SinglePlayerChoice(
+                players, selection, onSelection = { selection = setOf(it) })
+        } else {
+            MultiPlayerChoice(
                 players,
                 selection,
                 onSelectionChange = { id, selected ->
                     selection = if (selected) selection + id
                     else selection - id
                 })
-
-
-            RoundType.Abandonce, RoundType.Misere -> SinglePlayerChoice(
-                players, selection, onSelection = { selection = setOf(it) })
-
         }
     }
 }
@@ -137,4 +131,8 @@ private val RoundType.title: String
 
 
 private val RoundType.description: String
-    get() = if (singlePlayer) "Choose the player that played this round" else "Choose between the one player or two players that played this round"
+    get() = when {
+        singlePlayer -> "Choose the player that played this round"
+        playerCountRange.first == playerCountRange.last -> "Choose the ${playerCountRange.first} players that played this round"
+        else -> "Choose between ${playerCountRange.first} and ${playerCountRange.last} players that played this round"
+    }

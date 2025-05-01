@@ -1,8 +1,9 @@
-package be.niels.billen.presentation.addround
+package be.niels.billen.presentation.screens.addround
 
 enum class AddRoundScreen {
     SELECT_ROUND_TYPE,
     SELECT_PLAYERS,
     SELECT_SLAMS,
+    SELECT_BID,
     SUMMARY
 }
