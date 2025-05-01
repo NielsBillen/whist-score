@@ -3,82 +3,114 @@ package be.niels.billen.domain
 import kotlin.math.abs
 
 sealed interface Round {
-    val players: Set<PlayerId>
-    val requiredSlams: Int
-    val slams: Int
-    val baseScore: Int
-    val overScoreMultiplier: Int
 
-    fun points(player: PlayerId) =
-        if (isWinner(player))
-            basePoints * loserCount / winnerCount
-        else
-            -basePoints
+    fun points(player: PlayerId): Int
 
 
-    val winnerCount: Int
-        get() = if (slams >= requiredSlams) players.size else PlayerId.entries.size - players.size
-
-    val loserCount: Int
-        get() = if (slams < requiredSlams) players.size else PlayerId.entries.size - players.size
-
-    fun isWinner(playerId: PlayerId) =
-        if (requiredSlams >= slams) players.contains(playerId) else !players.contains(playerId)
-
-    private val basePoints: Int
-        get() = baseScore + abs(slams - requiredSlams) * overScoreMultiplier
+    fun isWinner(playerId: PlayerId): Boolean
 
 
-    data class Regular(override val players: Set<PlayerId>, override val slams: Int = 0) : Round {
-        override val requiredSlams = if (players.size == 1) 5 else 8
-        override val baseScore = 2
-        override val overScoreMultiplier = 1
+    sealed interface MultiPlayerRound : Round {
+        val players: Set<PlayerId>
+        val playersWon: Boolean
+
+        val winnerCount: Int
+            get() = if (playersWon) players.size else PlayerId.entries.size - players.size
+
+        val loserCount: Int
+            get() = if (playersWon) PlayerId.entries.size - players.size else players.size
+
+        override fun isWinner(playerId: PlayerId) =
+            if (playersWon) players.contains(playerId) else !players.contains(playerId)
+    }
+
+    sealed interface SinglePlayerRound : Round {
+        val player: PlayerId
+        val playerWon: Boolean
+
+        val penaltyPoints: Int
+
+        override fun isWinner(playerId: PlayerId) =
+            if (playerWon) this.player == player else this.player != player
+
+        override fun points(player: PlayerId): Int =
+            if (this.player == player) {
+                if (playerWon) 3 * penaltyPoints else -penaltyPoints * 3
+            } else {
+                if (playerWon) -penaltyPoints else penaltyPoints
+            }
+    }
+
+    data class Regular(override val players: Set<PlayerId>, val slams: Int = 0) : MultiPlayerRound {
+        val requiredSlams = if (players.size == 1) 5 else 8
+        override val playersWon = slams >= requiredSlams
 
         init {
             require(players.isNotEmpty()) { "there must be at least one winner" }
             require(players.size < 3) { "there can be at most two winners" }
             require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
         }
+
+        override fun points(player: PlayerId) =
+            if (isWinner(player))
+                basePoints * loserCount / winnerCount
+            else
+                -basePoints
+
+        private val basePoints: Int
+            get() = 2 + abs(slams - requiredSlams)
     }
 
     data class Abandonce(
-        override val players: Set<PlayerId>,
-        override val slams: Int = 0,
-        override val requiredSlams: Int = 9
+        override val player: PlayerId,
+        override val playerWon: Boolean = true,
     ) :
-        Round {
-        init {
-            require(players.size == 1) { "Abandonce is a single player round" }
-            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
-            require(requiredSlams in 9..12) { "the bid must be between 0 and 12" }
-        }
-
-        override val baseScore = 3
-        override val overScoreMultiplier = 0
+        SinglePlayerRound {
+        override val penaltyPoints = 3
     }
 
-    data class Misere(override val players: Set<PlayerId>, override val slams: Int = 0) :
-        Round {
-        init {
-            require(players.size == 1) { "Misere is a single player round" }
-            require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
-        }
-
-        override val requiredSlams = 0
-        override val baseScore = 5
-        override val overScoreMultiplier = 0
+    data class Misere(
+        override val player: PlayerId,
+        override val playerWon: Boolean = true,
+    ) :
+        SinglePlayerRound {
+        override val penaltyPoints = 5
     }
 
-    data class Treble(override val players: Set<PlayerId>, override val slams: Int = 0) :
-        Round {
+    data class OpenMisere(
+        override val player: PlayerId,
+        override val playerWon: Boolean = true,
+    ) :
+        SinglePlayerRound {
+        override val penaltyPoints = 10
+    }
+
+    data class SoloSlim(
+        override val player: PlayerId,
+        override val playerWon: Boolean = true,
+    ) :
+        SinglePlayerRound {
+        override val penaltyPoints = 15
+    }
+
+
+    data class Treble(override val players: Set<PlayerId>, val slams: Int = 0) : MultiPlayerRound {
+        val requiredSlams = if (players.size == 1) 5 else 8
+        override val playersWon = slams >= requiredSlams
+
         init {
-            require(players.size == 2) { "Treble is a two player round" }
+            require(players.size == 2) { "Treble is played by two players" }
             require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
         }
 
-        override val requiredSlams = 8
-        override val baseScore = 4
-        override val overScoreMultiplier = 2
+        override fun points(player: PlayerId) =
+            if (isWinner(player))
+                basePoints * loserCount / winnerCount
+            else
+                -basePoints
+
+        private val basePoints: Int
+            get() = 4 + abs(slams - requiredSlams) * 2
     }
 }
 

@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
+import be.niels.billen.presentation.screens.addround.bidachievedinput.BidAchievedInput
 import be.niels.billen.presentation.screens.addround.bidinput.BidInputScreen
 import be.niels.billen.presentation.screens.addround.playerselection.PlayerSelectionScreen
 import be.niels.billen.presentation.screens.addround.roundinput.RoundTypeInputScreen
@@ -59,6 +60,11 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
 
                 AddRoundScreen.SELECT_BID -> BidInputScreen(
                     initialBid = state.bid,
+                    onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
+                    onAction = { viewModel.onAction(it) })
+
+                AddRoundScreen.SELECT_BID_ACHIEVED -> BidAchievedInput(
+                    initialBidAchieved = state.playerWon,
                     onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                     onAction = { viewModel.onAction(it) })
 

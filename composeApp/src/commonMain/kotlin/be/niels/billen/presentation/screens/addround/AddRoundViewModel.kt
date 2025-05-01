@@ -24,6 +24,7 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
             is AddRoundAction.SetPlayers -> onAction(action)
             is AddRoundAction.SetSlams -> onAction(action)
             is AddRoundAction.SetBid -> onAction(action)
+            is AddRoundAction.SetBidAchieved -> onAction(action)
             is AddRoundAction.PreviousScreen -> onAction(action)
         }
     }
@@ -45,6 +46,11 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
 
     fun onAction(action: AddRoundAction.SetBid) {
         _state.update { it.setBid(action.bid).setScreen(it.nextScreen) }
+    }
+
+
+    fun onAction(action: AddRoundAction.SetBidAchieved) {
+        _state.update { it.setBidAchieved(action.bidAchieved).setScreen(it.nextScreen) }
     }
 
 
@@ -75,32 +81,18 @@ private val AddRoundState.previousScreen: AddRoundScreen
 
 private val RoundType.screens: List<AddRoundScreen>
     get() = when (this) {
-        RoundType.Regular -> listOf(
+        RoundType.Regular, RoundType.Treble -> listOf(
             AddRoundScreen.SELECT_ROUND_TYPE,
             AddRoundScreen.SELECT_PLAYERS,
             AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SUMMARY
         )
 
-        RoundType.Abandonce -> listOf(
+        RoundType.Abandonce, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere, RoundType.SoloSlim -> listOf(
             AddRoundScreen.SELECT_ROUND_TYPE,
-            AddRoundScreen.SELECT_BID,
             AddRoundScreen.SELECT_PLAYERS,
-            AddRoundScreen.SELECT_SLAMS,
+            AddRoundScreen.SELECT_BID_ACHIEVED,
             AddRoundScreen.SUMMARY
         )
 
-        RoundType.Misere -> listOf(
-            AddRoundScreen.SELECT_ROUND_TYPE,
-            AddRoundScreen.SELECT_PLAYERS,
-            AddRoundScreen.SELECT_SLAMS,
-            AddRoundScreen.SUMMARY
-        )
-
-        RoundType.Treble -> listOf(
-            AddRoundScreen.SELECT_ROUND_TYPE,
-            AddRoundScreen.SELECT_PLAYERS,
-            AddRoundScreen.SELECT_SLAMS,
-            AddRoundScreen.SUMMARY
-        )
     }

@@ -14,7 +14,7 @@ fun SummaryScreen(
         title = "Summary",
         onBack = onBack,
         onNext = onNext,
-        nextEnabled = { true}
+        nextEnabled = { true }
     ) {
     }
 }

@@ -127,12 +127,16 @@ private fun PlayerRadioButton(
 }
 
 private val RoundType.title: String
-    get() = if (singlePlayer) "Select player:" else "Select player(s)"
+    get() = when (this) {
+        RoundType.Regular -> "Select player(s)"
+        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Select player"
+        RoundType.Treble -> "Select players"
+    }
 
 
 private val RoundType.description: String
-    get() = when {
-        singlePlayer -> "Choose the player that played this round"
-        playerCountRange.first == playerCountRange.last -> "Choose the ${playerCountRange.first} players that played this round"
-        else -> "Choose between ${playerCountRange.first} and ${playerCountRange.last} players that played this round"
+    get() = when (this) {
+        RoundType.Regular -> "Choose between one and two players that played this round"
+        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Choose the player that played this round"
+        RoundType.Treble -> "Choose the two players that played this round"
     }

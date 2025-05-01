@@ -2,6 +2,7 @@ package be.niels.billen.presentation.screens.addround
 
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.Round
+import be.niels.billen.domain.Round.*
 import be.niels.billen.domain.RoundType
 
 data class AddRoundState(
@@ -9,28 +10,35 @@ data class AddRoundState(
     val roundType: RoundType? = null,
     val bid: Int? = null,
     val players: Set<PlayerId> = emptySet(),
+    val playerWon: Boolean? = null,
     val slams: Int? = null
 ) {
     fun setRoundType(roundType: RoundType) = AddRoundState(roundType = roundType)
 
     fun setScreen(screen: AddRoundScreen) = copy(screen = screen)
 
-    fun setPlayers(players: Set<PlayerId>): AddRoundState =
-        copy(players = players)
+    fun setPlayers(players: Set<PlayerId>) = copy(players = players)
 
-    fun setSlams(slams: Int): AddRoundState =
-        copy(slams = slams)
+    fun setSlams(slams: Int) = copy(slams = slams)
 
-    fun setBid(slams: Int): AddRoundState = copy(bid = slams)
+    fun setBid(slams: Int) = copy(bid = slams)
+
+    fun setBidAchieved(bidAchieved: Boolean) = copy(playerWon = bidAchieved)
 
     val round: Round? by lazy {
-        if (roundType == null || slams == null || players.isEmpty()) return@lazy null
+        if (roundType == null || players.isEmpty()) return@lazy null
 
         return@lazy when (roundType) {
-            RoundType.Regular -> Round.Regular(players, slams)
-            RoundType.Abandonce -> if (bid == null) null  else Round.Abandonce(players, slams, bid)
-            RoundType.Misere -> Round.Misere(players, slams)
-            RoundType.Treble -> Round.Treble(players, slams)
+            RoundType.Regular -> if (slams == null) null else Regular(players, slams)
+            RoundType.Treble -> if (slams == null) null else Treble(players, slams)
+            RoundType.Abandonce, RoundType.AbandonceInTrump -> if (playerWon == null) null else Abandonce(
+                players.first(),
+                playerWon
+            )
+
+            RoundType.Misere -> if (playerWon == null) null else Misere(players.first(), playerWon)
+            RoundType.OpenMisere -> if (playerWon == null) null else OpenMisere(players.first(), playerWon)
+            RoundType.SoloSlim -> if (playerWon == null) null else SoloSlim(players.first(), playerWon)
         }
     }
 }
