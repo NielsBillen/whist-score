@@ -26,6 +26,7 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
             is AddRoundAction.SetBid -> onAction(action)
             is AddRoundAction.SetBidAchieved -> onAction(action)
             is AddRoundAction.PreviousScreen -> onAction(action)
+            is AddRoundAction.SetPassRound -> onAction(action)
         }
     }
 
@@ -53,6 +54,9 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
         _state.update { it.setBidAchieved(action.bidAchieved).setScreen(it.nextScreen) }
     }
 
+    fun onAction(action: AddRoundAction.SetPassRound) {
+        _state.update { it.setPassRound(action.passRound).setScreen(it.nextScreen) }
+    }
 
     fun onAction(action: AddRoundAction.PreviousScreen) {
         _state.update { it.copy(screen = it.previousScreen) }

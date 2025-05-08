@@ -19,21 +19,22 @@ import be.niels.billen.presentation.theme.icons.Spades
 import kotlin.math.ceil
 import kotlin.math.max
 
+private val images = listOf(
+    Icons.Clubs,
+    Icons.Hearts,
+    Icons.Diamonds,
+    Icons.Spades,
+)
+
+const val scale = 0.3f
+
 @Composable
 fun Background(modifier: Modifier = Modifier, tint: Color = Color(0xFF1a1a1f)) {
-    val images = listOf(
-        Icons.Clubs,
-        Icons.Hearts,
-        Icons.Diamonds,
-        Icons.Spades,
-    )
-
     val painters = images.map { rememberVectorPainter(it) }
     val colorFilter = ColorFilter.tint(tint)
 
     Canvas(modifier) {
-        val scale = 0.3f
-        val maxSize = painters.maxOf { max(it.intrinsicSize.width, it.intrinsicSize.height) } * scale
+        val maxSize = painters.map {it.intrinsicSize }.maxOf { max(it.width, it.height) } * scale
         val spacing = 0.25f * maxSize
         val offset = (0.1f * maxSize).mod(maxSize)
         val horizontalCount = ceil((size.width + spacing) / (maxSize + spacing)).toInt()
@@ -43,7 +44,7 @@ fun Background(modifier: Modifier = Modifier, tint: Color = Color(0xFF1a1a1f)) {
             val indent = (j % 2) * (maxSize + spacing) * 0.5f
             val y = j * (maxSize + spacing) + maxSize * 0.5f + offset
             for (i in 0..horizontalCount) {
-                val x = i * (maxSize + spacing) + maxSize * 0.5f - indent +offset
+                val x = i * (maxSize + spacing) + maxSize * 0.5f - indent + offset
                 val painter = painters[(i + 2 * j).mod(painters.size)]
                 drawCentered(Offset(x, y), painter, scale, colorFilter)
             }

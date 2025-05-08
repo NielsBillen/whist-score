@@ -1,9 +1,9 @@
 package be.niels.billen.presentation.screens.overview
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,16 +15,17 @@ import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
 import be.niels.billen.presentation.screens.overview.players.PlayersView
+import be.niels.billen.presentation.screens.overview.rounds.RoundsView
 
 @Composable
 fun Overview(onAction: (AppAction) -> Unit) {
-    Column(modifier = Modifier.padding(Style.Dimensions.paddingLarge)) {
+    Column(modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp), verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)) {
         Text("Whist score", style = MaterialTheme.typography.titleLarge)
 
-        Spacer(modifier = Modifier.height(16.dp))
 
         PlayersView()
-        Spacer(Modifier.weight(1f))
+
+        RoundsView(Modifier.weight(1f))
 
         Button(
             modifier = Modifier

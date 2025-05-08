@@ -7,7 +7,6 @@ enum class AppScreen {
     ADD_ROUND
 }
 
-
 sealed interface AppAction {
     data class Navigate(val screen: AppScreen) : AppAction
     data class AddRound(val round: Round) : AppAction

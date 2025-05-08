@@ -13,9 +13,7 @@ class DefaultPlayerRepository : PlayerRepository {
     private val _players = MutableStateFlow(defaultPlayers)
     override val players = _players.asStateFlow()
 
-    override fun update(transform: (Players) -> Players) {
-        _players.update(transform)
-    }
+    override fun update(transform: (Players) -> Players) = _players.update(transform)
 
     companion object {
         val defaultPlayers = mapOf(

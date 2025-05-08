@@ -73,8 +73,10 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
 
                     SummaryScreen(
                         round = it,
+                        players = players.value,
                         onBack = { viewModel.onAction(AddRoundAction.PreviousScreen) },
-                        onNext = { onAction(AppAction.AddRound(it)) }
+                        onNext = { onAction(AppAction.AddRound(it)) },
+                        { viewModel.onAction(it) }
                     )
                 }
             }

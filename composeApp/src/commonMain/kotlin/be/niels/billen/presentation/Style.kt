@@ -43,7 +43,10 @@ fun AppTheme(content: @Composable () -> Unit) {
     val colorScheme = MaterialTheme.colorScheme.copy(
         surface = Color(0xFF14161a),
         surfaceBright = Color(0xFF252a2c),
-        onSurface = Color(0xFFa8a8a8)
+        onSurface = Color(0xFFb8b8b8),
+        inverseOnSurface = Color(0xFF090909),
+
+
     )
 
     MaterialTheme(typography = typography, colorScheme = colorScheme, content = content)
