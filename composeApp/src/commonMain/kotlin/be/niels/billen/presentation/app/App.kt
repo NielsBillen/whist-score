@@ -23,7 +23,7 @@ fun App() {
             val viewModel: AppViewModel = koinInject()
             val screen = viewModel.screen.collectAsState()
 
-            Box(Modifier.safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
+            Box(contentAlignment = Alignment.TopCenter) {
                 when (screen.value) {
                     AppScreen.OVERVIEW -> Overview { viewModel.onAction(it) }
                     AppScreen.ADD_ROUND -> AddRound { viewModel.onAction(it) }
