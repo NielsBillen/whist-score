@@ -15,7 +15,7 @@ import be.niels.billen.presentation.screens.overview.Overview
 import org.koin.compose.koinInject
 
 @Composable
-fun App() {
+fun App(modifier: Modifier = Modifier) {
     AppTheme {
         Surface(Modifier.fillMaxSize()) {
             Background(Modifier.fillMaxSize())
@@ -23,7 +23,7 @@ fun App() {
             val viewModel: AppViewModel = koinInject()
             val screen = viewModel.screen.collectAsState()
 
-            Box(contentAlignment = Alignment.TopCenter) {
+            Box(modifier, contentAlignment = Alignment.TopCenter) {
                 when (screen.value) {
                     AppScreen.OVERVIEW -> Overview { viewModel.onAction(it) }
                     AppScreen.ADD_ROUND -> AddRound { viewModel.onAction(it) }

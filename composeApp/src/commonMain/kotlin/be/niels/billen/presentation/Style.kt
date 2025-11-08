@@ -9,9 +9,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.Font
-import wiezen.composeapp.generated.resources.NotoSans_Bold
-import wiezen.composeapp.generated.resources.NotoSans_Regular
-import wiezen.composeapp.generated.resources.Res
+import whist_score.composeapp.generated.resources.NotoSans_Bold
+import whist_score.composeapp.generated.resources.NotoSans_Regular
+import whist_score.composeapp.generated.resources.Res
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
