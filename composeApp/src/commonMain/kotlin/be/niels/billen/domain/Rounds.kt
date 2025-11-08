@@ -15,6 +15,13 @@ data class Rounds private constructor(
 
     companion object {
         val EMPTY = Rounds()
+
+        fun of(rounds: List<Round>): Rounds {
+            val scores = PlayerId.entries.associateWith { player -> rounds.fold(0) { score, round -> score + round.points(player) } }
+
+
+            return Rounds(rounds = rounds, scores = scores)
+        }
     }
 }
 

@@ -103,7 +103,8 @@ sealed interface Round {
 
 
     data class Treble(
-        override val players: Set<PlayerId>, val slams: Int = 0,
+        override val players: Set<PlayerId>,
+        val slams: Int = 0,
         override val passRound: Boolean = false
     ) : MultiPlayerRound {
         val requiredSlams = if (players.size == 1) 5 else 8

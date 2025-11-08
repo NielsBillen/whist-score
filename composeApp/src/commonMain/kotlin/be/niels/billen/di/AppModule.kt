@@ -11,12 +11,17 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val appModule = module {
+private val commonModule = module {
     single { DefaultPlayerRepository() }.bind<PlayerRepository>()
-    single { DefaultRoundsRepository() }.bind<RoundsRepository>()
+    single { DefaultRoundsRepository(settings = get()) }.bind<RoundsRepository>()
 
     viewModel { PlayersViewModel(get(),get()) }
     viewModel { AppViewModel(get()) }
     viewModel { AddRoundViewModel(get(), get()) }
     viewModel { RoundsViewModel(get(), get()) }
+}
+
+val appModule = module {
+    includes(commonModule)
+    includes(platformModule)
 }
