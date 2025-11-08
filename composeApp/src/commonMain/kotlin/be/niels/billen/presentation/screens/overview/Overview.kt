@@ -22,7 +22,6 @@ fun Overview(onAction: (AppAction) -> Unit) {
     Column(modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp), verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)) {
         Text("Whist score", style = MaterialTheme.typography.titleLarge)
 
-
         PlayersView()
 
         RoundsView(Modifier.weight(1f))

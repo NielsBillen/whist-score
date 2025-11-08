@@ -18,15 +18,21 @@ import be.niels.billen.presentation.Style
 import org.koin.compose.koinInject
 
 @Composable
-fun PlayersView(modifier: Modifier = Modifier) {
-    val viewModel: PlayersViewModel = koinInject()
+fun PlayersView(
+    modifier: Modifier = Modifier,
+    viewModel: PlayersViewModel = koinInject()
+) {
     val players = viewModel.players.collectAsState().value
 
+    PlayersView(players = players, modifier = modifier)
+}
+
+@Composable
+fun PlayersView(players: List<PlayerView>, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) {
         val columns = if (maxWidth > maxHeight) 4 else 2
 
         LazyVerticalGrid(
-            modifier = modifier,
             userScrollEnabled = false,
             horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
@@ -37,12 +43,12 @@ fun PlayersView(modifier: Modifier = Modifier) {
             }
         }
     }
-
 }
 
 @Composable
 fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
-    val textColor = if (player.color.luminance < 0.5f) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
+    val textColor =
+        if (player.color.luminance < 0.5f) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
     Box(modifier = modifier.background(player.color, RoundedCornerShape(Style.Dimensions.radiusMedium))) {
         Column(Modifier.padding(Style.Dimensions.paddingMedium)) {
             Text(player.name, fontWeight = FontWeight.Bold, color = textColor)

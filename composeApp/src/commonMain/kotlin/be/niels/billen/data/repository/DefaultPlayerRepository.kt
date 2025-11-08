@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class DefaultPlayerRepository : PlayerRepository {
-    private val _players = MutableStateFlow(defaultPlayers)
+    private val _players = MutableStateFlow(DEFAULT_PLAYERS)
     override val players = _players.asStateFlow()
 
     override fun update(transform: (Players) -> Players) = _players.update(transform)
 
     companion object {
-        val defaultPlayers = mapOf(
+        val DEFAULT_PLAYERS = mapOf(
             PlayerId.Player1 to Player("Player 1", Color(0xFF3b4863)),
             PlayerId.Player2 to Player("Player 2", Color(0xFFaf945a)),
             PlayerId.Player3 to Player("Player 3", Color(0xFF9a4a4b)),

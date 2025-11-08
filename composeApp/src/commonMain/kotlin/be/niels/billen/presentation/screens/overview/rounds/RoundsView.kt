@@ -39,8 +39,8 @@ fun RoundsView(modifier: Modifier = Modifier, viewModel: RoundsViewModel = koinI
                 )
                 for (playerId in PlayerId.entries) {
                     Text(
-                        players.getValue(playerId).name,
-                        Modifier.weight(1f),
+                        text = players[playerId]?.name ?: "-",
+                        modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
@@ -54,8 +54,7 @@ fun RoundsView(modifier: Modifier = Modifier, viewModel: RoundsViewModel = koinI
                     Text("No rounds have been played")
                 }
 
-            }
-            else {
+            } else {
 
                 LazyColumn(
                     Modifier.weight(1f),

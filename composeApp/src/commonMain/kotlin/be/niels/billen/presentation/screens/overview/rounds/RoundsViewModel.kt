@@ -12,7 +12,7 @@ class RoundsViewModel(playersRepository: PlayerRepository, roundsRepository: Rou
     val players = playersRepository.players.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = DefaultPlayerRepository.defaultPlayers
+        initialValue = emptyMap()
     )
 
     val rounds = roundsRepository.rounds.stateIn(

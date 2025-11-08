@@ -1,10 +1,10 @@
 package be.niels.billen.domain.repository
 
-import be.niels.billen.domain.Round
+import be.niels.billen.domain.Rounds
 import kotlinx.coroutines.flow.Flow
 
 interface RoundsRepository {
-    val rounds : Flow<List<Round>>
+    val rounds: Flow<Rounds>
 
-    fun update(transform: (List<Round>)->List<Round>)
+    fun update(transform: (Rounds) -> Rounds)
 }
