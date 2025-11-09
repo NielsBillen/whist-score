@@ -1,10 +1,10 @@
 package be.niels.billen.presentation
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,25 +41,23 @@ fun AppTheme(content: @Composable () -> Unit) {
         )
     }
 
-//    val colorScheme = MaterialTheme.colorScheme.copy(
-//        surface = Color(0xFF14161a),
-//        surfaceBright = Color(0xFF252a2c),
-//        onSurface = Color(0xFFb8b8b8),
-//        inverseOnSurface = Color(0xFF090909),
-//    )
-    val colorScheme = darkColorScheme()
-
-    MaterialTheme(typography = typography, colorScheme = colorScheme, content = content)
+    MaterialTheme(typography = typography, colorScheme = darkColorScheme(), content = content)
 }
 
 
 object Style {
     object Dimensions {
+        val paddingTight = 4.dp
         val paddingSmall = 8.dp
         val paddingMedium = 12.dp
         val paddingLarge = 16.dp
         val paddingExtraExtraLarge = 48.dp
         val radiusMedium = 16.dp
+    }
+
+    object Shapes {
+        val mediumRoundedCornerShape = RoundedCornerShape(Dimensions.radiusMedium)
+
     }
 }
 

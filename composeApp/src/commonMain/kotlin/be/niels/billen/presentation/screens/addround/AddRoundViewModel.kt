@@ -7,7 +7,7 @@ import be.niels.billen.domain.repository.PlayerRepository
 import be.niels.billen.domain.repository.RoundsRepository
 import kotlinx.coroutines.flow.*
 
-class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsRepository: RoundsRepository) :
+class AddRoundViewModel(playersRepository: PlayerRepository) :
     ViewModel() {
     private val _state = MutableStateFlow(AddRoundState())
     val state: StateFlow<AddRoundState> = _state.asStateFlow()
@@ -48,7 +48,6 @@ class AddRoundViewModel(playersRepository: PlayerRepository, private val roundsR
     fun onAction(action: AddRoundAction.SetBid) {
         _state.update { it.setBid(action.bid).setScreen(it.nextScreen) }
     }
-
 
     fun onAction(action: AddRoundAction.SetBidAchieved) {
         _state.update { it.setBidAchieved(action.bidAchieved).setScreen(it.nextScreen) }
