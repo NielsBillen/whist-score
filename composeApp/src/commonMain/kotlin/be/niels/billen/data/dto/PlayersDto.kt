@@ -1,10 +1,15 @@
 package be.niels.billen.data.dto
 
-import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.Players
+import kotlinx.serialization.Serializable
 
-typealias PlayersDto = Map<PlayerId, PlayerDto>
+@Serializable
+data class PlayersDto(
+    val players: Map<PlayerIdDto, PlayerDto>,
+) : Map<PlayerIdDto, PlayerDto> by players {
+    val value by lazy {
+        entries.associate { (idDto, playerDto) -> idDto.value to playerDto.value }
+    }
+}
 
-fun Players.toDto() = mapValues { (_, player) -> player.toDto() }
-
-val PlayersDto.value: Players get() = mapValues { (_, dto) -> dto.value }
+fun Players.toDto() = PlayersDto(players = entries.associate { (id, player) -> id.toDto() to player.toDto() })
