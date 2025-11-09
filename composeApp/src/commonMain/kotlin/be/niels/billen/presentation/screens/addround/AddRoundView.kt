@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.presentation.Style
@@ -20,10 +21,9 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
+fun AddRoundView(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
     val viewModel: AddRoundViewModel = koinInject()
-    val state = viewModel.state.collectAsState().value
-    val players = viewModel.players.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     AnimatedContent(
         targetState = state.screen,
@@ -45,9 +45,12 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
 
                 AddRoundScreen.SELECT_PLAYERS -> state.roundType.let {
                     requireNotNull(it)
+
+                    val players by viewModel.players.collectAsState()
+
                     PlayerSelectionScreen(
                         roundType = it,
-                        players = players.value,
+                        players = players,
                         initialSelection = state.players,
                         onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                         onAction = { viewModel.onAction(it) })
@@ -70,10 +73,11 @@ fun AddRound(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
 
                 AddRoundScreen.SUMMARY -> state.round.let {
                     requireNotNull(it)
+                    val players by viewModel.players.collectAsState()
 
                     SummaryScreen(
                         round = it,
-                        players = players.value,
+                        players = players,
                         onBack = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                         onNext = { onAction(AppAction.AddRound(it)) },
                         { viewModel.onAction(it) }

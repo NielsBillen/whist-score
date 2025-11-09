@@ -1,22 +1,17 @@
 package be.niels.billen.presentation.app
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import be.niels.billen.domain.repository.PlayerRepository
 import be.niels.billen.presentation.AppTheme
 import be.niels.billen.presentation.background.Background
-import be.niels.billen.presentation.screens.addround.AddRound
+import be.niels.billen.presentation.screens.addround.AddRoundView
 import be.niels.billen.presentation.screens.overview.Overview
 import org.koin.compose.koinInject
-import kotlin.collections.emptyList
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
@@ -29,8 +24,8 @@ fun App(modifier: Modifier = Modifier) {
 
             Box(modifier, contentAlignment = Alignment.TopCenter) {
                 when (screen.value) {
-                    AppScreen.OVERVIEW -> Overview { viewModel.onAction(it) }
-                    AppScreen.ADD_ROUND -> AddRound { viewModel.onAction(it) }
+                    AppScreen.OVERVIEW -> Overview { viewModel.navigate(it) }
+                    AppScreen.ADD_ROUND -> AddRoundView { viewModel.navigate(it) }
                 }
             }
         }

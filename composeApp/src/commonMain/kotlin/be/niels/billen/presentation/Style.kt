@@ -2,6 +2,7 @@ package be.niels.billen.presentation
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -40,14 +41,13 @@ fun AppTheme(content: @Composable () -> Unit) {
         )
     }
 
-    val colorScheme = MaterialTheme.colorScheme.copy(
-        surface = Color(0xFF14161a),
-        surfaceBright = Color(0xFF252a2c),
-        onSurface = Color(0xFFb8b8b8),
-        inverseOnSurface = Color(0xFF090909),
-
-
-    )
+//    val colorScheme = MaterialTheme.colorScheme.copy(
+//        surface = Color(0xFF14161a),
+//        surfaceBright = Color(0xFF252a2c),
+//        onSurface = Color(0xFFb8b8b8),
+//        inverseOnSurface = Color(0xFF090909),
+//    )
+    val colorScheme = darkColorScheme()
 
     MaterialTheme(typography = typography, colorScheme = colorScheme, content = content)
 }

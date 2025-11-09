@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,9 +46,8 @@ fun AddRoundPanel(
         }
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Button(
+            OutlinedButton(
                 onClick = onBack,
-                colors = ButtonDefaults.outlinedButtonColors()
             ) {
                 Text(backText)
             }
@@ -56,7 +55,6 @@ fun AddRoundPanel(
             Button(
                 onClick = onNext,
                 enabled = nextEnabled(),
-                colors = ButtonDefaults.buttonColors(),
             ) {
                 Text(nextText)
             }

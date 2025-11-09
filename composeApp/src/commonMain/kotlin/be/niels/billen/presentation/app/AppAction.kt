@@ -8,6 +8,7 @@ enum class AppScreen {
 }
 
 sealed interface AppAction {
+    object ResetGame : AppAction
     data class Navigate(val screen: AppScreen) : AppAction
     data class AddRound(val round: Round) : AppAction
 }
