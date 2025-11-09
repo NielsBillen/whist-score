@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
@@ -20,6 +23,8 @@ import be.niels.billen.presentation.app.AppAction
 import be.niels.billen.presentation.app.AppScreen
 import be.niels.billen.presentation.screens.overview.players.PlayersView
 import be.niels.billen.presentation.screens.overview.rounds.RoundsView
+import be.niels.billen.presentation.theme.Icons
+import be.niels.billen.presentation.theme.icons.Pencil
 import org.koin.compose.koinInject
 
 @Composable
@@ -38,7 +43,16 @@ fun Overview(canStartNewGame: Boolean, onAction: (AppAction) -> Unit) {
         modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
-        Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
+
+            IconButton(onClick = { onAction(AppAction.Navigate(AppScreen.EDIT_PLAYERS))}) {
+                Icon(imageVector = Icons.Pencil, contentDescription = "Edit players",)
+            }
+        }
 
         PlayersView()
 

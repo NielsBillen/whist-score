@@ -4,7 +4,8 @@ import be.niels.billen.domain.Round
 
 enum class AppScreen {
     OVERVIEW,
-    ADD_ROUND
+    ADD_ROUND,
+    EDIT_PLAYERS,
 }
 
 sealed interface AppAction {

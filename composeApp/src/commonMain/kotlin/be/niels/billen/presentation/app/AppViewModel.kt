@@ -12,7 +12,7 @@ class AppViewModel(private val roundsRepository: RoundsRepository) : ViewModel()
     private val _screen = MutableStateFlow(AppScreen.OVERVIEW)
     val screen: StateFlow<AppScreen> = _screen.asStateFlow()
 
-    fun navigate(action: AppAction) {
+    fun onAction(action: AppAction) {
         when (action) {
             is AppAction.Navigate -> navigate(action)
             is AppAction.AddRound -> addRound(action)
