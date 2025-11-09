@@ -3,8 +3,8 @@ package be.niels.billen.data.repository
 import androidx.compose.ui.graphics.Color
 import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
+import be.niels.billen.domain.Players
 import be.niels.billen.domain.repository.PlayerRepository
-import be.niels.billen.domain.repository.Players
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

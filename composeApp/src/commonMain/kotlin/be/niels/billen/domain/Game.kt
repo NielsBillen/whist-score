@@ -2,7 +2,7 @@ package be.niels.billen.domain
 
 import androidx.compose.ui.graphics.Color
 
-data class Game(val players: Map<PlayerId, Player> = defaultPlayers, val rounds: List<Round> = emptyList()) {
+data class Game(val players: Players = defaultPlayers, val rounds: List<Round> = emptyList()) {
     fun score(playerId: PlayerId) = scores.getOrElse(playerId) { 0 }
 
     private val scores: Map<PlayerId, Int> by lazy {

@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
+import be.niels.billen.domain.Players
 import be.niels.billen.domain.Round
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.components.Points
@@ -24,7 +24,7 @@ import be.niels.billen.presentation.screens.addround.AddRoundPanel
 @Composable
 fun SummaryScreen(
     round: Round,
-    players: Map<PlayerId, Player>,
+    players: Players,
     onBack: () -> Unit,
     onNext: () -> Unit,
     onAction: (AddRoundAction) -> Unit,

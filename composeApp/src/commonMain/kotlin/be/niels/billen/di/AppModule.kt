@@ -19,7 +19,7 @@ private val commonModule = module {
 
     viewModel { PlayersViewModel(playersRepository = get(), roundsRepository = get()) }
     viewModel { AppViewModel(roundsRepository = get()) }
-    viewModel { AddRoundViewModel(playersRepository = get(), roundsRepository = get()) }
+    viewModel { AddRoundViewModel(playersRepository = get()) }
     viewModel { RoundsViewModel(playersRepository = get(), roundsRepository = get()) }
     viewModel { OverviewViewModel(roundsRepository = get()) }
 }

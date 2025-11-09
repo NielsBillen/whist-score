@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
+import be.niels.billen.domain.Players
 import be.niels.billen.domain.Rounds
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.components.Points
@@ -44,7 +44,7 @@ fun RoundsView(
 @Composable
 fun RoundsView(
     rounds: Rounds,
-    players: Map<PlayerId, Player>,
+    players: Players,
     modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit
 ) {

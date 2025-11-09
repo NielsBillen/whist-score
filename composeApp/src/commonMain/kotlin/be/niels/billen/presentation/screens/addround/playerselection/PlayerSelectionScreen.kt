@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
+import be.niels.billen.domain.Players
 import be.niels.billen.domain.RoundType
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.components.Selectable
@@ -19,7 +20,7 @@ import be.niels.billen.presentation.screens.addround.AddRoundPanel
 fun PlayerSelectionScreen(
     modifier: Modifier = Modifier,
     roundType: RoundType,
-    players: Map<PlayerId, Player>,
+    players: Players,
     initialSelection: Set<PlayerId>,
     onAction: (AddRoundAction) -> Unit,
     onCancel: () -> Unit,
@@ -36,11 +37,13 @@ fun PlayerSelectionScreen(
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
-                players, selection, onSelection = { selection = setOf(it) })
+                players = players,
+                selectedPlayers = selection,
+                onSelection = { selection = setOf(it) })
         } else {
             MultiPlayerChoice(
-                players,
-                selection,
+                players = players,
+                selectedPlayers = selection,
                 onSelectionChange = { id, selected ->
                     selection = if (selected) selection + id
                     else selection - id
@@ -51,7 +54,7 @@ fun PlayerSelectionScreen(
 
 @Composable
 private fun MultiPlayerChoice(
-    players: Map<PlayerId, Player>,
+    players: Players,
     selectedPlayers: Set<PlayerId>,
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
@@ -92,7 +95,7 @@ private fun PlayerCheckBox(
 
 @Composable
 private fun SinglePlayerChoice(
-    players: Map<PlayerId, Player>,
+    players: Players,
     selectedPlayers: Set<PlayerId>,
     modifier: Modifier = Modifier,
     onSelection: (PlayerId) -> Unit,

@@ -52,7 +52,7 @@ fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
     Box(modifier = modifier.background(player.color, RoundedCornerShape(Style.Dimensions.radiusMedium))) {
         Column(Modifier.padding(Style.Dimensions.paddingMedium)) {
             Text(player.name, fontWeight = FontWeight.Bold, color = textColor)
-            Text("${player.score}", color = textColor, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+            Text("${player.score}", color = textColor, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
         }
     }
 }
