@@ -1,0 +1,33 @@
+{
+  "lang": "en-us",
+  "name": "Whist score",
+  "short_name": "Whist score",
+  "description": "A basic application to keep track of score during whist",
+  "id": "/",
+  "start_url": "/",
+  "background_color": "#141218",
+  "theme_color": "#3b4863",
+  "orientation": "any",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg"
+    },
+    {
+      "src": "icons/icon.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot.png",
+      "sizes": "3840x2160",
+      "type": "image/png",
+      "label": "Scoring",
+      "form_factor": "wide"
+    }
+  ]
+}
