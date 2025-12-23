@@ -26,7 +26,7 @@ import be.niels.billen.presentation.theme.Icons
 import be.niels.billen.presentation.theme.icons.Trash
 import org.koin.compose.koinInject
 
-private val ROUNDS_COLUMN_WIDTH = 64.dp
+private val ROUNDS_COLUMN_WIDTH = 32.dp
 private val ICONS_SIZE = 32.dp
 
 
@@ -59,7 +59,7 @@ fun RoundsView(
         Column(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "Round",
+                    text = "#",
                     modifier = Modifier.width(ROUNDS_COLUMN_WIDTH),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold
@@ -90,7 +90,7 @@ fun RoundsView(
                 ) {
                     itemsIndexed(rounds) { index, round ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("#${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
+                            Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
 
                             for (playerId in PlayerId.entries) {
                                 Points(round.points(playerId), Modifier.weight(1f))
