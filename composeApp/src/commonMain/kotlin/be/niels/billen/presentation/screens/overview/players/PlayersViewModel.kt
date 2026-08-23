@@ -2,7 +2,6 @@ package be.niels.billen.presentation.screens.overview.players
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.niels.billen.domain.Game
 import be.niels.billen.domain.repository.PlayerRepository
 import be.niels.billen.domain.repository.RoundsRepository
 import kotlinx.coroutines.flow.*

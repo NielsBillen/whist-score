@@ -9,14 +9,12 @@ data class Rounds private constructor(
         require(scores.values.sum() == 0) { "sum of scores should be zero" }
     }
 
-    operator fun plus(round: Round) = copy(rounds = rounds + round, scores = scores + round)
+    operator fun plus(round: Round) =
+        copy(rounds = rounds + round, scores = scores(rounds + round))
 
     fun removeAt(index: Int): Rounds {
-        val round = rounds[index]
-        val newRounds = rounds.filterIndexed { i, _ -> i != index }
-        val newScores = scores - round
-
-        return copy(rounds = newRounds, scores = newScores)
+        val remaining = rounds.filterIndexed { i, _ -> i != index }
+        return copy(rounds = remaining, scores = scores(remaining))
     }
 
     fun score(playerId: PlayerId) = scores.getOrElse(playerId) { 0 }
@@ -24,20 +22,16 @@ data class Rounds private constructor(
     companion object {
         val EMPTY = Rounds()
 
-        fun of(rounds: List<Round>): Rounds {
-            val scores =
-                PlayerId.entries.associateWith { player -> rounds.fold(0) { score, round -> score + round.points(player) } }
-
-
-            return Rounds(rounds = rounds, scores = scores)
-        }
+        fun of(rounds: List<Round>): Rounds =
+            Rounds(rounds = rounds, scores = scores(rounds))
     }
 }
 
-private operator fun Map<PlayerId, Int>.plus(round: Round) = PlayerId.entries.associateWith { player ->
-    getOrElse(player) { 0 } + round.points(player)
+private fun scores(rounds: List<Round>) = PlayerId.entries.associateWith { player ->
+    rounds.foldIndexed(0) { index, running, round ->
+        running + round.points(player) * multiplier(rounds, index)
+    }
 }
 
-private operator fun Map<PlayerId, Int>.minus(round: Round) = PlayerId.entries.associateWith { player ->
-    getOrElse(player) { 0 } - round.points(player)
-}
+private fun multiplier(rounds: List<Round>, index: Int) =
+    if (index == 0) 1 else if (rounds[index - 1].passRound) 2 else 1

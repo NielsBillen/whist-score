@@ -9,21 +9,19 @@ sealed interface Round {
 
     fun won(playerId: PlayerId): Boolean
 
-    val passRoundMultiplier: Int
-        get() = if (passRound) 2 else 1
-
     sealed interface MultiPlayerRound : Round {
         val players: Set<PlayerId>
         val playersWon: Boolean
 
-        override fun won(playerId: PlayerId) =
-            if (playersWon) players.contains(playerId) else !players.contains(playerId)
+    override fun won(playerId: PlayerId) =
+        if (playersWon) players.contains(playerId) else !players.contains(playerId)
 
-        override fun points(player: PlayerId) = passRoundMultiplier * (if (players.contains(player)) {
+    override fun points(player: PlayerId) =
+        if (players.contains(player)) {
             (if (playersWon) basePoints else -basePoints) * nonPlayerCount / players.size
         } else {
             if (playersWon) -basePoints else basePoints
-        })
+        }
 
         private val nonPlayerCount: Int
             get() = PlayerId.entries.size - players.size
@@ -36,15 +34,15 @@ sealed interface Round {
         val playerWon: Boolean
         val penaltyPoints: Int
 
-        override fun won(playerId: PlayerId) =
-            if (playerWon) this.player == player else this.player != player
+    override fun won(playerId: PlayerId) =
+        if (playerWon) this.player == player else this.player != player
 
-        override fun points(player: PlayerId): Int =
-            passRoundMultiplier * (if (this.player == player) {
-                if (playerWon) 3 * penaltyPoints else -penaltyPoints * 3
-            } else {
-                if (playerWon) -penaltyPoints else penaltyPoints
-            })
+    override fun points(player: PlayerId): Int =
+        if (this.player == player) {
+            if (playerWon) 3 * penaltyPoints else -penaltyPoints * 3
+        } else {
+            if (playerWon) -penaltyPoints else penaltyPoints
+        }
     }
 
     data class Regular(
