@@ -62,8 +62,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
         }
         sourceSets.getByName("jvmTest").dependencies {
-            implementation("io.kotest:kotest-runner-junit5-jvm:6.2.4")
-            implementation("io.kotest:kotest-assertions-core:6.2.4")
+            implementation(libs.kotest.runner.junit5.jvm)
+            implementation(libs.kotest.assertions.core)
         }
     }
 }

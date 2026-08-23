@@ -3,6 +3,7 @@ agp = "9.1.0"
 android-compileSdk = "37"
 android-minSdk = "24"
 android-targetSdk = "37"
+kotest = "6.2.4"
 androidx-activityCompose = "1.13.0"
 androidx-lifecycle = "2.11.0"
 composeMultiplatform = "1.11.1"
@@ -22,6 +23,8 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatform-settings" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+kotest-runner-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
