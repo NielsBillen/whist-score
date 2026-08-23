@@ -12,7 +12,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "be.nioms.billen.shared"
+        namespace = "be.niels.billen.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -61,11 +61,19 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
+        sourceSets.getByName("jvmTest").dependencies {
+            implementation(libs.kotest.runner.junit5.jvm)
+            implementation(libs.kotest.assertions.core)
+        }
     }
 }
 
 dependencies {
     androidRuntimeClasspath(compose.uiTooling)
+}
+
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    useJUnitPlatform()
 }
 
 compose.desktop {
