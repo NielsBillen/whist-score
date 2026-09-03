@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.Players
 import be.niels.billen.presentation.Style
-import be.niels.billen.presentation.app.AppAction
-import be.niels.billen.presentation.app.AppScreen
 import org.koin.compose.koinInject
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,19 +28,19 @@ import androidx.compose.runtime.setValue
 @Composable
 fun EditPlayersView(
     viewModel: EditPlayersViewModel = koinInject(),
-    onAppAction: (AppAction) -> Unit,
+    onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val players by viewModel.players.collectAsState()
 
-    EditPlayersView(players = players, onAction = viewModel::onAction, onAppAction = onAppAction, modifier = modifier)
+    EditPlayersView(players = players, onAction = viewModel::onAction, onSave = onSave, modifier = modifier)
 }
 
 @Composable
 fun EditPlayersView(
     players: Players,
     modifier: Modifier = Modifier,
-    onAppAction: (AppAction) -> Unit,
+    onSave: () -> Unit,
     onAction: (EditPlayersAction) -> Unit
 ) {
     Column(
@@ -56,7 +54,8 @@ fun EditPlayersView(
 
         Button(
             modifier = Modifier.align(Alignment.End),
-            onClick = { onAppAction(AppAction.Navigate(AppScreen.OVERVIEW)) }) {
+            onClick = onSave
+        ) {
             Text("Save")
         }
     }

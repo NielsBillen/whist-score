@@ -7,9 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import be.niels.billen.domain.Round
 import be.niels.billen.presentation.Style
-import be.niels.billen.presentation.app.AppAction
-import be.niels.billen.presentation.app.AppScreen
 import be.niels.billen.presentation.screens.addround.bidachievedinput.BidAchievedInput
 import be.niels.billen.presentation.screens.addround.bidinput.BidInputScreen
 import be.niels.billen.presentation.screens.addround.playerselection.PlayerSelectionScreen
@@ -21,7 +20,11 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AddRoundView(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
+fun AddRoundView(
+    modifier: Modifier = Modifier,
+    onCancel: () -> Unit,
+    onSave: (Round) -> Unit
+) {
     val viewModel: AddRoundViewModel = koinInject()
     val state by viewModel.state.collectAsState()
 
@@ -39,9 +42,8 @@ fun AddRoundView(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
                 AddRoundScreen.SELECT_ROUND_TYPE -> RoundTypeInputScreen(
                     initialRoundType = state.roundType,
                     onAction = { viewModel.onAction(it) },
-                    onCancel = {
-                        onAction(AppAction.Navigate(AppScreen.OVERVIEW))
-                    })
+                    onCancel = onCancel
+                )
 
                 AddRoundScreen.SELECT_PLAYERS -> state.roundType.let {
                     requireNotNull(it)
@@ -79,7 +81,7 @@ fun AddRoundView(modifier: Modifier = Modifier, onAction: (AppAction) -> Unit) {
                         round = it,
                         players = players,
                         onBack = { viewModel.onAction(AddRoundAction.PreviousScreen) },
-                        onNext = { onAction(AppAction.AddRound(it)) },
+                        onNext = { onSave(it) },
                         { viewModel.onAction(it) }
                     )
                 }

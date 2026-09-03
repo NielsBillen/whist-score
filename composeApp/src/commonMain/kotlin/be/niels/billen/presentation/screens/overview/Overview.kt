@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.app.AppAction
-import be.niels.billen.presentation.app.AppScreen
 import be.niels.billen.presentation.screens.overview.players.PlayersView
 import be.niels.billen.presentation.screens.overview.rounds.RoundsView
 import be.niels.billen.presentation.theme.Icons
@@ -30,15 +29,22 @@ import org.koin.compose.koinInject
 @Composable
 fun Overview(
     viewModel: OverviewViewModel = koinInject(),
-    onAction: (AppAction) -> Unit
+    onAction: (AppAction) -> Unit,
+    onAddRound: () -> Unit,
+    onEditPlayers: () -> Unit
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
 
-    Overview(canStartNewGame = canStartNewGame, onAction = onAction)
+    Overview(canStartNewGame = canStartNewGame, onAction = onAction, onAddRound = onAddRound, onEditPlayers = onEditPlayers)
 }
 
 @Composable
-fun Overview(canStartNewGame: Boolean, onAction: (AppAction) -> Unit) {
+fun Overview(
+    canStartNewGame: Boolean,
+    onAction: (AppAction) -> Unit,
+    onAddRound: () -> Unit,
+    onEditPlayers: () -> Unit
+) {
     Column(
         modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
@@ -49,7 +55,7 @@ fun Overview(canStartNewGame: Boolean, onAction: (AppAction) -> Unit) {
         ) {
             Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
 
-            IconButton(onClick = { onAction(AppAction.Navigate(AppScreen.EDIT_PLAYERS))}) {
+            IconButton(onClick = onEditPlayers) {
                 Icon(imageVector = Icons.Pencil, contentDescription = "Edit players",)
             }
         }
@@ -61,13 +67,19 @@ fun Overview(canStartNewGame: Boolean, onAction: (AppAction) -> Unit) {
         ButtonRow(
             canStartNewGame = canStartNewGame,
             onAction = onAction,
+            onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
 @Composable
-private fun ButtonRow(canStartNewGame: Boolean, onAction: (AppAction) -> Unit, modifier: Modifier = Modifier) {
+private fun ButtonRow(
+    canStartNewGame: Boolean,
+    onAction: (AppAction) -> Unit,
+    onAddRound: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier.padding(Style.Dimensions.paddingSmall),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -79,9 +91,7 @@ private fun ButtonRow(canStartNewGame: Boolean, onAction: (AppAction) -> Unit, m
             Text(text = "New game")
         }
 
-        Button(
-            onClick = { onAction(AppAction.Navigate(AppScreen.ADD_ROUND)) }
-        ) {
+        Button(onClick = onAddRound) {
             Text(text = "Add Round")
         }
     }
