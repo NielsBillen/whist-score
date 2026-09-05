@@ -18,20 +18,22 @@ import be.niels.billen.presentation.screens.editplayers.EditPlayersView
 import be.niels.billen.presentation.screens.overview.Overview
 import org.koin.compose.koinInject
 
-private data object OverviewRoute : NavKey
+private sealed interface AppNavigation : NavKey {
+    data object OverviewRoute : AppNavigation
 
-private data object AddRoundRoute : NavKey
+    data object AddRoundRoute : AppNavigation
 
-private data object EditPlayersRoute : NavKey
+    data object EditPlayersRoute : AppNavigation
+}
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
     AppTheme {
-        Surface(Modifier.fillMaxSize()) {
+        Surface(modifier = modifier.fillMaxSize()) {
             Background(Modifier.fillMaxSize())
 
             val viewModel: AppViewModel = koinInject()
-            val backStack = remember { mutableStateListOf<Any>(OverviewRoute) }
+            val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 NavDisplay(
@@ -39,15 +41,15 @@ fun App(modifier: Modifier = Modifier) {
                     onBack = { backStack.removeLastOrNull() },
                     entryProvider = { key ->
                         when (key) {
-                            is OverviewRoute -> NavEntry(key) {
+                            is AppNavigation.OverviewRoute -> NavEntry(key) {
                                 Overview(
                                     onAction = viewModel::onAction,
-                                    onAddRound = { backStack.add(AddRoundRoute) },
-                                    onEditPlayers = { backStack.add(EditPlayersRoute) },
+                                    onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
+                                    onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
                                 )
                             }
 
-                            is AddRoundRoute -> NavEntry(key) {
+                            is AppNavigation.AddRoundRoute -> NavEntry(key) {
                                 AddRoundView(
                                     onCancel = { backStack.removeLastOrNull() },
                                     onSave = { round ->
@@ -57,13 +59,11 @@ fun App(modifier: Modifier = Modifier) {
                                 )
                             }
 
-                            is EditPlayersRoute -> NavEntry(key) {
+                            is AppNavigation.EditPlayersRoute -> NavEntry(key) {
                                 EditPlayersView(
                                     onSave = { backStack.removeLastOrNull() },
                                 )
                             }
-
-                            else -> error("Unknown route: $key")
                         }
                     }
                 )
