@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="desktopApp" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="be.niels.billen.MainKt" />
+    <option name="MAIN_CLASS_NAME" value="be.niels.billen.whistscore.MainKt" />
     <module name="whist-score.composeApp.jvmMain" />
     <shortenClasspath name="NONE" />
     <method v="2">

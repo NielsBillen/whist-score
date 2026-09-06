@@ -89,7 +89,7 @@ tasks.withType<Test>().configureEach {
 
 compose.desktop {
     application {
-        mainClass = "be.niels.billen.MainKt"
+        mainClass = "be.niels.billen.whistscore.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
