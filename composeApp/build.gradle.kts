@@ -9,10 +9,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotest)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "be.niels.billen.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -25,15 +27,15 @@ kotlin {
         }
     }
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+//    listOf(
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach { iosTarget ->
+//        iosTarget.binaries.framework {
+//            baseName = "ComposeApp"
+//            isStatic = true
+//        }
+//    }
 
     jvm()
 
@@ -59,15 +61,20 @@ kotlin {
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.serialization)
         }
+        commonTest.dependencies {
+//            implementation(libs.kotest.runner.junit5.jvm)
+//            implementation(libs.kotest.assertions.core)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.assertions.core)
+        }
+        jvmTest.dependencies {
+            implementation(libs.kotest.runner.junit5)
+        }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-        }
-        sourceSets.getByName("jvmTest").dependencies {
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
-            implementation(libs.kotest.runner.junit5.jvm)
-            implementation(libs.kotest.assertions.core)
         }
     }
 }
@@ -76,7 +83,7 @@ dependencies {
     androidRuntimeClasspath(compose.uiTooling)
 }
 
-tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 

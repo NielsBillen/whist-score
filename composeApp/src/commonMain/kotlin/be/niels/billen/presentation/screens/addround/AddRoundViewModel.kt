@@ -2,20 +2,20 @@ package be.niels.billen.presentation.screens.addround
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.niels.billen.domain.Game
 import be.niels.billen.domain.RoundType
+import be.niels.billen.domain.repository.GameRepository
 import be.niels.billen.domain.repository.PlayerRepository
-import be.niels.billen.domain.repository.RoundsRepository
 import kotlinx.coroutines.flow.*
 
-class AddRoundViewModel(playersRepository: PlayerRepository) :
-    ViewModel() {
+class AddRoundViewModel(gameRepository: GameRepository, ) : ViewModel() {
     private val _state = MutableStateFlow(AddRoundState())
     val state: StateFlow<AddRoundState> = _state.asStateFlow()
 
-    val players = playersRepository.players.stateIn(
+    val game = gameRepository.game.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = emptyMap(),
+        initialValue = Game.DEFAULT,
     )
 
     fun onAction(action: AddRoundAction) {
@@ -26,7 +26,6 @@ class AddRoundViewModel(playersRepository: PlayerRepository) :
             is AddRoundAction.SetBid -> onAction(action)
             is AddRoundAction.SetBidAchieved -> onAction(action)
             is AddRoundAction.PreviousScreen -> onAction(action)
-            is AddRoundAction.SetPassRound -> onAction(action)
         }
     }
 
@@ -51,10 +50,6 @@ class AddRoundViewModel(playersRepository: PlayerRepository) :
 
     fun onAction(action: AddRoundAction.SetBidAchieved) {
         _state.update { it.setBidAchieved(action.bidAchieved).setScreen(it.nextScreen) }
-    }
-
-    fun onAction(action: AddRoundAction.SetPassRound) {
-        _state.update { it.setPassRound(action.passRound).setScreen(it.nextScreen) }
     }
 
     fun onAction(action: AddRoundAction.PreviousScreen) {
@@ -84,6 +79,8 @@ private val AddRoundState.previousScreen: AddRoundScreen
 
 private val RoundType.screens: List<AddRoundScreen>
     get() = when (this) {
+        RoundType.Pass -> listOf(AddRoundScreen.SUMMARY)
+
         RoundType.Regular, RoundType.Treble -> listOf(
             AddRoundScreen.SELECT_ROUND_TYPE,
             AddRoundScreen.SELECT_PLAYERS,
@@ -97,5 +94,4 @@ private val RoundType.screens: List<AddRoundScreen>
             AddRoundScreen.SELECT_BID_ACHIEVED,
             AddRoundScreen.SUMMARY
         )
-
     }

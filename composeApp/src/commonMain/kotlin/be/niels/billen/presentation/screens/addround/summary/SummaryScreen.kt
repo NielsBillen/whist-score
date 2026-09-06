@@ -12,22 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import be.niels.billen.domain.Game
+import be.niels.billen.domain.Player
 import be.niels.billen.domain.PlayerId
-import be.niels.billen.domain.Players
 import be.niels.billen.domain.Round
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.components.Points
-import be.niels.billen.presentation.components.Selectable
-import be.niels.billen.presentation.screens.addround.AddRoundAction
 import be.niels.billen.presentation.screens.addround.AddRoundPanel
 
 @Composable
 fun SummaryScreen(
+    game: Game,
     round: Round,
-    players: Players,
     onBack: () -> Unit,
     onNext: () -> Unit,
-    onAction: (AddRoundAction) -> Unit,
 ) {
     val shape = RoundedCornerShape(Style.Dimensions.radiusMedium)
 
@@ -43,7 +41,9 @@ fun SummaryScreen(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)) {
                 for (playerId in PlayerId.entries) {
-                    val points = round.points(playerId)
+                    if (playerId !in game.players) continue
+                    val isPassRounds = game.rounds.lastOrNull() is Round.PassRound
+                    val points = round.points(playerId = playerId, passRound = isPassRounds)
 
                     Box(
                         Modifier.background(
@@ -56,27 +56,14 @@ fun SummaryScreen(
                         ).clip(shape)
                     ) {
                         Row(Modifier.padding(Style.Dimensions.paddingLarge)) {
-                            Text(players.getValue(playerId).name, Modifier.weight(1f), fontWeight = FontWeight.Bold)
+                            Text(
+                                text = game.players.getValue(playerId).name,
+                                modifier = Modifier.weight(1f),
+                                fontWeight = FontWeight.Bold
+                            )
                             Points(points)
                         }
                     }
-                }
-            }
-
-            Spacer(Modifier.weight(1f))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
-            ) {
-                Text("Pass round?")
-
-
-                Selectable(selected = round.passRound, onClick = { onAction(AddRoundAction.SetPassRound(true)) }) {
-                    Text("Yes", Modifier.padding(Style.Dimensions.paddingLarge))
-                }
-                Selectable(selected = !round.passRound, onClick = { onAction(AddRoundAction.SetPassRound(false)) }) {
-                    Text("No", Modifier.padding(Style.Dimensions.paddingLarge))
                 }
             }
 

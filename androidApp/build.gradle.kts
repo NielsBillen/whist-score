@@ -6,7 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+
 kotlin {
+    jvmToolchain(25)
+
     target {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)

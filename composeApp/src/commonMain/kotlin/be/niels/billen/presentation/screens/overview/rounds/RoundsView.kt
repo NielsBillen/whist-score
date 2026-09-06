@@ -17,9 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import be.niels.billen.domain.Game
 import be.niels.billen.domain.PlayerId
 import be.niels.billen.domain.Players
-import be.niels.billen.domain.Rounds
+import be.niels.billen.domain.Round
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.components.Points
 import be.niels.billen.presentation.theme.Icons
@@ -35,16 +36,14 @@ fun RoundsView(
     modifier: Modifier = Modifier,
     viewModel: RoundsViewModel = koinInject(),
 ) {
-    val rounds by viewModel.rounds.collectAsState()
-    val players by viewModel.players.collectAsState()
+    val game by viewModel.game.collectAsState()
 
-    RoundsView(rounds = rounds, players = players, modifier = modifier, onAction = viewModel::onAction)
+    RoundsView(game = game, modifier = modifier, onAction = viewModel::onAction)
 }
 
 @Composable
 fun RoundsView(
-    rounds: Rounds,
-    players: Players,
+    game: Game,
     modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit
 ) {
@@ -66,7 +65,7 @@ fun RoundsView(
                 )
                 for (playerId in PlayerId.entries) {
                     Text(
-                        text = players[playerId]?.name ?: "-",
+                        text = game.players[playerId]?.name ?: "-",
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
@@ -78,7 +77,7 @@ fun RoundsView(
 
             Box(Modifier.background(MaterialTheme.colorScheme.onSurface).fillMaxWidth().requiredHeight(1.dp))
 
-            if (rounds.isEmpty()) {
+            if (game.rounds.isEmpty()) {
                 Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                     Text("No rounds have been played")
                 }
@@ -88,12 +87,15 @@ fun RoundsView(
                     Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
                 ) {
-                    itemsIndexed(rounds) { index, round ->
+                    itemsIndexed(game.rounds) { index, round ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
 
                             for (playerId in PlayerId.entries) {
-                                Points(round.points(playerId), Modifier.weight(1f))
+                                Points(
+                                    round.points(playerId = playerId, passRound = game.isPassRound(index - 1)),
+                                    Modifier.weight(1f)
+                                )
                             }
 
                             IconButton(

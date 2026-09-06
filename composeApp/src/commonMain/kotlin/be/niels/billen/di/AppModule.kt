@@ -1,29 +1,30 @@
 package be.niels.billen.di
 
 import be.niels.billen.data.repository.DefaultPlayerRepository
-import be.niels.billen.data.repository.DefaultRoundsRepository
+import be.niels.billen.data.repository.DefaultGameRepository
 import be.niels.billen.domain.repository.PlayerRepository
-import be.niels.billen.domain.repository.RoundsRepository
+import be.niels.billen.domain.repository.GameRepository
 import be.niels.billen.presentation.app.AppViewModel
 import be.niels.billen.presentation.screens.addround.AddRoundViewModel
 import be.niels.billen.presentation.screens.editplayers.EditPlayersViewModel
 import be.niels.billen.presentation.screens.overview.players.PlayersViewModel
 import be.niels.billen.presentation.screens.overview.rounds.RoundsViewModel
 import be.niels.billen.presentation.screens.overview.OverviewViewModel
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val commonModule = module {
-    single { DefaultPlayerRepository(settings = get()) }.bind<PlayerRepository>()
-    single { DefaultRoundsRepository(settings = get()) }.bind<RoundsRepository>()
+    singleOf(::DefaultPlayerRepository).bind<PlayerRepository>()
+    singleOf(::DefaultGameRepository).bind<GameRepository>()
 
-    viewModel { PlayersViewModel(playersRepository = get(), roundsRepository = get()) }
-    viewModel { AppViewModel(roundsRepository = get()) }
-    viewModel { AddRoundViewModel(playersRepository = get()) }
-    viewModel { RoundsViewModel(playersRepository = get(), roundsRepository = get()) }
-    viewModel { OverviewViewModel(roundsRepository = get()) }
-    viewModel { EditPlayersViewModel(playersRepository = get()) }
+    viewModelOf(::PlayersViewModel)
+    viewModelOf(::AppViewModel)
+    viewModelOf(::AddRoundViewModel)
+    viewModelOf(::RoundsViewModel)
+    viewModelOf(::OverviewViewModel)
+    viewModelOf(::EditPlayersViewModel)
 }
 
 val appModule = module {

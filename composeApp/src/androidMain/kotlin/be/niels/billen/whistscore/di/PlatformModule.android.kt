@@ -1,8 +1,7 @@
-package be.niels.billen.di
+package be.niels.billen.whistscore.di
 
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
-import org.koin.core.module.Module
 import org.koin.dsl.bind
 import org.koin.dsl.module
 

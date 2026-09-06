@@ -1,26 +1,18 @@
 package be.niels.billen.presentation.app
 
-import androidx.compose.ui.test.ComposeUiTest
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.*
 import be.niels.billen.domain.repository.FakePlayerRepository
-import be.niels.billen.domain.repository.FakeRoundsRepository
 import be.niels.billen.domain.repository.PlayerRepository
-import be.niels.billen.domain.repository.RoundsRepository
 import be.niels.billen.presentation.screens.addround.AddRoundViewModel
 import be.niels.billen.presentation.screens.editplayers.EditPlayersViewModel
+import be.niels.billen.presentation.screens.overview.OverviewViewModel
 import be.niels.billen.presentation.screens.overview.players.PlayersViewModel
 import be.niels.billen.presentation.screens.overview.rounds.RoundsViewModel
-import be.niels.billen.presentation.screens.overview.OverviewViewModel
 import io.kotest.core.spec.style.FreeSpec
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -78,13 +70,12 @@ class AppTest : FreeSpec() {
     }
 
     private val testAppModule = module {
-        singleOf<FakeRoundsRepository>(constructor = { FakeRoundsRepository() }).bind<RoundsRepository>()
-        singleOf<FakePlayerRepository>(constructor = { FakePlayerRepository() }).bind<PlayerRepository>()
-        viewModel { AppViewModel(get()) }
-        viewModel { OverviewViewModel(get()) }
-        viewModel { AddRoundViewModel(get()) }
-        viewModel { EditPlayersViewModel(get()) }
-        viewModel { RoundsViewModel(get(), get()) }
-        viewModel { PlayersViewModel(get(), get()) }
+        singleOf(::FakePlayerRepository).bind<PlayerRepository>()
+        viewModelOf(::AppViewModel)
+        viewModelOf(::OverviewViewModel)
+        viewModelOf(::AddRoundViewModel)
+        viewModelOf(::EditPlayersViewModel)
+        viewModelOf(::RoundsViewModel)
+        viewModelOf(::PlayersViewModel)
     }
 }

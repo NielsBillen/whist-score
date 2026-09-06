@@ -19,7 +19,5 @@ sealed interface AddRoundAction {
     }
 
     data class SetBidAchieved(val bidAchieved: Boolean) : AddRoundAction
-    data class SetPassRound(val passRound: Boolean) : AddRoundAction
-
     data object PreviousScreen : AddRoundAction
 }

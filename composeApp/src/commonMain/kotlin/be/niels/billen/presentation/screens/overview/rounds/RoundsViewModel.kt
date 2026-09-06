@@ -2,25 +2,19 @@ package be.niels.billen.presentation.screens.overview.rounds
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.niels.billen.data.repository.DefaultPlayerRepository
-import be.niels.billen.domain.Rounds
+import be.niels.billen.domain.Game
+import be.niels.billen.domain.repository.GameRepository
 import be.niels.billen.domain.repository.PlayerRepository
-import be.niels.billen.domain.repository.RoundsRepository
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class RoundsViewModel(playersRepository: PlayerRepository, private val roundsRepository: RoundsRepository) :
+class RoundsViewModel(private val gameRepository: GameRepository) :
     ViewModel() {
-    val players = playersRepository.players.stateIn(
+    val game = gameRepository.game.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = emptyMap()
-    )
-
-    val rounds = roundsRepository.rounds.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = Rounds.EMPTY
+        initialValue = Game.DEFAULT
     )
 
     fun onAction(action: RoundsViewAction) {
@@ -30,12 +24,6 @@ class RoundsViewModel(playersRepository: PlayerRepository, private val roundsRep
     }
 
     private fun deleteRound(action: RoundsViewAction.DeleteRound) {
-        roundsRepository.update {
-            if (action.index in it.indices) {
-                it.removeAt(action.index)
-            } else {
-                it
-            }
-        }
+        gameRepository.update { it.removeAt(action.index) }
     }
 }

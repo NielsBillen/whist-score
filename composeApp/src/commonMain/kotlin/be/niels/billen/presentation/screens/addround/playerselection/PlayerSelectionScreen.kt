@@ -134,6 +134,7 @@ private val RoundType.title: String
         RoundType.Regular -> "Select player(s)"
         RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Select player"
         RoundType.Treble -> "Select players"
+        RoundType.Pass -> ""
     }
 
 
@@ -142,4 +143,5 @@ private val RoundType.description: String
         RoundType.Regular -> "Choose between one and two players that played this round"
         RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Choose the player that played this round"
         RoundType.Treble -> "Choose the two players that played this round"
+        RoundType.Pass -> ""
     }

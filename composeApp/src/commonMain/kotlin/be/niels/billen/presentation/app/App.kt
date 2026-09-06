@@ -18,14 +18,6 @@ import be.niels.billen.presentation.screens.editplayers.EditPlayersView
 import be.niels.billen.presentation.screens.overview.Overview
 import org.koin.compose.koinInject
 
-private sealed interface AppNavigation : NavKey {
-    data object OverviewRoute : AppNavigation
-
-    data object AddRoundRoute : AppNavigation
-
-    data object EditPlayersRoute : AppNavigation
-}
-
 @Composable
 fun App(modifier: Modifier = Modifier) {
     AppTheme {
@@ -44,8 +36,7 @@ fun App(modifier: Modifier = Modifier) {
                             is AppNavigation.OverviewRoute -> NavEntry(key) {
                                 Overview(
                                     onAction = viewModel::onAction,
-                                    onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
-                                    onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
+                                    onAppNavigation = { backStack.add(it) },
                                 )
                             }
 

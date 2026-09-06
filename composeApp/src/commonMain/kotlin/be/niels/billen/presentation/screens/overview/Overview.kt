@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.presentation.Style
 import be.niels.billen.presentation.app.AppAction
+import be.niels.billen.presentation.app.AppNavigation
 import be.niels.billen.presentation.screens.overview.players.PlayersView
 import be.niels.billen.presentation.screens.overview.rounds.RoundsView
 import be.niels.billen.presentation.theme.Icons
@@ -30,20 +31,18 @@ import org.koin.compose.koinInject
 fun Overview(
     viewModel: OverviewViewModel = koinInject(),
     onAction: (AppAction) -> Unit,
-    onAddRound: () -> Unit,
-    onEditPlayers: () -> Unit
+    onAppNavigation: (AppNavigation) -> Unit,
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
 
-    Overview(canStartNewGame = canStartNewGame, onAction = onAction, onAddRound = onAddRound, onEditPlayers = onEditPlayers)
+    Overview(canStartNewGame = canStartNewGame, onAction = onAction, onAppNavigation = onAppNavigation)
 }
 
 @Composable
 fun Overview(
     canStartNewGame: Boolean,
     onAction: (AppAction) -> Unit,
-    onAddRound: () -> Unit,
-    onEditPlayers: () -> Unit
+    onAppNavigation: (AppNavigation) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
@@ -55,8 +54,8 @@ fun Overview(
         ) {
             Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
 
-            IconButton(onClick = onEditPlayers) {
-                Icon(imageVector = Icons.Pencil, contentDescription = "Edit players",)
+            IconButton(onClick = { onAppNavigation(AppNavigation.EditPlayersRoute) }) {
+                Icon(imageVector = Icons.Pencil, contentDescription = "Edit players")
             }
         }
 
@@ -67,7 +66,7 @@ fun Overview(
         ButtonRow(
             canStartNewGame = canStartNewGame,
             onAction = onAction,
-            onAddRound = onAddRound,
+            onAddRound = { onAppNavigation(AppNavigation.AddRoundRoute) },
             modifier = Modifier.fillMaxWidth()
         )
     }

@@ -73,6 +73,7 @@ private val RoundType.displayName: String
         RoundType.AbandonceInTrump -> "Abandonce in Trump"
         RoundType.OpenMisere -> "Open Misere"
         RoundType.SoloSlim -> "Solo Slim"
+        RoundType.Pass -> "Pass"
     }
 
 private val RoundType.description: String
@@ -84,4 +85,5 @@ private val RoundType.description: String
         RoundType.Treble -> "The player with three aces teams up with the player with the last ace to achieve 8 slams"
         RoundType.OpenMisere -> "One player bids to achieve no slams with cards on the table"
         RoundType.SoloSlim -> "One player bids to achieve 13 slams"
+        RoundType.Pass -> "None of the player placed a bid"
     }

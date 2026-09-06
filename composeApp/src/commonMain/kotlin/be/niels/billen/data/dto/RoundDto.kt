@@ -10,17 +10,21 @@ sealed interface RoundDto {
     val value: Round
 
     @Serializable
+    @SerialName("pass")
+    data object PassRound : RoundDto {
+        override val value: Round get() = Round.PassRound
+    }
+
+    @Serializable
     @SerialName("regular")
     data class Regular(
         val players: Set<PlayerId>,
         val slams: Int,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.Regular(
-                players = players,
+                playerIds = players,
                 slams = slams,
-                passRound = passRound
             )
         }
     }
@@ -28,15 +32,13 @@ sealed interface RoundDto {
     @Serializable
     @SerialName("abandonce")
     data class Abandonce(
-        val player: PlayerId,
+        val playerId: PlayerId,
         val playerWon: Boolean,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.Abandonce(
-                player = player,
+                playerId = playerId,
                 playerWon = playerWon,
-                passRound = passRound
             )
         }
     }
@@ -44,15 +46,13 @@ sealed interface RoundDto {
     @Serializable
     @SerialName("misere")
     data class Misere(
-        val player: PlayerId,
+        val playerId: PlayerId,
         val playerWon: Boolean,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.Misere(
-                player = player,
+                playerId = playerId,
                 playerWon = playerWon,
-                passRound = passRound
             )
         }
     }
@@ -60,15 +60,13 @@ sealed interface RoundDto {
     @Serializable
     @SerialName("openMisere")
     data class OpenMisere(
-        val player: PlayerId,
+        val playerId: PlayerId,
         val playerWon: Boolean,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.OpenMisere(
-                player = player,
+                playerId = playerId,
                 playerWon = playerWon,
-                passRound = passRound
             )
         }
     }
@@ -76,15 +74,13 @@ sealed interface RoundDto {
     @Serializable
     @SerialName("soloSlim")
     data class SoloSlim(
-        val player: PlayerId,
+        val playerId: PlayerId,
         val playerWon: Boolean,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.SoloSlim(
-                player = player,
+                playerId = playerId,
                 playerWon = playerWon,
-                passRound = passRound
             )
         }
     }
@@ -92,21 +88,20 @@ sealed interface RoundDto {
     @Serializable
     @SerialName("treble")
     data class Treble(
-        val players: Set<PlayerId>,
+        val playerIds: Set<PlayerId>,
         val slams: Int,
-        val passRound: Boolean
     ) : RoundDto {
         override val value by lazy {
             Round.Treble(
-                players = players,
+                playerIds = playerIds,
                 slams = slams,
-                passRound = passRound
             )
         }
     }
 }
 
 fun Round.toDto(): RoundDto = when (this) {
+    is Round.PassRound -> RoundDto.PassRound
     is Round.Regular -> toDto()
     is Round.Treble -> toDto()
     is Round.Abandonce -> toDto()
@@ -116,38 +111,32 @@ fun Round.toDto(): RoundDto = when (this) {
 }
 
 private fun Round.Regular.toDto() = RoundDto.Regular(
-    players = players,
+    players = playerIds,
     slams = slams,
-    passRound = passRound
 )
 
 private fun Round.Abandonce.toDto() = RoundDto.Abandonce(
-    player = player,
+    playerId = playerId,
     playerWon = playerWon,
-    passRound = passRound
 )
 
 private fun Round.Misere.toDto() = RoundDto.Misere(
-    player = player,
+    playerId = playerId,
     playerWon = playerWon,
-    passRound = passRound
 )
 
 private fun Round.OpenMisere.toDto() = RoundDto.OpenMisere(
-    player = player,
+    playerId = playerId,
     playerWon = playerWon,
-    passRound = passRound
 )
 
 private fun Round.SoloSlim.toDto() = RoundDto.SoloSlim(
-    player = player,
+    playerId = playerId,
     playerWon = playerWon,
-    passRound = passRound
 )
 
 private fun Round.Treble.toDto() = RoundDto.Treble(
-    players = players,
+    playerIds = playerIds,
     slams = slams,
-    passRound = passRound
 )
 

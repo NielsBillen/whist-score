@@ -16,6 +16,7 @@ import be.niels.billen.presentation.screens.addround.roundinput.RoundTypeInputSc
 import be.niels.billen.presentation.screens.addround.slaminput.SlamInputScreen
 import be.niels.billen.presentation.screens.addround.summary.SummaryScreen
 import org.koin.compose.koinInject
+import kotlin.math.round
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -45,14 +46,14 @@ fun AddRoundView(
                     onCancel = onCancel
                 )
 
-                AddRoundScreen.SELECT_PLAYERS -> state.roundType.let {
-                    requireNotNull(it)
+                AddRoundScreen.SELECT_PLAYERS -> state.roundType.let { roundType ->
+                    requireNotNull(roundType)
+                    val game by viewModel.game.collectAsState()
 
-                    val players by viewModel.players.collectAsState()
 
                     PlayerSelectionScreen(
-                        roundType = it,
-                        players = players,
+                        roundType = roundType,
+                        players = game.players,
                         initialSelection = state.players,
                         onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                         onAction = { viewModel.onAction(it) })
@@ -73,16 +74,15 @@ fun AddRoundView(
                     onCancel = { viewModel.onAction(AddRoundAction.PreviousScreen) },
                     onAction = { viewModel.onAction(it) })
 
-                AddRoundScreen.SUMMARY -> state.round.let {
-                    requireNotNull(it)
-                    val players by viewModel.players.collectAsState()
+                AddRoundScreen.SUMMARY -> state.round.let { round ->
+                    requireNotNull(round)
+                    val game by viewModel.game.collectAsState()
 
                     SummaryScreen(
-                        round = it,
-                        players = players,
+                        game = game,
+                        round = round,
                         onBack = { viewModel.onAction(AddRoundAction.PreviousScreen) },
-                        onNext = { onSave(it) },
-                        { viewModel.onAction(it) }
+                        onNext = { onSave(round) },
                     )
                 }
             }
