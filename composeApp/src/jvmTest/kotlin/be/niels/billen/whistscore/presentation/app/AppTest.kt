@@ -1,7 +1,15 @@
 package be.niels.billen.whistscore.presentation.app
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
+import be.niels.billen.whistscore.domain.repository.FakeGameRepository
 import be.niels.billen.whistscore.domain.repository.FakePlayerRepository
+import be.niels.billen.whistscore.domain.repository.GameRepository
 import be.niels.billen.whistscore.domain.repository.PlayerRepository
 import be.niels.billen.whistscore.presentation.screens.addround.AddRoundViewModel
 import be.niels.billen.whistscore.presentation.screens.editplayers.EditPlayersViewModel
@@ -70,7 +78,8 @@ class AppTest : FreeSpec() {
     }
 
     private val testAppModule = module {
-        singleOf(::FakePlayerRepository).bind<PlayerRepository>()
+        single { FakePlayerRepository() }.bind<PlayerRepository>()
+        single { FakeGameRepository() }.bind<GameRepository>()
         viewModelOf(::AppViewModel)
         viewModelOf(::OverviewViewModel)
         viewModelOf(::AddRoundViewModel)

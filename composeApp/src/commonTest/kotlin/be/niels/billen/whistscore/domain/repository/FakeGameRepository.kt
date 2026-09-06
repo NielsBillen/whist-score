@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class FakePlayerRepository(
-    initial: Players = Game.DEFAULT_PLAYERS,
-) : PlayerRepository {
-    private val _players = MutableStateFlow(initial)
-    override val players = _players.asStateFlow()
+class FakeGameRepository(
+    initial: Game = Game.DEFAULT,
+) : GameRepository {
+    private val _game = MutableStateFlow(initial)
+    override val game = _game.asStateFlow()
 
-    override fun update(transform: (Players) -> Players) = _players.update(transform)
+    override fun update(transform: (Game) -> Game) = _game.update(transform)
 }
