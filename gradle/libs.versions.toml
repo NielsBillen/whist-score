@@ -13,6 +13,7 @@ koin-bom = "4.2.2"
 kotlinx-coroutines = "1.11.0"
 multiplatform-settings = "1.3.0"
 ksp = "2.3.11"
+proguard = "7.10.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
