@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -8,10 +9,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotest)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "be.niels.billen.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -24,15 +27,15 @@ kotlin {
         }
     }
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+//    listOf(
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach { iosTarget ->
+//        iosTarget.binaries.framework {
+//            baseName = "ComposeApp"
+//            isStatic = true
+//        }
+//    }
 
     jvm()
 
@@ -52,18 +55,26 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.nav3.ui)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.serialization)
         }
+        commonTest.dependencies {
+//            implementation(libs.kotest.runner.junit5.jvm)
+//            implementation(libs.kotest.assertions.core)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.assertions.core)
+        }
+        jvmTest.dependencies {
+            implementation(libs.kotest.runner.junit5)
+        }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-        }
-        sourceSets.getByName("jvmTest").dependencies {
-            implementation(libs.kotest.runner.junit5.jvm)
-            implementation(libs.kotest.assertions.core)
         }
     }
 }
@@ -72,13 +83,13 @@ dependencies {
     androidRuntimeClasspath(compose.uiTooling)
 }
 
-tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
 compose.desktop {
     application {
-        mainClass = "be.niels.billen.MainKt"
+        mainClass = "be.niels.billen.whistscore.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

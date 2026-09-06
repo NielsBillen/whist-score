@@ -354,8 +354,8 @@ internal fun BlockedRemovalDialog(blockedRemoval: BlockedRemoval, onAction: (Pro
 
 ## Modules & packages
 
-- **Package root `be.nielsbillen.whist-score`** — no exceptions.
-- **A feature's package is `be.nielsbillen.whist-score.feature.<feature>`** — singular
+- **Package root `be.nielsbillen.whistscore`** — no exceptions.
+- **A feature's package is `be.nielsbillen.whistscore.feature.<feature>`** — singular
   `feature`, and **the layer is never part of the package**: all three layer
   modules and their testfixtures share one package.
   Sub-packages are spent on concepts (`…feature.ui.component`), never on layers.

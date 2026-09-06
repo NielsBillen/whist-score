@@ -6,7 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+
 kotlin {
+    jvmToolchain(25)
+
     target {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
@@ -22,7 +25,7 @@ kotlin {
 }
 
 android {
-    namespace = "be.niels.billen"
+    namespace = "be.niels.billen.whistscore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
