@@ -25,7 +25,7 @@ kotlin {
 }
 
 android {
-    namespace = "be.niels.billen"
+    namespace = "be.niels.billen.whistscore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
