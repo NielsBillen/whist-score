@@ -17,10 +17,19 @@ kotlin {
     }
 
     dependencies {
-        implementation(projects.shared)
+        implementation(projects.shared.features.app.presentation)
+        implementation(projects.shared.features.game.data)
+        implementation(projects.shared.features.players.data)
+        implementation(projects.shared.features.overview.presentation)
+        implementation(projects.shared.features.addround.presentation)
+        implementation(projects.shared.features.editplayers.presentation)
+        implementation(projects.shared.features.players.presentation)
+        implementation(projects.shared.features.rounds.presentation)
+
         implementation(libs.androidx.activity.compose)
         implementation(libs.compose.uiToolingPreview)
         implementation(libs.koin)
+        implementation(libs.multiplatform.settings)
     }
 }
 
