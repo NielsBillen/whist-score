@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.overview.players
+package be.niels.billen.whistscore.feature.players
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import be.niels.billen.whistscore.presentation.Style
+import be.niels.billen.whistscore.feature.core.Style
 import org.koin.compose.koinInject
 
 @Composable

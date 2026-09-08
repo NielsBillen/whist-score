@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.overview.players
+package be.niels.billen.whistscore.feature.players
 
 import androidx.compose.ui.graphics.Color
 
