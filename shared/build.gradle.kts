@@ -1,4 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -38,52 +37,9 @@ kotlin {
 
     jvm()
 
-    js {
-        browser()
-        binaries.executable()
-    }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
-        binaries.executable()
+        nodejs()
+        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.nav3.ui)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.multiplatform.settings)
-            implementation(libs.multiplatform.settings.serialization)
-        }
-        commonTest.dependencies {
-//            implementation(libs.kotest.runner.junit5.jvm)
-//            implementation(libs.kotest.assertions.core)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
-            implementation(libs.kotest.framework.engine)
-            implementation(libs.kotest.assertions.core)
-        }
-        jvmTest.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotest.runner.junit5)
-        }
-    }
-}
-
-dependencies {
-    androidRuntimeClasspath(compose.uiTooling)
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }
