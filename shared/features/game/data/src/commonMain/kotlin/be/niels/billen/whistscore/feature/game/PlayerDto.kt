@@ -1,10 +1,10 @@
-package be.niels.billen.whistscore.data.dto
+package be.niels.billen.whistscore.feature.game
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import kotlinx.serialization.Serializable
-import be.niels.billen.whistscore.domain.Player
-import be.niels.billen.whistscore.domain.Players
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.Players
 
 @Serializable
 data class PlayerDto(val name: String, val color: Int) {

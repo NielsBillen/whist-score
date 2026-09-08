@@ -31,6 +31,7 @@ kotlin {
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.game.domain)
+            implementation(projects.shared.features.game.data)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.serialization)
             implementation(libs.koin)

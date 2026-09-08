@@ -1,7 +1,6 @@
-package be.niels.billen.whistscore.data.dto
+package be.niels.billen.whistscore.feature.game
 
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.Round
+import be.niels.billen.whistscore.feature.core.Round
 import kotlinx.serialization.Serializable
 
 @Serializable

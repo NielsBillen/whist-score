@@ -1,7 +1,7 @@
-package be.niels.billen.whistscore.data.dto
+package be.niels.billen.whistscore.feature.game
 
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Round
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Round
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
