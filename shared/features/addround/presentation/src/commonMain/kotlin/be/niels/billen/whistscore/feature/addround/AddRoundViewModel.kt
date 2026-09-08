@@ -1,11 +1,10 @@
-package be.niels.billen.whistscore.presentation.screens.addround
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.RoundType
-import be.niels.billen.whistscore.domain.repository.GameRepository
-import be.niels.billen.whistscore.domain.repository.PlayerRepository
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.RoundType
+import be.niels.billen.whistscore.feature.game.GameRepository
 import kotlinx.coroutines.flow.*
 
 class AddRoundViewModel(gameRepository: GameRepository, ) : ViewModel() {

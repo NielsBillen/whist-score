@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround.bidachievedinput
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Selectable
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundAction
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundPanel
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Selectable
 
 @Composable
 fun BidAchievedInput(

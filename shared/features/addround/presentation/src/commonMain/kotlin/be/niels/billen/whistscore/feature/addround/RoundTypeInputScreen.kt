@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround.roundinput
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,11 +13,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import be.niels.billen.whistscore.domain.RoundType
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Selectable
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundAction
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundPanel
+import be.niels.billen.whistscore.feature.core.RoundType
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Selectable
 
 @Composable
 fun RoundTypeInputScreen(

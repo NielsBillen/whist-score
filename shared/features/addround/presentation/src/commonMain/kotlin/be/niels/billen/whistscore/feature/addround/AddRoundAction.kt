@@ -1,7 +1,7 @@
-package be.niels.billen.whistscore.presentation.screens.addround
+package be.niels.billen.whistscore.feature.addround
 
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.RoundType
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.RoundType
 
 sealed interface AddRoundAction {
     data class SetRoundType(val roundType: RoundType) : AddRoundAction

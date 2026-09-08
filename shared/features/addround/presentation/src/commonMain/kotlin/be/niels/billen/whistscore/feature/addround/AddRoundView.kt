@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
@@ -7,14 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.domain.Round
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.screens.addround.bidachievedinput.BidAchievedInput
-import be.niels.billen.whistscore.presentation.screens.addround.bidinput.BidInputScreen
-import be.niels.billen.whistscore.presentation.screens.addround.playerselection.PlayerSelectionScreen
-import be.niels.billen.whistscore.presentation.screens.addround.roundinput.RoundTypeInputScreen
-import be.niels.billen.whistscore.presentation.screens.addround.slaminput.SlamInputScreen
-import be.niels.billen.whistscore.presentation.screens.addround.summary.SummaryScreen
+import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.core.Style
 import org.koin.compose.koinInject
 import kotlin.math.round
 

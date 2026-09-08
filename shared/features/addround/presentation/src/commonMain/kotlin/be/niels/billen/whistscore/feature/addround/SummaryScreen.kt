@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround.summary
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,13 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.Player
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Round
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Points
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundPanel
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Points
 
 @Composable
 fun SummaryScreen(

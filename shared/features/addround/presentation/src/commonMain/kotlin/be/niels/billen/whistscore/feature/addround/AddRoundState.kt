@@ -1,10 +1,10 @@
-package be.niels.billen.whistscore.presentation.screens.addround
+package be.niels.billen.whistscore.feature.addround
 
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Round
-import be.niels.billen.whistscore.domain.Round.*
-import be.niels.billen.whistscore.domain.RoundType
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.core.Round.*
+import be.niels.billen.whistscore.feature.core.RoundType
 
 data class AddRoundState(
     val screen: AddRoundScreen = AddRoundScreen.SELECT_ROUND_TYPE,

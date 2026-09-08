@@ -1,34 +1,36 @@
-package be.niels.billen.whistscore.presentation.screens.addround.bidinput
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Selectable
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundAction
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundPanel
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Selectable
 
 @Composable
-fun BidInputScreen(
+fun SlamInputScreen(
     modifier: Modifier = Modifier,
-    initialBid: Int?,
+    initialSlams: Int?,
     onCancel: () -> Unit,
     onAction: (AddRoundAction) -> Unit
 ) {
-    var selectedBid by remember { mutableStateOf(initialBid) }
+    var selectedSlams by remember { mutableStateOf(initialSlams) }
 
     AddRoundPanel(
-        title = "Select bid",
-        description = "Choose the number of slams the player bids in this round.",
+        title = "Select slams",
+        description = "Choose the number of slams the player(s) achieved this round.",
         onBack = onCancel,
-        onNext = { selectedBid?.let { onAction(AddRoundAction.SetBid(it)) } },
-        nextEnabled = { selectedBid != null },
+        onNext = { selectedSlams?.let { onAction(AddRoundAction.SetSlams(it)) } },
+        nextEnabled = { selectedSlams != null },
         modifier = modifier,
     ) {
         FlowRow(
@@ -42,16 +44,16 @@ fun BidInputScreen(
                 Alignment.CenterVertically
             )
         ) {
-            for (bid in 9..12) {
-                val selected = selectedBid == bid
+            for (slams in 0..13) {
+                val selected = selectedSlams == slams
 
                 Selectable(
                     selected,
-                    onClick = { selectedBid = bid },
+                    onClick = { selectedSlams = slams },
                     Modifier.requiredSize(56.dp)
                 ) {
                     Text(
-                        "$bid",
+                        "$slams",
                         Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                     )
                 }

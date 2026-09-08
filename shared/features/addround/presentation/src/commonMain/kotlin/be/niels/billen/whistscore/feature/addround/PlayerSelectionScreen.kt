@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround.playerselection
+package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.domain.Player
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Players
-import be.niels.billen.whistscore.domain.RoundType
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Selectable
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundAction
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundPanel
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.RoundType
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Selectable
 
 @Composable
 fun PlayerSelectionScreen(

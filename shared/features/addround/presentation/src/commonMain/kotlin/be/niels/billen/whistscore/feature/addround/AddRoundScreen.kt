@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.addround
+package be.niels.billen.whistscore.feature.addround
 
 enum class AddRoundScreen {
     SELECT_ROUND_TYPE,
