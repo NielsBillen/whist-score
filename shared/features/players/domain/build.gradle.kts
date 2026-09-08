@@ -27,6 +27,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
+            implementation(projects.shared.features.game.domain)
         }
         commonTest.dependencies {
             implementation(libs.kotest.framework.engine)

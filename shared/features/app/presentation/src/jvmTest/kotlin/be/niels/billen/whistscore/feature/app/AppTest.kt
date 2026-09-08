@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.app
+package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
@@ -7,15 +7,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
-import be.niels.billen.whistscore.domain.repository.FakeGameRepository
-import be.niels.billen.whistscore.domain.repository.FakePlayerRepository
-import be.niels.billen.whistscore.domain.repository.GameRepository
-import be.niels.billen.whistscore.domain.repository.PlayerRepository
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundViewModel
-import be.niels.billen.whistscore.presentation.screens.editplayers.EditPlayersViewModel
-import be.niels.billen.whistscore.presentation.screens.overview.OverviewViewModel
-import be.niels.billen.whistscore.presentation.screens.overview.players.PlayersViewModel
-import be.niels.billen.whistscore.presentation.screens.overview.rounds.RoundsViewModel
+import be.niels.billen.whistscore.feature.game.FakeGameRepository
+import be.niels.billen.whistscore.feature.players.FakePlayerRepository
+import be.niels.billen.whistscore.feature.game.GameRepository
+import be.niels.billen.whistscore.feature.players.PlayerRepository
+import be.niels.billen.whistscore.feature.addround.AddRoundViewModel
+import be.niels.billen.whistscore.feature.editplayers.EditPlayersViewModel
+import be.niels.billen.whistscore.feature.overview.OverviewViewModel
+import be.niels.billen.whistscore.feature.players.PlayersViewModel
+import be.niels.billen.whistscore.feature.rounds.RoundsViewModel
 import io.kotest.core.spec.style.FreeSpec
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin

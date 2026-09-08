@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -46,9 +47,15 @@ kotlin {
         }
         jvmTest.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(projects.shared.features.game.domain)
+            implementation(projects.shared.features.players.domain)
+            implementation(projects.shared.features.players.presentation)
+            implementation(projects.shared.features.rounds.presentation)
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
         }

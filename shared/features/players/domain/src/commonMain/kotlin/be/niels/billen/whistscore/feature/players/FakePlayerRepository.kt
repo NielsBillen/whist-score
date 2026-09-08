@@ -1,10 +1,7 @@
-package be.niels.billen.whistscore.domain.repository
+package be.niels.billen.whistscore.feature.players
 
-import androidx.compose.ui.graphics.Color
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.Player
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Players
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.game.Game
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
