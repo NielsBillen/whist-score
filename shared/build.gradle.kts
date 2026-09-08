@@ -37,14 +37,9 @@ kotlin {
 
     jvm()
 
-    js {
-        browser()
-        binaries.executable()
-    }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
-        binaries.executable()
+        nodejs()
+        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
 }

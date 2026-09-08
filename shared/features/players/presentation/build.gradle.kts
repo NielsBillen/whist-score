@@ -13,7 +13,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "be.niels.billen.whistscore.feature.players"
+        namespace = "be.niels.billen.whistscore.feature.players.presentation"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         compilerOptions { jvmTarget = JvmTarget.JVM_11 }
@@ -21,9 +21,11 @@ kotlin {
     }
 //    (iOS block stays commented out, same as shared)
     jvm()
-    js { browser(); binaries.executable() }
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs { browser(); binaries.executable() }
+    wasmJs {
+        nodejs()
+        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
+    }
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
