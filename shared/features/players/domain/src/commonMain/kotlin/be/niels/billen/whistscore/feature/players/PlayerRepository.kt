@@ -1,6 +1,6 @@
-package be.niels.billen.whistscore.domain.repository
+package be.niels.billen.whistscore.feature.players
 
-import be.niels.billen.whistscore.domain.Players
+import be.niels.billen.whistscore.feature.core.Players
 import kotlinx.coroutines.flow.Flow
 
 

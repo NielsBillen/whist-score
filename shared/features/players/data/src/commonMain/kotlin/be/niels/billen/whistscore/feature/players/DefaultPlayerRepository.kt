@@ -1,10 +1,12 @@
-package be.niels.billen.whistscore.data.repository
+package be.niels.billen.whistscore.feature.players
 
-import be.niels.billen.whistscore.data.dto.PlayersDto
-import be.niels.billen.whistscore.data.dto.toDto
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.Players
-import be.niels.billen.whistscore.domain.repository.PlayerRepository
+
+
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.game.PlayersDto
+import be.niels.billen.whistscore.feature.game.toDto
+
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValueOrNull

@@ -28,6 +28,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(compose.ui)   // Game uses Color via Player
+            implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
         }
         commonTest.dependencies {
