@@ -1,6 +1,5 @@
-package be.niels.billen.whistscore.domain.repository
+package be.niels.billen.whistscore.feature.game
 
-import be.niels.billen.whistscore.domain.Game
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {

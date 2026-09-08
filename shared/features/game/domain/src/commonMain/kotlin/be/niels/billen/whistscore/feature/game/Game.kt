@@ -1,6 +1,9 @@
-package be.niels.billen.whistscore.domain
+package be.niels.billen.whistscore.feature.game
 
 import androidx.compose.ui.graphics.Color
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Round
 
 data class Game(
     val players: Map<PlayerId, Player> = DEFAULT_PLAYERS,
