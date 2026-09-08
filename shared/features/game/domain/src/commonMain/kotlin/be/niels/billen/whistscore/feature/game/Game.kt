@@ -1,6 +1,6 @@
 package be.niels.billen.whistscore.feature.game
 
-import androidx.compose.ui.graphics.Color
+import be.niels.billen.whistscore.feature.core.Color
 import be.niels.billen.whistscore.feature.core.Player
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Round
@@ -34,10 +34,10 @@ data class Game(
 
     companion object {
         val DEFAULT_PLAYERS = mapOf(
-            PlayerId.Player1 to Player(name = "Player 1", color = Color(0xFF3b4863)),
-            PlayerId.Player2 to Player(name = "Player 2", color = Color(0xFFaf945a)),
-            PlayerId.Player3 to Player(name = "Player 3", color = Color(0xFF9a4a4b)),
-            PlayerId.Player4 to Player(name = "Player 4", color = Color(0xFF405850))
+            PlayerId.Player1 to Player(name = "Player 1", color = Color(0xFF3b4863.toInt())),
+            PlayerId.Player2 to Player(name = "Player 2", color = Color(0xFFaf945a.toInt())),
+            PlayerId.Player3 to Player(name = "Player 3", color = Color(0xFF9a4a4b.toInt())),
+            PlayerId.Player4 to Player(name = "Player 4", color = Color(0xFF405850.toInt()))
         )
 
         val DEFAULT = Game(players = DEFAULT_PLAYERS)
