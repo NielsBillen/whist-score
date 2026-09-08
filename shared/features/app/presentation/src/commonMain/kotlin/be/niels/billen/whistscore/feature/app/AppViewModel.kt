@@ -1,8 +1,8 @@
-package be.niels.billen.whistscore.presentation.app
+package be.niels.billen.whistscore.feature.app
 
 import androidx.lifecycle.ViewModel
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.repository.GameRepository
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.game.GameRepository
 
 class AppViewModel(private val gameRepository: GameRepository) : ViewModel() {
 

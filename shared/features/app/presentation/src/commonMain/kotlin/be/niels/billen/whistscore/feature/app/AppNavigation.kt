@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.app
+package be.niels.billen.whistscore.feature.app
 
 import androidx.navigation3.runtime.NavKey
 

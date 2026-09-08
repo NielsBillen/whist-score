@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.app
+package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
-import be.niels.billen.whistscore.presentation.AppTheme
-import be.niels.billen.whistscore.presentation.background.Background
-import be.niels.billen.whistscore.presentation.screens.addround.AddRoundView
-import be.niels.billen.whistscore.presentation.screens.editplayers.EditPlayersView
-import be.niels.billen.whistscore.presentation.screens.overview.Overview
+import be.niels.billen.whistscore.feature.core.AppTheme
+import be.niels.billen.whistscore.feature.core.Background
+import be.niels.billen.whistscore.feature.addround.AddRoundView
+import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
+import be.niels.billen.whistscore.feature.overview.Overview
 import org.koin.compose.koinInject
 
 @Composable
@@ -35,8 +35,9 @@ fun App(modifier: Modifier = Modifier) {
                         when (key) {
                             is AppNavigation.OverviewRoute -> NavEntry(key) {
                                 Overview(
-                                    onAction = viewModel::onAction,
-                                    onAppNavigation = { backStack.add(it) },
+                                    onResetGame = { viewModel.onAction(AppAction.ResetGame) },
+                                    onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
+                                    onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
                                 )
                             }
 

@@ -1,6 +1,6 @@
-package be.niels.billen.whistscore.presentation.app
+package be.niels.billen.whistscore.feature.app
 
-import be.niels.billen.whistscore.domain.Round
+import be.niels.billen.whistscore.feature.core.Round
 
 sealed interface AppAction {
     object ResetGame : AppAction
