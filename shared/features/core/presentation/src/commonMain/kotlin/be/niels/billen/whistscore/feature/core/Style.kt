@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation
+package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -10,9 +10,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.Font
-import whist_score.shared.generated.resources.NotoSans_Bold
-import whist_score.shared.generated.resources.NotoSans_Regular
-import whist_score.shared.generated.resources.Res
+import whist_score.shared.features.core.presentation.generated.resources.NotoSans_Bold
+import whist_score.shared.features.core.presentation.generated.resources.NotoSans_Regular
+import whist_score.shared.features.core.presentation.generated.resources.Res
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {

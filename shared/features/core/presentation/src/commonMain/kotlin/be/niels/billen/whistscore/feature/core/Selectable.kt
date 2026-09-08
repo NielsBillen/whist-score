@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.components
+package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.presentation.Style
 
 @Composable
 fun Selectable(

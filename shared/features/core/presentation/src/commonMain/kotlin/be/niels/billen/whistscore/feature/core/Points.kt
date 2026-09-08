@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.components
+package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

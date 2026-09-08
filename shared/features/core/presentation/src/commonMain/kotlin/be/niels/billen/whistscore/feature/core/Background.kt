@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.background
+package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -11,11 +11,11 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import be.niels.billen.whistscore.presentation.theme.Icons
-import be.niels.billen.whistscore.presentation.theme.icons.Clubs
-import be.niels.billen.whistscore.presentation.theme.icons.Diamonds
-import be.niels.billen.whistscore.presentation.theme.icons.Hearts
-import be.niels.billen.whistscore.presentation.theme.icons.Spades
+import be.niels.billen.whistscore.feature.core.Icons
+import be.niels.billen.whistscore.feature.core.icons.Clubs
+import be.niels.billen.whistscore.feature.core.icons.Diamonds
+import be.niels.billen.whistscore.feature.core.icons.Hearts
+import be.niels.billen.whistscore.feature.core.icons.Spades
 import kotlin.math.ceil
 import kotlin.math.max
 

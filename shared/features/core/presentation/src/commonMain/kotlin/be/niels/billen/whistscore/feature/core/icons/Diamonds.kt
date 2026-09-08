@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.theme.icons
+package be.niels.billen.whistscore.feature.core.icons
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType.Companion.NonZero
@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.presentation.theme.Icons
+import be.niels.billen.whistscore.feature.core.Icons
 
 val Icons.Diamonds by lazy {
     Builder(
