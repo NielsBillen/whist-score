@@ -1,8 +1,8 @@
-package be.niels.billen.whistscore.presentation.screens.editplayers
+package be.niels.billen.whistscore.feature.editplayers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.niels.billen.whistscore.domain.repository.PlayerRepository
+import be.niels.billen.whistscore.feature.players.PlayerRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 

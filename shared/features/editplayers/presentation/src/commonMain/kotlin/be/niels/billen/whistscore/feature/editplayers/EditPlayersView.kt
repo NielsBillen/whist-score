@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.editplayers
+package be.niels.billen.whistscore.feature.editplayers
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,9 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Players
-import be.niels.billen.whistscore.presentation.Style
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.Style
 import org.koin.compose.koinInject
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
