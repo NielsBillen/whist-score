@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.overview
+package be.niels.billen.whistscore.feature.overview
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,31 +18,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.app.AppAction
-import be.niels.billen.whistscore.presentation.app.AppNavigation
-import be.niels.billen.whistscore.presentation.screens.overview.players.PlayersView
-import be.niels.billen.whistscore.presentation.screens.overview.rounds.RoundsView
-import be.niels.billen.whistscore.presentation.theme.Icons
-import be.niels.billen.whistscore.presentation.theme.icons.Pencil
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Icons
+import be.niels.billen.whistscore.feature.core.icons.Pencil
+import be.niels.billen.whistscore.feature.players.PlayersView
+import be.niels.billen.whistscore.feature.rounds.RoundsView
 import org.koin.compose.koinInject
 
 @Composable
 fun Overview(
     viewModel: OverviewViewModel = koinInject(),
-    onAction: (AppAction) -> Unit,
-    onAppNavigation: (AppNavigation) -> Unit,
+    onResetGame: () -> Unit,
+    onAddRound: () -> Unit,
+    onEditPlayers: () -> Unit,
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
 
-    Overview(canStartNewGame = canStartNewGame, onAction = onAction, onAppNavigation = onAppNavigation)
+    Overview(canStartNewGame = canStartNewGame, onResetGame = onResetGame, onAddRound = onAddRound, onEditPlayers = onEditPlayers)
 }
 
 @Composable
 fun Overview(
     canStartNewGame: Boolean,
-    onAction: (AppAction) -> Unit,
-    onAppNavigation: (AppNavigation) -> Unit,
+    onResetGame: () -> Unit,
+    onAddRound: () -> Unit,
+    onEditPlayers: () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
@@ -54,7 +54,7 @@ fun Overview(
         ) {
             Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
 
-            IconButton(onClick = { onAppNavigation(AppNavigation.EditPlayersRoute) }) {
+            IconButton(onClick = onEditPlayers) {
                 Icon(imageVector = Icons.Pencil, contentDescription = "Edit players")
             }
         }
@@ -65,8 +65,8 @@ fun Overview(
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
-            onAction = onAction,
-            onAddRound = { onAppNavigation(AppNavigation.AddRoundRoute) },
+            onResetGame = onResetGame,
+            onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -75,7 +75,7 @@ fun Overview(
 @Composable
 private fun ButtonRow(
     canStartNewGame: Boolean,
-    onAction: (AppAction) -> Unit,
+    onResetGame: () -> Unit,
     onAddRound: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -85,7 +85,7 @@ private fun ButtonRow(
     ) {
         OutlinedButton(
             enabled = canStartNewGame,
-            onClick = { onAction(AppAction.ResetGame) }
+            onClick = onResetGame
         ) {
             Text(text = "New game")
         }
