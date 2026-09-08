@@ -1,4 +1,5 @@
 wayfinder:task
+status: closed
 
 ## Question
 
@@ -9,3 +10,9 @@ Details:
 - `domain/Game.kt` — dead: `Game.score` and `defaultPlayers` are never referenced; `DefaultPlayerRepository.DEFAULT_PLAYERS` is the real default colour source.
 - Consumers: `PlayersViewModel` combines `rounds.score(id)`; `SummaryScreen` iterates `round.points(playerId)`; `PlayersViewModel` still imports the unused `Game`.
 - No automated tests exist. Establish them here — the scoring surface is the highest-risk area in the app.
+
+## Resolution
+
+Done. `Round.points(playerId, passRound)` hides the multiplier/penalty math behind the sealed interface; `Rounds` is a real domain type (`features/rounds/domain`) with `score(playerId)`/`scoreSnapshot()`/`isPassRound(index)`, and `Game` delegates its scoring to it instead of duplicating it. Tests were established: `RoundTest` (per-type point tables, zero-sum) and `GameTest` (accumulation, pass round, reset).
+
+The "delete dead `Game`" part is superseded: `Game` is no longer dead — it became the live `GameRepository` aggregate (`features/game/domain`), so deleting it would now break the app.

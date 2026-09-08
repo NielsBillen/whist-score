@@ -1,4 +1,5 @@
 wayfinder:research
+status: closed
 
 ## Question
 
@@ -13,3 +14,7 @@ Find out:
 - Whether this app is currently using Koin for DI (it is) — confirm navigation3 doesn't impose a framework that conflicts.
 
 Output: a short recommendation — adopt nav3, or recommend an alternative — with concrete coordinate versions and any target-compatibility caveats.
+
+## Resolution
+
+Done — findings at [../research/nav3-research.md](../research/nav3-research.md). Verdict: **adopt nav3**. `navigation3-ui:1.1.1` is the current stable, publishes variants for all four app targets (Android, iOS, Desktop, WasmJs), is DI-agnostic (Koin stays), and the app's Compose/Kotlin versions are ahead of its requirements. Caveats for integration: one-time `SavedStateConfiguration`/`SerializersModule` setup for polymorphic `NavKey`s on non-JVM targets; pair with the navigator extraction (02) and dead-Bid cleanup (03).

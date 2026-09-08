@@ -15,11 +15,13 @@ Reaching the end of this map looks like a robust whist application with: correct
 
 <!-- populated as tickets close -->
 
+- [Deepen the scoring module](tickets/01-deepen-scoring.md) — done: `Round.points` hides the multiplier, `Rounds` is a real domain type `Game` delegates to, and `RoundTest`/`GameTest` cover the scoring surface; the dead-`Game` deletion is superseded because `Game` became the live `GameRepository` aggregate.
+- [nav3 usability research](tickets/06-research-nav3.md) — adopt nav3: `navigation3-ui:1.1.1` supports all four targets, is Koin-compatible, and the app's versions are ahead of its requirements; findings in `research/nav3-research.md`.
+
 ## Not yet specified
 
 - How dealer and first-move state model in the domain and survive across round types.
 - The shape of game history (a `Game` aggregate? a per-round `win` record needed for stats?) — the current `Round` interface records no `won`/`wonBy` beyond point math, so stats and history may need new fields.
-- Whether nav3 fits Compose Multiplatform's current release line or whether an alternative navigation approach is warranted.
 - Which Astryx components apply to a Compose UI, or whether the Astryx integration should target a lighter design system.
 - The exact stats surfaced first (win rate, trick win rate, total points, points per game, win rate over time) and their storage format.
 
