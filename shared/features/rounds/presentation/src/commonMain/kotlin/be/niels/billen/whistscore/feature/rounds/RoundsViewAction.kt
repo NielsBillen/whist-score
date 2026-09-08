@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.overview.rounds
+package be.niels.billen.whistscore.feature.rounds
 
 sealed interface RoundsViewAction {
     data class DeleteRound(val index: Int) : RoundsViewAction

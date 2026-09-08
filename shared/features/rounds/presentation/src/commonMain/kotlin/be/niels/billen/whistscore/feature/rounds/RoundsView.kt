@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.presentation.screens.overview.rounds
+package be.niels.billen.whistscore.feature.rounds
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,14 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.domain.Game
-import be.niels.billen.whistscore.domain.PlayerId
-import be.niels.billen.whistscore.domain.Players
-import be.niels.billen.whistscore.domain.Round
-import be.niels.billen.whistscore.presentation.Style
-import be.niels.billen.whistscore.presentation.components.Points
-import be.niels.billen.whistscore.presentation.theme.Icons
-import be.niels.billen.whistscore.presentation.theme.icons.Trash
+import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.Points
+import be.niels.billen.whistscore.feature.core.Icons
+import be.niels.billen.whistscore.feature.core.icons.Trash
 import org.koin.compose.koinInject
 
 private val ROUNDS_COLUMN_WIDTH = 32.dp
