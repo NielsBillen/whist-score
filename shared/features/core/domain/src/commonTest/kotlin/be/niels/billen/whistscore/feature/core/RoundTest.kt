@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.domain
+package be.niels.billen.whistscore.feature.core
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe

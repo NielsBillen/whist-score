@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.domain
+package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.ui.graphics.Color
 

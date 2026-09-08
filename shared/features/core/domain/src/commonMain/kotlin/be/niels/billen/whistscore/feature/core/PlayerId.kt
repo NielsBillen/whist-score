@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.domain
+package be.niels.billen.whistscore.feature.core
 
 enum class PlayerId{
     Player1,
