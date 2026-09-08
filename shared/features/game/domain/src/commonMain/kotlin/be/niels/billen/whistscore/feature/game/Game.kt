@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import be.niels.billen.whistscore.feature.core.Player
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.rounds.Rounds
 
 data class Game(
     val players: Map<PlayerId, Player> = DEFAULT_PLAYERS,
@@ -13,10 +14,12 @@ data class Game(
         require(players.size == 4) { "Each game must have 4 players" }
     }
 
+    private val roundList: Rounds by lazy { Rounds(rounds) }
+    private val scores by lazy { roundList.scoreSnapshot() }
+
     fun clearRounds() = copy(rounds = emptyList())
 
-    fun isPassRound(index: Int) = rounds.isPassRound(index)
-    private val scores by lazy { rounds.scores() }
+    fun isPassRound(index: Int) = roundList.isPassRound(index)
 
     operator fun plus(round: Round) = copy(rounds = rounds + round)
 
@@ -40,20 +43,3 @@ data class Game(
         val DEFAULT = Game(players = DEFAULT_PLAYERS)
     }
 }
-
-private fun List<Round>.isPassRound(index: Int) = index in this.indices && when (this[index]) {
-    is Round.PassRound -> true
-    is Round.Regular,
-    is Round.Treble,
-    is Round.Abandonce,
-    is Round.Misere,
-    is Round.OpenMisere,
-    is Round.SoloSlim -> false
-}
-
-private fun List<Round>.scores(): Map<PlayerId, Int> =
-    PlayerId.entries.associateWith { playerId ->
-        foldIndexed(0) { index, running, round ->
-            running + round.points(playerId = playerId, passRound = isPassRound(index))
-        }
-    }

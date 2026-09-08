@@ -30,6 +30,7 @@ kotlin {
             implementation(compose.ui)   // Game uses Color via Player
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
+            implementation(projects.shared.features.rounds.domain)
         }
         commonTest.dependencies {
             implementation(libs.kotest.framework.engine)
