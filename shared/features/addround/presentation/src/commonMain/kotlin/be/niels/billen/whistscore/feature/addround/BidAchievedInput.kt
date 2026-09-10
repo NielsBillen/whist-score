@@ -14,18 +14,12 @@ import be.niels.billen.whistscore.feature.core.Selectable
 @Composable
 fun BidAchievedInput(
     modifier: Modifier = Modifier,
-    initialBidAchieved: Boolean?,
-    onCancel: () -> Unit,
-    onAction: (AddRoundAction) -> Unit
+    selectedBidAchieved: Boolean?,
+    onBidAchievedSelected: (Boolean) -> Unit,
 ) {
-    var selectedBidAchieved by remember { mutableStateOf(initialBidAchieved) }
-
     AddRoundPanel(
         title = "Bid Achieved",
         description = "Choose whether the player achieved the bid",
-        onBack = onCancel,
-        onNext = { selectedBidAchieved?.let { onAction(AddRoundAction.SetBidAchieved(it)) } },
-        nextEnabled = { selectedBidAchieved != null },
         modifier = modifier,
     ) {
         Column(
@@ -33,7 +27,7 @@ fun BidAchievedInput(
         ) {
             Selectable(
                 selectedBidAchieved == true,
-                onClick = { selectedBidAchieved = true },
+                onClick = { onBidAchievedSelected(true) },
                 Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -44,7 +38,7 @@ fun BidAchievedInput(
 
             Selectable(
                 selectedBidAchieved == false,
-                onClick = { selectedBidAchieved = false },
+                onClick = { onBidAchievedSelected(false) },
                 Modifier.fillMaxWidth()
             ) {
                 Text(

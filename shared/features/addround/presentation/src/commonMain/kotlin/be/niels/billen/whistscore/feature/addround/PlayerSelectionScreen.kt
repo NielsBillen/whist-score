@@ -19,33 +19,24 @@ fun PlayerSelectionScreen(
     modifier: Modifier = Modifier,
     roundType: RoundType,
     players: Players,
-    initialSelection: Set<PlayerId>,
-    onAction: (AddRoundAction) -> Unit,
-    onCancel: () -> Unit,
+    selection: Set<PlayerId>,
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    var selection by remember { mutableStateOf(initialSelection) }
-
     AddRoundPanel(
         title = roundType.title,
         description = roundType.description,
-        onBack = onCancel,
-        onNext = { onAction(AddRoundAction.SetPlayers(selection)) },
-        nextEnabled = { selection.size in roundType.playerCountRange },
-        modifier = modifier
+        modifier = modifier,
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
                 players = players,
                 selectedPlayers = selection,
-                onSelection = { selection = setOf(it) })
+                onSelection = { onSelectionChange(it, true) })
         } else {
             MultiPlayerChoice(
                 players = players,
                 selectedPlayers = selection,
-                onSelectionChange = { id, selected ->
-                    selection = if (selected) selection + id
-                    else selection - id
-                })
+                onSelectionChange = onSelectionChange)
         }
     }
 }

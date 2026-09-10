@@ -21,18 +21,15 @@ import be.niels.billen.whistscore.feature.core.Points
 
 @Composable
 fun SummaryScreen(
+    modifier: Modifier = Modifier,
     game: Game,
     round: Round,
-    onBack: () -> Unit,
-    onNext: () -> Unit,
 ) {
     val shape = RoundedCornerShape(Style.Dimensions.radiusMedium)
 
     AddRoundPanel(
         title = "Summary",
-        onBack = onBack,
-        onNext = onNext,
-        nextEnabled = { true }
+        modifier = modifier,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

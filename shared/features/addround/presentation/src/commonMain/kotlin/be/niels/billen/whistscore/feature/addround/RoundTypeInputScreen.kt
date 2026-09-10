@@ -20,24 +20,18 @@ import be.niels.billen.whistscore.feature.core.Selectable
 @Composable
 fun RoundTypeInputScreen(
     modifier: Modifier = Modifier,
-    initialRoundType: RoundType?,
-    onAction: (AddRoundAction) -> Unit,
-    onCancel: () -> Unit
+    selectedRoundType: RoundType?,
+    onRoundTypeSelected: (RoundType) -> Unit,
 ) {
-    var selectedRoundType by remember { mutableStateOf(initialRoundType) }
-
     AddRoundPanel(
         title = "Select round type",
         modifier = modifier,
-        onBack = onCancel,
-        onNext = { selectedRoundType?.let { onAction(AddRoundAction.SetRoundType(it)) } },
-        nextEnabled = { selectedRoundType != null }) {
-
+    ) {
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)) {
             items(items = RoundType.entries) { type ->
                 RoundTypeButton(type, selectedRoundType == type) {
-                    selectedRoundType = type
+                    onRoundTypeSelected(type)
                 }
             }
         }

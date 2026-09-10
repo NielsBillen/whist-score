@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,18 +15,12 @@ import be.niels.billen.whistscore.feature.core.Selectable
 @Composable
 fun SlamInputScreen(
     modifier: Modifier = Modifier,
-    initialSlams: Int?,
-    onCancel: () -> Unit,
-    onAction: (AddRoundAction) -> Unit
+    selectedSlams: Int?,
+    onSlamsSelected: (Int) -> Unit,
 ) {
-    var selectedSlams by remember { mutableStateOf(initialSlams) }
-
     AddRoundPanel(
         title = "Select slams",
         description = "Choose the number of slams the player(s) achieved this round.",
-        onBack = onCancel,
-        onNext = { selectedSlams?.let { onAction(AddRoundAction.SetSlams(it)) } },
-        nextEnabled = { selectedSlams != null },
         modifier = modifier,
     ) {
         FlowRow(
@@ -49,7 +39,7 @@ fun SlamInputScreen(
 
                 Selectable(
                     selected,
-                    onClick = { selectedSlams = slams },
+                    onClick = { onSlamsSelected(slams) },
                     Modifier.requiredSize(56.dp)
                 ) {
                     Text(
