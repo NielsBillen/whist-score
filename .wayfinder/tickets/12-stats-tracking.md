@@ -8,5 +8,5 @@ Add statistics: global win rate, per-trick win rate, total points, points per ga
 Details:
 - Stats read from two sources that must exist first: the scoring module (`01-deepen-scoring.md`) for reliable, tested score derivation, and game history (`11-game-history.md`) for anything beyond the current game.
 - Stats to implement (user's list): global win rate, per-trick (per-deal) win rate, total points across games, points per game, and win rate over time (a time-series of win rate).
-- The per-trick win rate requires a per-round win record — resolved by the dealer/first-move ticket (`09-dealer-first-move.md`), which adds `wonBy` to `Round`.
+- The per-trick win rate needs a per-round winner — **derived, not stored**: each `Round` already exposes `won(playerId)`, and `09-dealer-first-move.md` confirmed no `wonBy` field is added. So the per-trick win rate reads winners straight from the round; it does not depend on 09 for a new field.
 - Decisions to make: where stats are computed (a stats aggregator over `GameHistory`), how win-rate-over-time is stored/computed, and how to present them (screen, or a stats view on the overview).

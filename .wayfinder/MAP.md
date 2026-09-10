@@ -16,6 +16,8 @@ Reaching the end of this map looks like a robust whist application with: correct
 <!-- populated as tickets close -->
 
 - [Deepen the scoring module](tickets/01-deepen-scoring.md) — done: `Round.points` hides the multiplier, `Rounds` is a real domain type `Game` delegates to, and `RoundTest`/`GameTest` cover the scoring surface; the dead-`Game` deletion is superseded because `Game` became the live `GameRepository` aggregate.
+- [Pass rounds](tickets/08-pass-rounds.md) — done: a `PassRound` is a zero-point placeholder that keeps the round sequence intact and doubles nothing — the 2× pass multiplier is not wired to any real round (inert, tested in `GameTest`); if a pass round must actually double the prior deal, that is new work.
+- [Dealer, first-move & per-round winners](tickets/09-dealer-first-move.md) — done: winners are derived from `Round.won(playerId)` (no `wonBy` field, no DTO change); dealer & first-lead are derived from the Edit-Players seat order (deal *n*: dealer = seat `(n−1) mod 4`, lead = seat `n mod 4`, passes advance one seat); reordering is seat identity. Decision: ship a reorderable Edit Players (persisted seat order) + dealer/lead shown per round.
 - [RoundType display metadata](tickets/04-roundtype-metadata.md) — done: canonical `displayName`/`description` live on the domain `RoundType`; both add-round screens read them, the screens' divergent `title`/guidance re-derivations are deleted.
 - [nav3 usability research](tickets/06-research-nav3.md) — adopt nav3: `navigation3-ui:1.1.1` supports all four targets, is Koin-compatible, and the app's versions are ahead of its requirements; findings in `research/nav3-research.md`.
 - [Extract a deep NumberInput component](tickets/05-numberinput.md) — superseded, no code change: the "Bid" stage is now the boolean `BidAchievedInput`, so `SlamInputScreen` is the only number-range input left and a shared `NumberInput` would have one caller; also resolves the `03-dead-code` "dead `SELECT_BID` stage" unit (replaced, not deleted).
@@ -23,8 +25,7 @@ Reaching the end of this map looks like a robust whist application with: correct
 
 ## Not yet specified
 
-- How dealer and first-move state model in the domain and survive across round types.
-- The shape of game history (a `Game` aggregate? a per-round `win` record needed for stats?) — the current `Round` interface records no `won`/`wonBy` beyond point math, so stats and history may need new fields.
+- The shape of game history (a `Game` aggregate?) — how the current game and past games are represented and serialized (ticket 11). Per-round winners are already derived from `Round.won()` (09), so no new win field is needed.
 - The exact stats surfaced first (win rate, trick win rate, total points, points per game, win rate over time) and their storage format.
 
 ## Out of scope
