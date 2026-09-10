@@ -126,7 +126,7 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Regular", substring = true).performClick()
                 onNodeWithText("Next").performClick()
                 waitForIdle()
-                onNodeWithText("Select player(s)").assertIsDisplayed()
+                onNodeWithText("Regular").assertIsDisplayed()
             }
         }
 

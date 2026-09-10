@@ -16,6 +16,7 @@ Reaching the end of this map looks like a robust whist application with: correct
 <!-- populated as tickets close -->
 
 - [Deepen the scoring module](tickets/01-deepen-scoring.md) — done: `Round.points` hides the multiplier, `Rounds` is a real domain type `Game` delegates to, and `RoundTest`/`GameTest` cover the scoring surface; the dead-`Game` deletion is superseded because `Game` became the live `GameRepository` aggregate.
+- [RoundType display metadata](tickets/04-roundtype-metadata.md) — done: canonical `displayName`/`description` live on the domain `RoundType`; both add-round screens read them, the screens' divergent `title`/guidance re-derivations are deleted.
 - [nav3 usability research](tickets/06-research-nav3.md) — adopt nav3: `navigation3-ui:1.1.1` supports all four targets, is Koin-compatible, and the app's versions are ahead of its requirements; findings in `research/nav3-research.md`.
 
 ## Not yet specified

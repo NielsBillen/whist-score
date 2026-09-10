@@ -23,7 +23,7 @@ fun PlayerSelectionScreen(
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     AddRoundPanel(
-        title = roundType.title,
+        title = roundType.displayName,
         description = roundType.description,
         modifier = modifier,
     ) {
@@ -117,20 +117,3 @@ private fun PlayerRadioButton(
         )
     }
 }
-
-private val RoundType.title: String
-    get() = when (this) {
-        RoundType.Regular -> "Select player(s)"
-        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Select player"
-        RoundType.Treble -> "Select players"
-        RoundType.Pass -> ""
-    }
-
-
-private val RoundType.description: String
-    get() = when (this) {
-        RoundType.Regular -> "Choose between one and two players that played this round"
-        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Choose the player that played this round"
-        RoundType.Treble -> "Choose the two players that played this round"
-        RoundType.Pass -> ""
-    }
