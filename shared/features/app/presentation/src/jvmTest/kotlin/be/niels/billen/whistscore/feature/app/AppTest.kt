@@ -49,6 +49,108 @@ class AppTest : FreeSpec() {
             }
         }
 
+        "saving a full regular round returns to the overview" {
+            withApp {
+                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Regular", substring = true).performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+
+                onNodeWithText("Player 1").performClick()
+                onNodeWithText("Player 2").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+
+                waitForIdle()
+                onNodeWithText("Select slams").assertIsDisplayed()
+                onNodeWithText("8").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+
+                waitForIdle()
+                onNodeWithText("Summary").assertIsDisplayed()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Whist score").assertIsDisplayed()
+            }
+        }
+
+        "saving a pass round returns to the overview" {
+            withApp {
+                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Pass", substring = true).performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Summary").assertIsDisplayed()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Whist score").assertIsDisplayed()
+            }
+        }
+
+        "saving a misere round returns to the overview" {
+            withApp {
+                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Misere - One player bids to achieve no slams").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+
+                onNodeWithText("Player 1").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+
+                waitForIdle()
+                onNodeWithText("Bid Achieved").assertIsDisplayed()
+                onNodeWithText("Yes").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Summary").assertIsDisplayed()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Whist score").assertIsDisplayed()
+            }
+        }
+
+        "backing out of the player selection returns to the round type selection" {
+            withApp {
+                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Regular", substring = true).performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Back").performClick()
+                waitForIdle()
+                onNodeWithText("Select round type").assertIsDisplayed()
+                onNodeWithText("Regular", substring = true).performClick()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Select player(s)").assertIsDisplayed()
+            }
+        }
+
+        "backing out of the summary returns to the slams selection" {
+            withApp {
+                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Regular", substring = true).performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                onNodeWithText("Player 1").performClick()
+                onNodeWithText("Player 2").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("8").performClick()
+                waitForIdle()
+                onNodeWithText("Next").performClick()
+                waitForIdle()
+                onNodeWithText("Back").performClick()
+                waitForIdle()
+                onNodeWithText("Select slams").assertIsDisplayed()
+            }
+        }
+
         "edit players shows the edit players screen" {
             withApp {
                 onNodeWithContentDescription("Edit players").performClick()

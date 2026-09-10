@@ -9,7 +9,6 @@ import be.niels.billen.whistscore.feature.core.RoundType
 data class AddRoundState(
     val screen: AddRoundScreen = AddRoundScreen.SELECT_ROUND_TYPE,
     val roundType: RoundType? = null,
-    val bid: Int? = null,
     val players: Set<PlayerId> = emptySet(),
     val playerWon: Boolean? = null,
     val slams: Int? = null,
@@ -17,13 +16,9 @@ data class AddRoundState(
 ) {
     fun setRoundType(roundType: RoundType) = copy(roundType = roundType)
 
-    fun setScreen(screen: AddRoundScreen) = copy(screen = screen)
-
     fun setPlayers(players: Set<PlayerId>) = copy(players = players)
 
     fun setSlams(slams: Int) = copy(slams = slams)
-
-    fun setBid(slams: Int) = copy(bid = slams)
 
     fun setBidAchieved(bidAchieved: Boolean) = copy(playerWon = bidAchieved)
 

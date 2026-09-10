@@ -14,6 +14,8 @@ import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.AppTheme
 import be.niels.billen.whistscore.feature.core.Background
 import be.niels.billen.whistscore.feature.addround.AddRoundView
+import be.niels.billen.whistscore.feature.addround.popSlideTransition
+import be.niels.billen.whistscore.feature.addround.pushSlideTransition
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import org.koin.compose.koinInject
@@ -57,7 +59,9 @@ fun App(modifier: Modifier = Modifier) {
                                 )
                             }
                         }
-                    }
+                    },
+                    transitionSpec = pushSlideTransition(),
+                    popTransitionSpec = popSlideTransition(),
                 )
             }
         }

@@ -12,12 +12,6 @@ sealed interface AddRoundAction {
         }
     }
 
-    data class SetBid(val bid: Int) : AddRoundAction {
-        init {
-            require(bid in 9..13) { "the bid of slams must be between [9..13]" }
-        }
-    }
-
     data class SetBidAchieved(val bidAchieved: Boolean) : AddRoundAction
     data object PreviousScreen : AddRoundAction
 }

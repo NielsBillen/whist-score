@@ -38,9 +38,21 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.androidx.nav3.ui)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
             implementation(projects.shared.features.game.domain)
         }
+        jvmTest.dependencies {
+            implementation(libs.kotest.runner.junit5)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.assertions.core)
+        }
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
