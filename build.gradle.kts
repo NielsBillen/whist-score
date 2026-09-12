@@ -7,4 +7,12 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.kover)
+}
+
+dependencies {
+    kover(projects.shared.features.core.domain)
+    kover(projects.shared.features.game.domain)
+    kover(projects.shared.features.addround.presentation)
+    kover(projects.shared.features.app.presentation)
 }
