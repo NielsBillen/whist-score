@@ -16,3 +16,17 @@ dependencies {
     kover(projects.shared.features.addround.presentation)
     kover(projects.shared.features.app.presentation)
 }
+
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "be.niels.billen.whistscore.feature.addround.AddRoundViewKt",
+                    "be/niels/billen/whistscore/feature/addround/RoundTypeInputScreenKt",
+                    "be.niels.billen.whistscore.feature.addround.SlamInputScreenKt"
+                )
+            }
+        }
+    }
+}
