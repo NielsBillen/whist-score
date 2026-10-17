@@ -1,6 +1,6 @@
 package be.niels.billen.whistscore.feature.app
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -16,6 +16,7 @@ import be.niels.billen.whistscore.feature.core.Background
 import be.niels.billen.whistscore.feature.addround.AddRoundView
 import be.niels.billen.whistscore.feature.addround.popSlideTransition
 import be.niels.billen.whistscore.feature.addround.pushSlideTransition
+import be.niels.billen.whistscore.feature.addround.slideSizeTransform
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import org.koin.compose.koinInject
@@ -29,10 +30,14 @@ fun App(modifier: Modifier = Modifier) {
             val viewModel: AppViewModel = koinInject()
             val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+            BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                val windowWidth = constraints.maxWidth.toInt()
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
+                    sizeTransform = slideSizeTransform,
+                    transitionSpec = pushSlideTransition(windowWidth),
+                    popTransitionSpec = popSlideTransition(windowWidth),
                     entryProvider = { key ->
                         when (key) {
                             is AppNavigation.OverviewRoute -> NavEntry(key) {
@@ -60,8 +65,6 @@ fun App(modifier: Modifier = Modifier) {
                             }
                         }
                     },
-                    transitionSpec = pushSlideTransition(),
-                    popTransitionSpec = popSlideTransition(),
                 )
             }
         }
