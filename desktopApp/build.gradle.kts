@@ -18,13 +18,12 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
-    // shortcut: linux-x64 only; on macOS use org.jetbrains.skiko:skiko-awt-rt-macos-arm64 (or -x64) instead
-    implementation(libs.skiko.awt.runtime)
     implementation(libs.kotlinx.coroutines.swing)
 
     implementation(libs.koin)
     implementation(libs.compose.uiToolingPreview)
     implementation(libs.multiplatform.settings)
+    implementation(compose.desktop.currentOs)
 }
 
 compose.desktop {
