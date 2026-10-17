@@ -16,7 +16,10 @@ dependencies {
     implementation(projects.shared.features.game.data)
     implementation(projects.shared.features.players.data)
 
-    implementation(compose.desktop.currentOs)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
+    // shortcut: linux-x64 only; on macOS use org.jetbrains.skiko:skiko-awt-rt-macos-arm64 (or -x64) instead
+    implementation(libs.skiko.awt.runtime)
     implementation(libs.kotlinx.coroutines.swing)
 
     implementation(libs.koin)

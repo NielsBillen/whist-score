@@ -1,4 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -30,12 +29,12 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.compose)
@@ -49,7 +48,10 @@ kotlin {
             implementation(projects.shared.features.editplayers.presentation)
         }
         jvmTest.dependencies {
-            implementation(compose.desktop.currentOs)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.foundation)
+            // shortcut: linux-x64 only; on macOS use org.jetbrains.skiko:skiko-awt-rt-macos-arm64 (or -x64) instead
+            implementation(libs.skiko.awt.runtime)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
@@ -57,8 +59,7 @@ kotlin {
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
         }
