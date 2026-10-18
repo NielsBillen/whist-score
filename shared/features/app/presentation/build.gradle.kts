@@ -48,6 +48,7 @@ kotlin {
             implementation(projects.shared.features.editplayers.presentation)
         }
         jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
             implementation(libs.compose.ui)
             implementation(libs.compose.foundation)
             implementation(projects.shared.features.game.domain)

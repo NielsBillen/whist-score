@@ -7,7 +7,6 @@ import be.niels.billen.whistscore.feature.game.GameRepository
 import kotlinx.coroutines.flow.*
 
 class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
-    private val navigator = AddRoundNavigator()
 
     private val _state = MutableStateFlow(AddRoundState())
     val state: StateFlow<AddRoundState> = _state.asStateFlow()
@@ -21,35 +20,35 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
         initialValue = Game.DEFAULT,
     )
 
-    fun onAction(action: AddRoundAction) {
+    fun setPlayers(action: AddRoundAction) {
         when (action) {
-            is AddRoundAction.SetRoundType -> onAction(action)
-            is AddRoundAction.SetPlayers -> onAction(action)
-            is AddRoundAction.SetSlams -> onAction(action)
-            is AddRoundAction.SetBidAchieved -> onAction(action)
-            is AddRoundAction.PreviousScreen -> onAction(action)
+            is AddRoundAction.SetRoundType -> setRoundType(action)
+            is AddRoundAction.SetPlayers -> setPlayers(action)
+            is AddRoundAction.SetSlams -> setSlams(action)
+            is AddRoundAction.SetBidAchieved -> setBidAchieved(action)
+            is AddRoundAction.PreviousScreen -> navigateToPreviousScreen()
         }
     }
 
-    fun onAction(action: AddRoundAction.SetRoundType) {
+    private fun setRoundType(action: AddRoundAction.SetRoundType) {
         advance { it.setRoundType(action.roundType) }
     }
 
-    fun onAction(action: AddRoundAction.SetPlayers) {
+    private fun setPlayers(action: AddRoundAction.SetPlayers) {
         advance { it.setPlayers(action.players) }
     }
 
-    fun onAction(action: AddRoundAction.SetSlams) {
+    private fun setSlams(action: AddRoundAction.SetSlams) {
         advance { it.setSlams(action.slams) }
     }
 
-    fun onAction(action: AddRoundAction.SetBidAchieved) {
+    private fun setBidAchieved(action: AddRoundAction.SetBidAchieved) {
         advance { it.setBidAchieved(action.bidAchieved) }
     }
 
-    fun onAction(action: AddRoundAction.PreviousScreen) {
+    private fun navigateToPreviousScreen() {
         _state.update { state ->
-            state.copy(screen = navigator.previous(screen = state.screen, roundType = state.roundType))
+            state.copy(screen = AddRoundNavigator.previous(screen = state.screen, roundType = state.roundType))
         }
         _effects.tryEmit(AddRoundEffect.PreviousScreen)
     }
@@ -57,7 +56,7 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     private fun advance(update: (AddRoundState) -> AddRoundState) {
         _state.update { state ->
             val updated = update(state)
-            updated.copy(screen = navigator.next(screen = updated.screen, roundType = updated.roundType))
+            updated.copy(screen = AddRoundNavigator.next(screen = updated.screen, roundType = updated.roundType))
         }
         _effects.tryEmit(AddRoundEffect.NextScreen)
     }

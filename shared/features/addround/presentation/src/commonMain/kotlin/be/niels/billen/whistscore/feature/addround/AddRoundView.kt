@@ -133,7 +133,7 @@ fun AddRoundView(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(onClick = {
-                if (backStack.size > 1) viewModel.onAction(AddRoundAction.PreviousScreen)
+                if (backStack.size > 1) viewModel.setPlayers(AddRoundAction.PreviousScreen)
                 else onCancel()
             }) {
                 Text("Back")
@@ -142,7 +142,7 @@ fun AddRoundView(
             Button(
                 onClick = {
                     when (val step = nextButton.step) {
-                        is AddRoundNextStep.Dispatch -> viewModel.onAction(step.action)
+                        is AddRoundNextStep.Dispatch -> viewModel.setPlayers(step.action)
                         is AddRoundNextStep.Save -> onSave(step.round)
                     }
                 },
