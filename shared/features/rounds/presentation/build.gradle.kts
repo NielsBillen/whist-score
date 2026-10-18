@@ -41,6 +41,7 @@ kotlin {
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
             implementation(projects.shared.features.game.domain)
+            implementation(projects.shared.features.rounds.domain)
         }
     }
 }

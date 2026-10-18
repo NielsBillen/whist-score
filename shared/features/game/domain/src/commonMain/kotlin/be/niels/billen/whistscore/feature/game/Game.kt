@@ -8,29 +8,24 @@ import be.niels.billen.whistscore.feature.rounds.Rounds
 
 data class Game(
     val players: Map<PlayerId, Player> = DEFAULT_PLAYERS,
-    val rounds: List<Round> = emptyList()
+    val rounds: Rounds = Rounds.EMPTY,
 ) {
     init {
         require(players.size == 4) { "Each game must have 4 players" }
     }
 
-    private val roundList: Rounds by lazy { Rounds(rounds) }
-    private val scores by lazy { roundList.scoreSnapshot() }
-
-    fun clearRounds() = copy(rounds = emptyList())
-
-    fun isPassRound(index: Int) = roundList.isPassRound(index)
+    fun clearRounds() = copy(rounds = Rounds.EMPTY)
 
     operator fun plus(round: Round) = copy(rounds = rounds + round)
 
     fun removeAt(index: Int): Game {
         if (index in rounds.indices) {
-            return copy(rounds = rounds.filterIndexed { i, _ -> i != index })
+            return copy(rounds = rounds.removeAt(index))
         }
         return this
     }
 
-    fun score(playerId: PlayerId) = scores.getOrElse(playerId) { 0 }
+    fun score(playerId: PlayerId) = rounds.score(playerId)
 
     companion object {
         val DEFAULT_PLAYERS = mapOf(

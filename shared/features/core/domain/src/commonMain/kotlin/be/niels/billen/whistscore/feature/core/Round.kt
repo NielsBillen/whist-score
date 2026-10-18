@@ -3,8 +3,6 @@ package be.niels.billen.whistscore.feature.core
 import kotlin.math.abs
 
 sealed interface Round {
-    fun points(playerId: PlayerId, passRound: Boolean): Int = points(playerId) * passRound.passRoundMultiplier
-
     fun points(playerId: PlayerId): Int = 0
 
     fun won(playerId: PlayerId): Boolean
@@ -116,5 +114,3 @@ sealed interface Round {
             get() = 4 + abs(slams - requiredSlams) * 2
     }
 }
-
-private val Boolean.passRoundMultiplier: Int get() = if (this) 2 else 1

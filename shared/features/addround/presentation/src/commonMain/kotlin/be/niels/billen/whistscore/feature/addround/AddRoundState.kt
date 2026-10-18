@@ -12,7 +12,6 @@ data class AddRoundState(
     val players: Set<PlayerId> = emptySet(),
     val playerWon: Boolean? = null,
     val slams: Int? = null,
-    val passRound: Boolean = false,
 ) {
     fun setRoundType(roundType: RoundType) = copy(roundType = roundType)
 

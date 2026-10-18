@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Players
-import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.Icons
@@ -87,13 +86,13 @@ fun RoundsView(
                     Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
                 ) {
-                    itemsIndexed(game.rounds) { index, round ->
+                    itemsIndexed(game.rounds) { index, _ ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
 
                             for (playerId in PlayerId.entries) {
                                 Points(
-                                    round.points(playerId = playerId, passRound = game.isPassRound(index - 1)),
+                                    game.rounds.points(index, playerId),
                                     Modifier.weight(1f)
                                 )
                             }

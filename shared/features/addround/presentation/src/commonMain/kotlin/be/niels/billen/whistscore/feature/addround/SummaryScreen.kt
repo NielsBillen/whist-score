@@ -35,11 +35,13 @@ fun SummaryScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
         ) {
+            val nextGame = game + round
+            val roundIndex = nextGame.rounds.size - 1
+
             Column(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)) {
                 for (playerId in PlayerId.entries) {
                     if (playerId !in game.players) continue
-                    val isPassRounds = game.rounds.lastOrNull() is Round.PassRound
-                    val points = round.points(playerId = playerId, passRound = isPassRounds)
+                    val points = nextGame.rounds.points(roundIndex, playerId)
 
                     Box(
                         Modifier.background(

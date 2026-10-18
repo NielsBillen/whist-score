@@ -6,13 +6,13 @@ import io.kotest.matchers.shouldBe
 class RoundTest : FreeSpec() {
 
     init {
-        "Regular scores two teams split across the roster, ignoring the pass flag" {
+        "Regular scores two teams split across the roster" {
             val regular = Round.Regular(
                 playerIds = setOf(PlayerId.Player1, PlayerId.Player2),
                 slams = 8,
             )
 
-            PlayerId.entries.associateWith { regular.points(it, passRound = false) } shouldBe mapOf(
+            PlayerId.entries.associateWith { regular.points(it) } shouldBe mapOf(
                 PlayerId.Player1 to 2,
                 PlayerId.Player2 to 2,
                 PlayerId.Player3 to -2,
@@ -20,7 +20,7 @@ class RoundTest : FreeSpec() {
             )
         }
 
-        "Treble scores two players against the rest without the pass flag" {
+        "Treble scores two players against the rest" {
             val treble = Round.Treble(
                 playerIds = setOf(PlayerId.Player1, PlayerId.Player2),
                 slams = 8,
@@ -34,7 +34,7 @@ class RoundTest : FreeSpec() {
             )
         }
 
-        "Abandonce scores the bidder against the roster without the pass flag" {
+        "Abandonce scores the bidder against the roster" {
             val abandonce = Round.Abandonce(
                 playerId = PlayerId.Player1,
                 playerWon = true,
@@ -48,7 +48,7 @@ class RoundTest : FreeSpec() {
             )
         }
 
-        "Misere scores the bidder against the roster when failing without the pass flag" {
+        "Misere scores the bidder against the roster when failing" {
             val misere = Round.Misere(
                 playerId = PlayerId.Player1,
                 playerWon = false,
