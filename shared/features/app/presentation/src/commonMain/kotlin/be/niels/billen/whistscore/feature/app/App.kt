@@ -31,7 +31,8 @@ fun App(modifier: Modifier = Modifier) {
             val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
             BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                val windowWidth = constraints.maxWidth.toInt()
+                val windowWidth = constraints.maxWidth
+
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },

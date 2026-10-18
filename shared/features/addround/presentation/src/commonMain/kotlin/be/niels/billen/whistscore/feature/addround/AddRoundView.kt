@@ -67,7 +67,7 @@ fun AddRoundView(
             contentAlignment = Alignment.TopCenter,
         ) {
             // The box spans the window, so its max constraint is the window width.
-            val windowWidth = constraints.maxWidth.toInt()
+            val windowWidth = constraints.maxWidth
             NavDisplay(
                 backStack = backStack,
                 modifier = Modifier.padding(Style.Dimensions.paddingLarge),
