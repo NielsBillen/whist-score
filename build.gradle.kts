@@ -42,11 +42,8 @@ kover {
     reports {
         filters {
             excludes {
-                classes(
-                    "be.niels.billen.whistscore.feature.addround.AddRoundViewKt",
-                    "be/niels/billen/whistscore/feature/addround/RoundTypeInputScreenKt",
-                    "be.niels.billen.whistscore.feature.addround.SlamInputScreenKt"
-                )
+                // *Kt = file-facade classes (top-level declarations, e.g. composables).
+                classes("*Kt")
             }
         }
     }
