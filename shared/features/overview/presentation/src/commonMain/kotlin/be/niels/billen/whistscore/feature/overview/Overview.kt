@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.Icons
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
@@ -74,7 +73,7 @@ private fun TitleRow(onEditPlayers: () -> Unit) {
         Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
 
         IconButton(onClick = onEditPlayers) {
-            Icon(imageVector = Icons.Pencil, contentDescription = "Edit players")
+            Icon(imageVector = Pencil, contentDescription = "Edit players")
         }
     }
 }

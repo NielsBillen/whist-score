@@ -114,7 +114,7 @@ private fun RoundsList(rounds: Rounds, modifier: Modifier = Modifier, onAction: 
                     modifier = Modifier.requiredSize(ICONS_SIZE)
                 ) {
                     Icon(
-                        imageVector = Icons.Trash,
+                        imageVector = Trash,
                         contentDescription = "Delete round",
                         modifier = Modifier.fillMaxSize().padding(Style.Dimensions.paddingSmall)
                     )
