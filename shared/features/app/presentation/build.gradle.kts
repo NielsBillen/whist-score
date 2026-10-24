@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.androidx.nav3.ui)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
             implementation(projects.shared.features.game.domain)

@@ -40,10 +40,6 @@ internal fun PlayerSelectionScreen(
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    LaunchedEffect(selection) {
-        println(selection)
-    }
-
     AddRoundPanel(
         title = roundType.displayName,
         description = roundType.description,

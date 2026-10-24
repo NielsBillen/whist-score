@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.addround.AddRoundView
 import be.niels.billen.whistscore.feature.addround.slideTransition
@@ -32,8 +34,11 @@ fun App(modifier: Modifier = Modifier) {
                 onBack = { backStack.removeLastOrNull() },
                 transitionSpec = slideTransition(1),
                 popTransitionSpec = slideTransition(-1),
+                entryDecorators = listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator()
+                ),
                 entryProvider = { key ->
-
                     when (key) {
                         is AppNavigation.OverviewRoute -> NavEntry(key) {
                             Overview(

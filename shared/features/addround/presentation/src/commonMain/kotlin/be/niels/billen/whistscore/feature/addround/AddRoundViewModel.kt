@@ -83,7 +83,7 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     private fun advanceFromPlayersScreen(roundType: RoundType) {
         when (roundType.winCondition) {
             WinCondition.SLAMS -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
-            WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
+            WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_BID_ACHIEVED))
             WinCondition.NONE -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
         }
     }
