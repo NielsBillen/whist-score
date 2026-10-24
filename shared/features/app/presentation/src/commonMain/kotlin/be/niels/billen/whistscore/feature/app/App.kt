@@ -15,6 +15,7 @@ import be.niels.billen.whistscore.feature.core.Background
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
@@ -22,7 +23,7 @@ fun App(modifier: Modifier = Modifier) {
         Surface(modifier = modifier.fillMaxSize()) {
             Background(Modifier.fillMaxSize())
 
-            val viewModel: AppViewModel = koinInject()
+            val viewModel: AppViewModel = koinViewModel()
             val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
             NavDisplay(

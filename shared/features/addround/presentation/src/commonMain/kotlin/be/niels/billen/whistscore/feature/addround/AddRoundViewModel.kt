@@ -39,28 +39,23 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     }
 
     private fun setPlayerSelected(playerId: PlayerId, selected: Boolean) {
-
         _state.update { oldState ->
             requireNotNull(oldState.roundType)
 
+            val singlePlayer = oldState.roundType.singlePlayer
+
 
             val newPlayers = when (selected) {
-                true -> if (oldState.roundType.singlePlayer) setOf(playerId) else oldState.players + playerId
+                true -> if (singlePlayer) setOf(playerId) else oldState.players + playerId
                 false -> oldState.players - playerId
             }
 
-            when (oldState.roundType.winCondition) {
-                WinCondition.SLAMS -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
-                WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
-                WinCondition.NONE -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
+            if (singlePlayer) {
+                advanceFromPlayersScreen(oldState.roundType)
             }
 
-
             oldState.copy(players = newPlayers)
-
-
         }
-
     }
 
     private fun setRoundType(action: AddRoundAction.SetRoundType) {
@@ -79,13 +74,14 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
         }
     }
 
-
     private fun confirmPlayers() {
-        val state = _state.value
+        val roundType = _state.value.roundType
+        requireNotNull(roundType)
+        advanceFromPlayersScreen(roundType = roundType)
+    }
 
-        requireNotNull(state.roundType)
-
-        when (state.roundType.winCondition) {
+    private fun advanceFromPlayersScreen(roundType: RoundType) {
+        when (roundType.winCondition) {
             WinCondition.SLAMS -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
             WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
             WinCondition.NONE -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
@@ -94,10 +90,14 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
 
     private fun setSlams(action: AddRoundAction.SetSlams) {
         _state.update { it.copy(slams = action.slams) }
+
+        _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
     }
 
     private fun setBidAchieved(action: AddRoundAction.SetBidAchieved) {
         _state.update { it.copy(bidAchieved = action.bidAchieved) }
+
+        _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
     }
 
     private fun navigateToPreviousScreen() {

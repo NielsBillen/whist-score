@@ -13,11 +13,12 @@ import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
 import be.niels.billen.whistscore.feature.rounds.RoundsView
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun Overview(
-    viewModel: OverviewViewModel = koinInject(),
+    modifier: Modifier = Modifier,
+    viewModel: OverviewViewModel = koinViewModel(),
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
     onEditPlayers: () -> Unit,
@@ -28,7 +29,8 @@ fun Overview(
         canStartNewGame = canStartNewGame,
         onResetGame = onResetGame,
         onAddRound = onAddRound,
-        onEditPlayers = onEditPlayers
+        onEditPlayers = onEditPlayers,
+        modifier = modifier,
     )
 }
 
@@ -38,6 +40,7 @@ internal fun Overview(
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
     onEditPlayers: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = Modifier

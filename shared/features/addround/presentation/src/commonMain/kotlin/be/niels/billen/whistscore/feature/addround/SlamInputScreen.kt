@@ -6,16 +6,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.Selectable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SlamInputScreen(
     modifier: Modifier = Modifier,
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onSlamsSelected: (Int) -> Unit,
+) {
+    val state by viewModel.state.collectAsState()
+
+    SlamInputScreen(
+        modifier = modifier,
+        selectedSlams = state.slams,
+        onSlamsSelected = onSlamsSelected,
+    )
+}
+
+@Composable
+internal fun SlamInputScreen(
     selectedSlams: Int?,
+    modifier: Modifier = Modifier,
     onSlamsSelected: (Int) -> Unit,
 ) {
     AddRoundPanel(

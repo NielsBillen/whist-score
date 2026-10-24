@@ -17,14 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.game.Game
-import be.niels.billen.whistscore.feature.core.PlayerId
-import be.niels.billen.whistscore.feature.core.Players
-import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.Icons
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Points
+import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.icons.Trash
-import org.koin.compose.koinInject
+import be.niels.billen.whistscore.feature.game.Game
+import org.koin.compose.viewmodel.koinViewModel
 
 private val ROUNDS_COLUMN_WIDTH = 32.dp
 private val ICONS_SIZE = 32.dp
@@ -33,7 +32,7 @@ private val ICONS_SIZE = 32.dp
 @Composable
 fun RoundsView(
     modifier: Modifier = Modifier,
-    viewModel: RoundsViewModel = koinInject(),
+    viewModel: RoundsViewModel = koinViewModel(),
 ) {
     val game by viewModel.game.collectAsState()
 

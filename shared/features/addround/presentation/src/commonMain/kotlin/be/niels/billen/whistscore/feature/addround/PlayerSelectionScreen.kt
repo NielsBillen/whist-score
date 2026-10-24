@@ -6,23 +6,49 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.*
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlayerSelectionScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
+) {
+    val state by viewModel.state.collectAsState()
+    val game by viewModel.game.collectAsState()
+
+    PlayerSelectionScreen(
+        roundType = requireNotNull(state.roundType),
+        players = game.players,
+        selection = state.players,
+        modifier = modifier,
+        onSelectionChange = onSelectionChange,
+    )
+}
+
+@Composable
+internal fun PlayerSelectionScreen(
     roundType: RoundType,
     players: Players,
     selection: Set<PlayerId>,
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
+    LaunchedEffect(selection) {
+        println(selection)
+    }
+
     AddRoundPanel(
         title = roundType.displayName,
         description = roundType.description,
-        modifier = modifier,
-
-        ) {
+        modifier = modifier
+    ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
                 players = players,
@@ -37,6 +63,7 @@ fun PlayerSelectionScreen(
         }
     }
 }
+
 
 @Composable
 private fun MultiPlayerChoice(

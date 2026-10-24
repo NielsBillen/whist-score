@@ -10,11 +10,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.Selectable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BidAchievedInput(
     modifier: Modifier = Modifier,
-    selectedBidAchieved: Boolean?,
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onBidAchievedSelected: (Boolean) -> Unit,
+) {
+    val state by viewModel.state.collectAsState()
+    BidAchievedInput(
+        modifier = modifier,
+        bidAchieved = state.bidAchieved,
+        onBidAchievedSelected = onBidAchievedSelected,
+    )
+}
+
+@Composable
+internal fun BidAchievedInput(
+    bidAchieved: Boolean?,
+    modifier: Modifier = Modifier,
     onBidAchievedSelected: (Boolean) -> Unit,
 ) {
     AddRoundPanel(
@@ -26,24 +41,24 @@ fun BidAchievedInput(
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
         ) {
             Selectable(
-                selectedBidAchieved == true,
+                selected = bidAchieved == true,
                 onClick = { onBidAchievedSelected(true) },
                 Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "Yes",
-                    Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                    text = "Yes",
+                    modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                 )
             }
 
             Selectable(
-                selectedBidAchieved == false,
+                selected = bidAchieved == false,
                 onClick = { onBidAchievedSelected(false) },
-                Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "No",
-                    Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                    text = "No",
+                    modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                 )
             }
         }
