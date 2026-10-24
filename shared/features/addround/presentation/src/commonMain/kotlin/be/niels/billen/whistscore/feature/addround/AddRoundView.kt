@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.game.Game
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.koinInject
@@ -65,9 +66,11 @@ internal fun AddRoundView(
 
         backStack.lastOrNull()?.let { screen ->
             ButtonRow(
+                roundType = state.roundType,
                 screen = screen,
                 onBack = { backStack.removeLast() },
                 onSave = { state.round?.let(onSave) },
+                onAction = onAction,
                 onCancel = onCancel
             )
         }
@@ -115,8 +118,8 @@ private fun AddRoundScreens(
                         onSelectionChange = { id, selected ->
                             onAction(
                                 AddRoundAction.SetPlayerSelected(
-                                    id,
-                                    selected
+                                    playerId = id,
+                                    selected = selected
                                 )
                             )
                         },
@@ -153,8 +156,20 @@ private fun AddRoundScreens(
 }
 
 @Composable
-private fun ButtonRow(screen: AddRoundScreen, onBack: () -> Unit, onCancel: () -> Unit, onSave: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+private fun ButtonRow(
+    screen: AddRoundScreen,
+    roundType: RoundType?,
+    onBack: () -> Unit,
+    onCancel: () -> Unit,
+    onSave: () -> Unit,
+    onAction: (AddRoundAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Button(onClick = {
             when (screen) {
                 AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
@@ -167,12 +182,34 @@ private fun ButtonRow(screen: AddRoundScreen, onBack: () -> Unit, onCancel: () -
             Text("Back")
         }
 
-        Button(
-            onClick = onSave,
-            enabled = screen == AddRoundScreen.SUMMARY
-        ) {
-            Text("Save")
+
+        when (screen) {
+            AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
+            AddRoundScreen.SELECT_ROUND_TYPE -> Unit
+            AddRoundScreen.SELECT_PLAYERS ->
+                when (roundType?.singlePlayer == true) {
+                    true -> Unit
+                    false -> NextButton(onClick = { onAction(AddRoundAction.ConfirmPlayers) })
+                }
+
+
+            AddRoundScreen.SELECT_SLAMS -> Unit
+            AddRoundScreen.SELECT_BID_ACHIEVED -> Unit
         }
+    }
+}
+
+@Composable
+private fun NextButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("Next")
+    }
+}
+
+@Composable
+private fun SaveButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("Save")
     }
 }
 

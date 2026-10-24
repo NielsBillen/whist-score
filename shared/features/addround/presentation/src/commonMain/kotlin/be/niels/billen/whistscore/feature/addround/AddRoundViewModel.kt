@@ -3,6 +3,7 @@ package be.niels.billen.whistscore.feature.addround
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.core.RoundType.*
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
@@ -32,6 +33,8 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
                 playerId = action.playerId,
                 selected = action.selected
             )
+
+            is AddRoundAction.ConfirmPlayers -> confirmPlayers()
         }
     }
 
@@ -65,6 +68,18 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     }
 
 
+    private fun confirmPlayers() {
+        val state = _state.value
+
+        requireNotNull(state.roundType)
+
+        when (state.roundType.winCondition) {
+            WinCondition.SLAMS -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
+            WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
+            WinCondition.NONE -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
+        }
+    }
+
     private fun setSlams(action: AddRoundAction.SetSlams) {
         _state.update { it.copy(slams = action.slams) }
     }
@@ -77,3 +92,24 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
         _effects.tryEmit(AddRoundEffect.PreviousScreen)
     }
 }
+
+private enum class WinCondition {
+    SLAMS,
+    BID_ACHIEVED,
+    NONE
+}
+
+private val RoundType.winCondition: WinCondition
+    get() = when (this) {
+        Pass -> WinCondition.NONE
+
+        Abandonce,
+        AbandonceInTrump,
+        Misere,
+        OpenMisere,
+        SoloSlim -> WinCondition.BID_ACHIEVED
+
+        Regular,
+        Treble -> WinCondition.SLAMS
+
+    }

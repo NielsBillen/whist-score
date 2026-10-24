@@ -26,4 +26,5 @@ enum class RoundType(
             Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> 1..1
             Treble -> 2..2
         }
+
 }
