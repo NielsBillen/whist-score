@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.*
+import be.niels.billen.whistscore.feature.core.icons.ArrowUp
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import org.koin.compose.viewmodel.koinViewModel

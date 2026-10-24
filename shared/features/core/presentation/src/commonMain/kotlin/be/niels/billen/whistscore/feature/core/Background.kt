@@ -7,23 +7,22 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import be.niels.billen.whistscore.feature.core.Icons
 import be.niels.billen.whistscore.feature.core.icons.Clubs
 import be.niels.billen.whistscore.feature.core.icons.Diamonds
 import be.niels.billen.whistscore.feature.core.icons.Hearts
 import be.niels.billen.whistscore.feature.core.icons.Spades
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.ceil
 import kotlin.math.max
 
-private val images = listOf(
-    Icons.Clubs,
-    Icons.Hearts,
-    Icons.Diamonds,
-    Icons.Spades,
+private val images = persistentListOf(
+    Clubs,
+    Hearts,
+    Diamonds,
+    Spades,
 )
 
 const val scale = 0.3f
@@ -33,8 +32,8 @@ fun Background(modifier: Modifier = Modifier, tint: Color = Color(0xFF1a1a1f)) {
     val painters = images.map { rememberVectorPainter(it) }
     val colorFilter = ColorFilter.tint(tint)
 
-    Canvas(modifier) {
-        val maxSize = painters.map {it.intrinsicSize }.maxOf { max(it.width, it.height) } * scale
+    Canvas(modifier = modifier) {
+        val maxSize = painters.map { it.intrinsicSize }.maxOf { max(it.width, it.height) } * scale
         val spacing = 0.25f * maxSize
         val offset = (0.1f * maxSize).mod(maxSize)
         val horizontalCount = ceil((size.width + spacing) / (maxSize + spacing)).toInt()
@@ -56,10 +55,8 @@ private fun DrawScope.drawCentered(offset: Offset, painter: VectorPainter, scale
     val imageSize = painter.intrinsicSize * scale
 
     translate(offset.x - imageSize.width * 0.5f, offset.y - imageSize.height * 0.5f) {
-        drawIntoCanvas { canvas ->
-            with(painter) {
-                draw(size = painter.intrinsicSize * scale, colorFilter = colorFilter)
-            }
+        with(painter) {
+            draw(size = painter.intrinsicSize * scale, colorFilter = colorFilter)
         }
     }
 }

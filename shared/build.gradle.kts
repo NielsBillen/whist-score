@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotest)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.svg2compose)
 }
 
 kotlin {
@@ -43,3 +44,25 @@ kotlin {
         compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
 }
+
+//svgToCompose {
+//    processor {
+//        val icons by creating {
+//            from(layout.projectDirectory.dir("features/core/presentation/src/commonMain/composeResources/drawable"))
+//            destinationPackage("be.niels.billen.whistscore.feature.core.icons")
+//            optimize(true)
+//            recursive()
+//            icons {
+//                theme("be.niels.billen.whistscore.feature.core.theme")
+//                minify()
+//                //exclude(".*_exclude\\.svg".toRegex())
+////                mapIconNameTo { iconName ->
+////                    iconName.replace("_filled", "")
+////                }
+//                // Optional: customize generated code with a template
+//                // templateFile(layout.projectDirectory.file("s2c.template.toml"))
+//            }
+//        }
+//    }
+//}
+
