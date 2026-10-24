@@ -26,8 +26,6 @@ fun AddRoundPanel(
 
         if (description != null) Text(text = description, textAlign = TextAlign.Center)
 
-        Box(modifier = Modifier.weight(1f)) {
-            content()
-        }
+        Box(modifier = Modifier.weight(1f), content = content)
     }
 }

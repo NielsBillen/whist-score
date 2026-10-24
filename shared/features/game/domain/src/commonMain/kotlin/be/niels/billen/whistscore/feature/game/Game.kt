@@ -7,10 +7,12 @@ import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.rounds.Rounds
 import androidx.compose.runtime.Immutable
 import be.niels.billen.whistscore.feature.core.Players
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentHashMapOf
 
 @Immutable
 data class Game(
-    val players: Players = DEFAULT_PLAYERS,
+    val players: Players = persistentHashMapOf(),
     val rounds: Rounds = Rounds.EMPTY,
 ) {
     init {
@@ -31,7 +33,7 @@ data class Game(
     fun score(playerId: PlayerId) = rounds.score(playerId)
 
     companion object {
-        val DEFAULT_PLAYERS = Players(
+        val DEFAULT_PLAYERS = persistentHashMapOf(
             PlayerId.Player1 to Player(name = "Player 1", color = Color(0xFF3b4863.toInt())),
             PlayerId.Player2 to Player(name = "Player 2", color = Color(0xFFaf945a.toInt())),
             PlayerId.Player3 to Player(name = "Player 3", color = Color(0xFF9a4a4b.toInt())),

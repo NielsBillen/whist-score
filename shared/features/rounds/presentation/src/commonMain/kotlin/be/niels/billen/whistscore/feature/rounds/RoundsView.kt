@@ -17,10 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.Icons
-import be.niels.billen.whistscore.feature.core.PlayerId
-import be.niels.billen.whistscore.feature.core.Points
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.core.*
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,69 +42,81 @@ fun RoundsView(
     modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit
 ) {
-    Box(
-        modifier
-            .background(
-                color = Color(0xFF1a1a1f),
-                shape = Style.Shapes.mediumRoundedCornerShape
-            )
-            .padding(Style.Dimensions.paddingMedium)
+    Column(
+        modifier = modifier.background(
+            color = Color(0xFF1a1a1f),
+            shape = Style.Shapes.mediumRoundedCornerShape
+        ).padding(Style.Dimensions.paddingMedium),
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)) {
+        TableHeader(players = game.players)
+
+        Box(Modifier.background(MaterialTheme.colorScheme.onSurface).fillMaxWidth().requiredHeight(1.dp))
+
+        game.rounds.let { rounds ->
+            when {
+                rounds.isEmpty() -> NoRoundsMessage(modifier = Modifier.fillMaxWidth().weight(1f))
+                else -> RoundsList(rounds = game.rounds, onAction = onAction)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TableHeader(players: Players) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "#",
+            modifier = Modifier.width(ROUNDS_COLUMN_WIDTH),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        )
+        for (playerId in PlayerId.entries) {
+            Text(
+                text = players[playerId]?.name ?: "-",
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.requiredWidth(ICONS_SIZE))
+    }
+}
+
+@Composable
+private fun NoRoundsMessage(modifier: Modifier = Modifier) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Text("No rounds have been played")
+    }
+}
+
+@Composable
+private fun RoundsList(rounds: Rounds, modifier: Modifier = Modifier, onAction: (RoundsViewAction) -> Unit) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
+    ) {
+        itemsIndexed(rounds) { index, _ ->
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "#",
-                    modifier = Modifier.width(ROUNDS_COLUMN_WIDTH),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
-                )
+                Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
+
                 for (playerId in PlayerId.entries) {
-                    Text(
-                        text = game.players[playerId]?.name ?: "-",
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
+                    Points(
+                        rounds.points(index, playerId),
+                        Modifier.weight(1f)
                     )
                 }
 
-                Spacer(modifier = Modifier.requiredWidth(ICONS_SIZE))
-            }
-
-            Box(Modifier.background(MaterialTheme.colorScheme.onSurface).fillMaxWidth().requiredHeight(1.dp))
-
-            if (game.rounds.isEmpty()) {
-                Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-                    Text("No rounds have been played")
-                }
-
-            } else {
-                LazyColumn(
-                    Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
+                IconButton(
+                    onClick = { onAction(RoundsViewAction.DeleteRound(index = index)) },
+                    modifier = Modifier.requiredSize(ICONS_SIZE)
                 ) {
-                    itemsIndexed(game.rounds) { index, _ ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
-
-                            for (playerId in PlayerId.entries) {
-                                Points(
-                                    game.rounds.points(index, playerId),
-                                    Modifier.weight(1f)
-                                )
-                            }
-
-                            IconButton(
-                                onClick = { onAction(RoundsViewAction.DeleteRound(index = index)) },
-                                modifier = Modifier.requiredSize(ICONS_SIZE)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Trash,
-                                    contentDescription = "Delete round",
-                                    modifier = Modifier.fillMaxSize().padding(Style.Dimensions.paddingSmall)
-                                )
-                            }
-                        }
-                    }
+                    Icon(
+                        imageVector = Icons.Trash,
+                        contentDescription = "Delete round",
+                        modifier = Modifier.fillMaxSize().padding(Style.Dimensions.paddingSmall)
+                    )
                 }
             }
         }

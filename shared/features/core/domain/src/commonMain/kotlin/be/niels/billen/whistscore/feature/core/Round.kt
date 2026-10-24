@@ -2,6 +2,7 @@ package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.runtime.Immutable
 import kotlin.math.abs
+import kotlinx.collections.immutable.PersistentSet
 
 @Immutable
 sealed interface Round {
@@ -19,7 +20,7 @@ sealed interface Round {
 
     @Immutable
     sealed interface MultiPlayerRound : Round {
-        val playerIds: Set<PlayerId>
+        val playerIds: PersistentSet<PlayerId>
         val playersWon: Boolean
 
         override fun won(playerId: PlayerId) = when (playersWon) {
@@ -56,7 +57,7 @@ sealed interface Round {
 
     @Immutable
     data class Regular(
-        override val playerIds: Set<PlayerId>,
+        override val playerIds: PersistentSet<PlayerId>,
         val slams: Int = 0,
     ) : MultiPlayerRound {
 
@@ -109,7 +110,7 @@ sealed interface Round {
 
     @Immutable
     data class Treble(
-        override val playerIds: Set<PlayerId>,
+        override val playerIds: PersistentSet<PlayerId>,
         val slams: Int = 0,
     ) : MultiPlayerRound {
         val requiredSlams = if (playerIds.size == 1) 5 else 8

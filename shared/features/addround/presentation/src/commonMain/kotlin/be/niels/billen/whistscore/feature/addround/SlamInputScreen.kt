@@ -56,13 +56,13 @@ internal fun SlamInputScreen(
                 val selected = selectedSlams == slams
 
                 Selectable(
-                    selected,
+                    selected = selected,
                     onClick = { onSlamsSelected(slams) },
-                    Modifier.requiredSize(56.dp)
+                    modifier = Modifier.requiredSize(56.dp)
                 ) {
                     Text(
-                        "$slams",
-                        Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                        text = "$slams",
+                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                     )
                 }
             }

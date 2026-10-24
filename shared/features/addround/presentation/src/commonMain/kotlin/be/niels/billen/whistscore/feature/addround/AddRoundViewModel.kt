@@ -7,6 +7,9 @@ import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.core.RoundType.*
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
+import kotlinx.collections.immutable.minus
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.plus
 import kotlinx.coroutines.flow.*
 
 class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
@@ -46,7 +49,7 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
 
 
             val newPlayers = when (selected) {
-                true -> if (singlePlayer) setOf(playerId) else oldState.players + playerId
+                true -> if (singlePlayer) persistentSetOf(playerId) else oldState.players + playerId
                 false -> oldState.players - playerId
             }
 
@@ -62,7 +65,7 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
         _state.update {
             it.copy(
                 roundType = action.roundType,
-                players = if (action.roundType.singlePlayer != it.roundType?.singlePlayer) emptySet() else it.players
+                players = if (action.roundType.singlePlayer != it.roundType?.singlePlayer) persistentSetOf() else it.players
             )
         }
 

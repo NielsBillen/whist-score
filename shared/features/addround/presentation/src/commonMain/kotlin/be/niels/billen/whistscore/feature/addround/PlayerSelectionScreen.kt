@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.*
+import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -34,7 +35,7 @@ fun PlayerSelectionScreen(
 internal fun PlayerSelectionScreen(
     roundType: RoundType,
     players: Players,
-    selection: Set<PlayerId>,
+    selection: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
@@ -62,27 +63,34 @@ internal fun PlayerSelectionScreen(
 @Composable
 private fun MultiPlayerChoice(
     players: Players,
-    selectedPlayers: Set<PlayerId>,
+    selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     Column(
-        modifier,
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        players.forEach { (id, player) ->
-            val checked = selectedPlayers.contains(id)
+        PlayerId.entries.forEach { playerId ->
+            val player = players[playerId] ?: return@forEach
+            val checked = playerId in selectedPlayers
             val enabled = checked || selectedPlayers.size < 2
-            PlayerCheckBox(id, player, selectedPlayers.contains(id), enabled, onSelectionChange)
+
+            PlayerCheckBox(
+                playerId = playerId,
+                player = player,
+                selected = checked,
+                enabled = enabled,
+                onSelectionChange = onSelectionChange
+            )
         }
     }
-
 }
 
 
 @Composable
 private fun PlayerCheckBox(
-    id: PlayerId,
+    playerId: PlayerId,
     player: Player,
     selected: Boolean,
     enabled: Boolean,
@@ -91,7 +99,7 @@ private fun PlayerCheckBox(
     Selectable(
         selected = selected,
         enabled = enabled,
-        onClick = { onSelectionChange(id, !selected) },
+        onClick = { onSelectionChange(playerId, !selected) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
@@ -104,31 +112,37 @@ private fun PlayerCheckBox(
 @Composable
 private fun SinglePlayerChoice(
     players: Players,
-    selectedPlayers: Set<PlayerId>,
+    selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
     onSelection: (PlayerId) -> Unit,
 ) {
     Column(
-        modifier,
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        players.forEach { (id, player) ->
-            PlayerRadioButton(id, player, selectedPlayers.contains(id), onSelection)
+        PlayerId.entries.forEach { playerId ->
+            val player = players[playerId] ?: return@forEach
+            PlayerRadioButton(
+                playerId = playerId,
+                player = player,
+                selected = playerId in selectedPlayers,
+                onSelection = onSelection
+            )
+
         }
     }
-
 }
 
 @Composable
 private fun PlayerRadioButton(
-    id: PlayerId,
+    playerId: PlayerId,
     player: Player,
     selected: Boolean,
     onSelection: (PlayerId) -> Unit
 ) {
     Selectable(
         selected = selected,
-        onClick = { onSelection(id) },
+        onClick = { onSelection(playerId) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(

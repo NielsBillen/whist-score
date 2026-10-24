@@ -2,13 +2,14 @@ package be.niels.billen.whistscore.feature.core
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.collections.immutable.persistentHashSetOf
 
 class RoundTest : FreeSpec() {
 
     init {
         "Regular scores two teams split across the roster" {
             val regular = Round.Regular(
-                playerIds = setOf(PlayerId.Player1, PlayerId.Player2),
+                playerIds = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2),
                 slams = 8,
             )
 
@@ -22,7 +23,7 @@ class RoundTest : FreeSpec() {
 
         "Treble scores two players against the rest" {
             val treble = Round.Treble(
-                playerIds = setOf(PlayerId.Player1, PlayerId.Player2),
+                playerIds = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2),
                 slams = 8,
             )
 
@@ -64,7 +65,7 @@ class RoundTest : FreeSpec() {
 
         "a single round balances to zero across the roster" {
             val regular = Round.Regular(
-                playerIds = setOf(PlayerId.Player1, PlayerId.Player2),
+                playerIds = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2),
                 slams = 8,
             )
 

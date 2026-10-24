@@ -2,8 +2,8 @@ package be.niels.billen.whistscore.feature.editplayers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.players.PlayerRepository
+import kotlinx.collections.immutable.persistentHashMapOf
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
@@ -11,7 +11,7 @@ class EditPlayersViewModel(private val playersRepository: PlayerRepository) : Vi
     val players = playersRepository.players.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = Players()
+        initialValue = persistentHashMapOf()
     )
 
     fun onAction(action: EditPlayersAction) {
@@ -24,7 +24,7 @@ class EditPlayersViewModel(private val playersRepository: PlayerRepository) : Vi
         playersRepository.update {
             when (val oldPlayer = it[action.playerId]) {
                 null -> it
-                else -> it + (action.playerId to oldPlayer.copy(name = action.name))
+                else -> it.putting(action.playerId, oldPlayer.copy(name = action.name))
             }
         }
     }

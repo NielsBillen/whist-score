@@ -5,6 +5,7 @@ import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.core.RoundType
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.collections.immutable.persistentHashSetOf
 
 class NextButtonForTest : FreeSpec() {
 
@@ -18,13 +19,13 @@ class NextButtonForTest : FreeSpec() {
     private val trebleState = AddRoundState(roundType = RoundType.Treble)
     private val summaryState = AddRoundState(
         roundType = RoundType.Regular,
-        players = setOf(PlayerId.Player1, PlayerId.Player2),
+        players = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2),
         slams = 7,
     )
 
-    private val onePlayer = setOf(PlayerId.Player1)
-    private val twoPlayers = setOf(PlayerId.Player1, PlayerId.Player2)
-    private val threePlayers = setOf(PlayerId.Player1, PlayerId.Player2, PlayerId.Player3)
+    private val onePlayer = persistentHashSetOf(PlayerId.Player1)
+    private val twoPlayers = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2)
+    private val threePlayers = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2, PlayerId.Player3)
 
     init {
         "select round type" - {
@@ -33,7 +34,7 @@ class NextButtonForTest : FreeSpec() {
                     current = selectRoundType,
                     state = AddRoundState(),
                     selectedRoundType = null,
-                    selectedPlayers = emptySet(),
+                    selectedPlayers = persistentHashSetOf(),
                     selectedSlams = null,
                     selectedBidAchieved = null,
                 ).enabled shouldBe false
@@ -44,7 +45,7 @@ class NextButtonForTest : FreeSpec() {
                     current = selectRoundType,
                     state = AddRoundState(),
                     selectedRoundType = RoundType.Regular,
-                    selectedPlayers = emptySet(),
+                    selectedPlayers = persistentHashSetOf(),
                     selectedSlams = null,
                     selectedBidAchieved = null,
                 ) shouldBe NextButton(
@@ -60,7 +61,7 @@ class NextButtonForTest : FreeSpec() {
                     current = selectPlayers,
                     state = regularState,
                     selectedRoundType = RoundType.Regular,
-                    selectedPlayers = emptySet(),
+                    selectedPlayers = persistentHashSetOf(),
                     selectedSlams = null,
                     selectedBidAchieved = null,
                 ).enabled shouldBe false

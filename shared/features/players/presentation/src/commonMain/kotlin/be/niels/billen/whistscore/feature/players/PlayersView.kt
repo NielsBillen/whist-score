@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import be.niels.billen.whistscore.feature.core.Style
+import kotlinx.collections.immutable.PersistentList
 import org.koin.compose.koinInject
 
 @Composable
@@ -28,7 +29,7 @@ fun PlayersView(
 }
 
 @Composable
-fun PlayersView(players: List<PlayerView>, modifier: Modifier = Modifier) {
+fun PlayersView(players: PersistentList<PlayerView>, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) {
         val columns = if (maxWidth > maxHeight) 4 else 2
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class RoundsViewModel(private val gameRepository: GameRepository) :
