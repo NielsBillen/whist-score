@@ -23,9 +23,9 @@
   ],
   "screenshots": [
     {
-      "src": "images/screenshot.png",
-      "sizes": "3840x2160",
-      "type": "image/png",
+      "src": "images/screenshot.webp",
+      "sizes": "1920x1080",
+      "type": "image/webp",
       "label": "Scoring",
       "form_factor": "wide"
     }
