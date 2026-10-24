@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.*
+import be.niels.billen.whistscore.feature.game.Game
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -21,10 +22,12 @@ fun PlayerSelectionScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val game by viewModel.game.collectAsState()
+    val players by viewModel.players.collectAsState()
 
     PlayerSelectionScreen(
         roundType = requireNotNull(state.roundType),
-        players = game.players,
+        game = game,
+        players = players,
         selection = state.players,
         modifier = modifier,
         onSelectionChange = onSelectionChange,
@@ -34,6 +37,7 @@ fun PlayerSelectionScreen(
 @Composable
 internal fun PlayerSelectionScreen(
     roundType: RoundType,
+    game: Game,
     players: Players,
     selection: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
@@ -46,11 +50,13 @@ internal fun PlayerSelectionScreen(
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
+                game = game,
                 players = players,
                 selectedPlayers = selection,
                 onSelection = { onSelectionChange(it, true) })
         } else {
             MultiPlayerChoice(
+                game = game,
                 players = players,
                 selectedPlayers = selection,
                 onSelectionChange = onSelectionChange
@@ -62,6 +68,7 @@ internal fun PlayerSelectionScreen(
 
 @Composable
 private fun MultiPlayerChoice(
+    game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
@@ -71,7 +78,7 @@ private fun MultiPlayerChoice(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        PlayerId.entries.forEach { playerId ->
+        game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
             val checked = playerId in selectedPlayers
             val enabled = checked || selectedPlayers.size < 2
@@ -111,6 +118,7 @@ private fun PlayerCheckBox(
 
 @Composable
 private fun SinglePlayerChoice(
+    game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
@@ -120,7 +128,7 @@ private fun SinglePlayerChoice(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        PlayerId.entries.forEach { playerId ->
+        game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
             PlayerRadioButton(
                 playerId = playerId,

@@ -17,8 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.*
-import be.niels.billen.whistscore.feature.core.icons.ArrowUp
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.Points
+import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import org.koin.compose.viewmodel.koinViewModel
@@ -33,13 +34,15 @@ fun RoundsView(
     viewModel: RoundsViewModel = koinViewModel(),
 ) {
     val game by viewModel.game.collectAsState()
+    val players by viewModel.players.collectAsState()
 
-    RoundsView(game = game, modifier = modifier, onAction = viewModel::onAction)
+    RoundsView(game = game, players = players, modifier = modifier, onAction = viewModel::onAction)
 }
 
 @Composable
 fun RoundsView(
     game: Game,
+    players: Players,
     modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit
 ) {
@@ -50,21 +53,21 @@ fun RoundsView(
         ).padding(Style.Dimensions.paddingMedium),
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
     ) {
-        TableHeader(players = game.players)
+        TableHeader(game = game, players = players)
 
         Box(Modifier.background(MaterialTheme.colorScheme.onSurface).fillMaxWidth().requiredHeight(1.dp))
 
         game.rounds.let { rounds ->
             when {
                 rounds.isEmpty() -> NoRoundsMessage(modifier = Modifier.fillMaxWidth().weight(1f))
-                else -> RoundsList(rounds = game.rounds, onAction = onAction)
+                else -> RoundsList(game = game, onAction = onAction)
             }
         }
     }
 }
 
 @Composable
-private fun TableHeader(players: Players) {
+private fun TableHeader(game: Game, players: Players) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "#",
@@ -72,7 +75,7 @@ private fun TableHeader(players: Players) {
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )
-        for (playerId in PlayerId.entries) {
+        for (playerId in game.order) {
             Text(
                 text = players[playerId]?.name ?: "-",
                 modifier = Modifier.weight(1f),
@@ -93,19 +96,23 @@ private fun NoRoundsMessage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun RoundsList(rounds: Rounds, modifier: Modifier = Modifier, onAction: (RoundsViewAction) -> Unit) {
+private fun RoundsList(
+    game: Game,
+    modifier: Modifier = Modifier,
+    onAction: (RoundsViewAction) -> Unit
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
     ) {
-        itemsIndexed(rounds) { index, _ ->
+        itemsIndexed(game.rounds) { index, _ ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("${index + 1}", Modifier.width(ROUNDS_COLUMN_WIDTH), textAlign = TextAlign.Center)
 
-                for (playerId in PlayerId.entries) {
+                for (playerId in game.order) {
                     Points(
-                        rounds.points(index, playerId),
-                        Modifier.weight(1f)
+                        points = game.rounds.points(index, playerId),
+                        modifier = Modifier.weight(1f)
                     )
                 }
 

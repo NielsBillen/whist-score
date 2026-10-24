@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.*
 data class Rounds(
     val rounds: PersistentList<Round> = persistentListOf(),
 ) : List<Round> by rounds {
-    private val scores by lazy { scores() }
+    val scores by lazy { scores() }
 
     operator fun plus(round: Round) = Rounds(rounds + round)
 
@@ -31,7 +31,7 @@ data class Rounds(
             rounds.foldIndexed(0) { index, running, _ ->
                 running + points(index, playerId)
             }
-        }.toImmutableMap()
+        }.toPersistentHashMap()
 
     companion object {
         val EMPTY = Rounds()

@@ -10,5 +10,6 @@ import kotlinx.coroutines.flow.Flow
 interface PlayerRepository {
     val players : Flow<Players>
 
-    fun update(transform: (PersistentMap<PlayerId, Player>) -> Players)
+    fun update(transform: (Players) -> Players)
+
 }

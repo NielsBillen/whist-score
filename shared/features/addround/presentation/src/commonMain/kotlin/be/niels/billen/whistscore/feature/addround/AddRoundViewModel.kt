@@ -2,17 +2,22 @@ package be.niels.billen.whistscore.feature.addround
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.niels.billen.whistscore.feature.core.DEFAULT_PLAYERS
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.core.RoundType.*
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
+import be.niels.billen.whistscore.feature.players.PlayerRepository
 import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.plus
 import kotlinx.coroutines.flow.*
 
-class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
+class AddRoundViewModel(
+    gameRepository: GameRepository,
+    playerRepository: PlayerRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(AddRoundState())
     val state: StateFlow<AddRoundState> = _state.asStateFlow()
@@ -24,6 +29,12 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = Game.DEFAULT,
+    )
+
+    val players = playerRepository.players.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = DEFAULT_PLAYERS,
     )
 
     fun onAction(action: AddRoundAction) {
