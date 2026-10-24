@@ -39,16 +39,28 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     }
 
     private fun setPlayerSelected(playerId: PlayerId, selected: Boolean) {
+
         _state.update { oldState ->
             requireNotNull(oldState.roundType)
+
 
             val newPlayers = when (selected) {
                 true -> if (oldState.roundType.singlePlayer) setOf(playerId) else oldState.players + playerId
                 false -> oldState.players - playerId
             }
 
+            when (oldState.roundType.winCondition) {
+                WinCondition.SLAMS -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
+                WinCondition.BID_ACHIEVED -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS))
+                WinCondition.NONE -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))
+            }
+
+
             oldState.copy(players = newPlayers)
+
+
         }
+
     }
 
     private fun setRoundType(action: AddRoundAction.SetRoundType) {
