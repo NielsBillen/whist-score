@@ -59,7 +59,12 @@ class AddRoundViewModel(gameRepository: GameRepository) : ViewModel() {
     }
 
     private fun setRoundType(action: AddRoundAction.SetRoundType) {
-        _state.update { it.copy(roundType = action.roundType) }
+        _state.update {
+            it.copy(
+                roundType = action.roundType,
+                players = if (action.roundType.singlePlayer != it.roundType?.singlePlayer) emptySet() else it.players
+            )
+        }
 
         when (action.roundType) {
             Pass -> _effects.tryEmit(AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY))

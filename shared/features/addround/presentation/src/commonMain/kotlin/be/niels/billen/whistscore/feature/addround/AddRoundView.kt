@@ -1,19 +1,18 @@
 package be.niels.billen.whistscore.feature.addround
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
-import be.niels.billen.whistscore.feature.core.RoundType
+import be.niels.billen.whistscore.feature.core.Style
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,7 +48,8 @@ internal fun AddRoundView(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
         AddRoundScreens(
             onAction = onAction,
@@ -60,9 +60,13 @@ internal fun AddRoundView(
 
         backStack.lastOrNull()?.let { screen ->
             ButtonRow(
-                roundType = state.roundType,
+                state = state,
                 screen = screen,
-                onBack = { backStack.removeLast() },
+                onBack = {
+                    if (!backStack.isEmpty()) {
+                        backStack.removeLast()
+                    }
+                },
                 onSave = { state.round?.let(onSave) },
                 onAction = onAction,
                 onCancel = onCancel,
@@ -71,6 +75,12 @@ internal fun AddRoundView(
         }
     }
 }
+
+private val screenModifier = Modifier.padding(
+    start = Style.Dimensions.paddingLarge,
+    end = Style.Dimensions.paddingLarge,
+    top = Style.Dimensions.paddingLarge
+)
 
 
 @Composable
@@ -84,10 +94,11 @@ private fun AddRoundScreens(
         effects.collect { effect ->
             when (effect) {
                 is AddRoundEffect.NextScreen -> backStack.add(effect.screen)
-                AddRoundEffect.PreviousScreen -> backStack.removeLastOrNull()
+                AddRoundEffect.PreviousScreen -> if (!backStack.isEmpty()) backStack.removeLastOrNull()
             }
         }
     }
+
 
     NavDisplay(
         backStack = backStack,
@@ -96,11 +107,15 @@ private fun AddRoundScreens(
         entryProvider = { key ->
             when (key) {
                 AddRoundScreen.SELECT_ROUND_TYPE -> NavEntry(key) {
-                    RoundTypeInputScreen(onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) })
+                    RoundTypeInputScreen(
+                        modifier = screenModifier,
+                        onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) }
+                    )
                 }
 
                 AddRoundScreen.SELECT_PLAYERS -> NavEntry(key) {
                     PlayerSelectionScreen(
+                        modifier = screenModifier,
                         onSelectionChange = { id, selected ->
                             onAction(
                                 AddRoundAction.SetPlayerSelected(
@@ -114,18 +129,20 @@ private fun AddRoundScreens(
 
                 AddRoundScreen.SELECT_SLAMS -> NavEntry(key) {
                     SlamInputScreen(
+                        modifier = screenModifier,
                         onSlamsSelected = { onAction(AddRoundAction.SetSlams(it)) },
                     )
                 }
 
                 AddRoundScreen.SELECT_BID_ACHIEVED -> NavEntry(key) {
                     BidAchievedInput(
+                        modifier = screenModifier,
                         onBidAchievedSelected = { onAction(AddRoundAction.SetBidAchieved(it)) },
                     )
                 }
 
                 AddRoundScreen.SUMMARY -> NavEntry(key) {
-                    SummaryScreen()
+                    SummaryScreen(modifier = screenModifier)
                 }
             }
         },
@@ -137,7 +154,7 @@ private fun AddRoundScreens(
 @Composable
 private fun ButtonRow(
     screen: AddRoundScreen,
-    roundType: RoundType?,
+    state: AddRoundState,
     onBack: () -> Unit,
     onCancel: () -> Unit,
     onSave: () -> Unit,
@@ -145,7 +162,11 @@ private fun ButtonRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.padding(
+            start = Style.Dimensions.paddingLarge,
+            bottom = Style.Dimensions.paddingLarge,
+            end = Style.Dimensions.paddingLarge
+        ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -166,9 +187,12 @@ private fun ButtonRow(
             AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
             AddRoundScreen.SELECT_ROUND_TYPE -> Unit
             AddRoundScreen.SELECT_PLAYERS ->
-                when (roundType?.singlePlayer == true) {
+                when (state.roundType?.singlePlayer == true) {
                     true -> Unit
-                    false -> NextButton(onClick = { onAction(AddRoundAction.ConfirmPlayers) })
+                    false -> NextButton(
+                        enabled = state.players.isNotEmpty(),
+                        onClick = { onAction(AddRoundAction.ConfirmPlayers) }
+                    )
                 }
 
 
@@ -179,8 +203,8 @@ private fun ButtonRow(
 }
 
 @Composable
-private fun NextButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
+private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
+    Button(enabled = enabled, onClick = onClick) {
         Text("Next")
     }
 }
