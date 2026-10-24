@@ -2,11 +2,10 @@ package be.niels.billen.whistscore.feature.players
 
 
 
-import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.core.DEFAULT_PLAYERS
 import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.game.PlayersDto
 import be.niels.billen.whistscore.feature.game.toDto
-
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValueOrNull
@@ -30,8 +29,8 @@ private const val PLAYERS_KEY = "players"
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 private var Settings.players: Players
     get() = try {
-        decodeValueOrNull<PlayersDto>(key = PLAYERS_KEY)?.value ?: Game.DEFAULT_PLAYERS
-    } catch (e: Exception) {
-        Game.DEFAULT_PLAYERS
+        decodeValueOrNull<PlayersDto>(key = PLAYERS_KEY)?.value ?: DEFAULT_PLAYERS
+    } catch (_: Exception) {
+        DEFAULT_PLAYERS
     }
     set(value) = encodeValue(key = PLAYERS_KEY, value.toDto())

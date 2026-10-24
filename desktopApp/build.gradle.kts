@@ -16,12 +16,14 @@ dependencies {
     implementation(projects.shared.features.game.data)
     implementation(projects.shared.features.players.data)
 
-    implementation(compose.desktop.currentOs)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
     implementation(libs.kotlinx.coroutines.swing)
 
     implementation(libs.koin)
     implementation(libs.compose.uiToolingPreview)
     implementation(libs.multiplatform.settings)
+    implementation(compose.desktop.currentOs)
 }
 
 compose.desktop {

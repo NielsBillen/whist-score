@@ -1,3 +1,4 @@
+import com.google.devtools.ksp.gradle.KspAATask
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -9,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotest)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.svg2compose)
 }
 
 kotlin {
@@ -29,12 +31,37 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.uiToolingPreview)
         }
     }
+}
+
+svgToCompose {
+    processor {
+        common {
+            optimize(true)
+            recursive()
+            icons {
+                minify()
+                noPreview()
+            }
+        }
+
+        val icons by creating {
+            from(layout.projectDirectory.dir("src/commonMain/composeResources/drawable"))
+            destinationPackage("be.niels.billen.whistscore.feature.core.icons")
+        }
+    }
+}
+
+// svg2compose wires dependsOn(parseSvgToComposeIcon) only onto Kotlin compile tasks, but KSP
+// also reads the generated commonMain sources, so it needs the same dependency.
+tasks.withType<KspAATask>().configureEach {
+    dependsOn(tasks.named("parseSvgToComposeIcon"))
 }

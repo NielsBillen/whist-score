@@ -5,75 +5,99 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.feature.core.Player
-import be.niels.billen.whistscore.feature.core.PlayerId
-import be.niels.billen.whistscore.feature.core.Players
-import be.niels.billen.whistscore.feature.core.RoundType
-import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Selectable
+import be.niels.billen.whistscore.feature.core.*
+import be.niels.billen.whistscore.feature.game.Game
+import kotlinx.collections.immutable.PersistentSet
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlayerSelectionScreen(
     modifier: Modifier = Modifier,
-    roundType: RoundType,
-    players: Players,
-    initialSelection: Set<PlayerId>,
-    onAction: (AddRoundAction) -> Unit,
-    onCancel: () -> Unit,
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    var selection by remember { mutableStateOf(initialSelection) }
+    val state by viewModel.state.collectAsState()
+    val game by viewModel.game.collectAsState()
+    val players by viewModel.players.collectAsState()
 
+    PlayerSelectionScreen(
+        roundType = requireNotNull(state.roundType),
+        game = game,
+        players = players,
+        selection = state.players,
+        modifier = modifier,
+        onSelectionChange = onSelectionChange,
+    )
+}
+
+@Composable
+internal fun PlayerSelectionScreen(
+    roundType: RoundType,
+    game: Game,
+    players: Players,
+    selection: PersistentSet<PlayerId>,
+    modifier: Modifier = Modifier,
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
+) {
     AddRoundPanel(
-        title = roundType.title,
+        title = roundType.displayName,
         description = roundType.description,
-        onBack = onCancel,
-        onNext = { onAction(AddRoundAction.SetPlayers(selection)) },
-        nextEnabled = { selection.size in roundType.playerCountRange },
         modifier = modifier
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
+                game = game,
                 players = players,
                 selectedPlayers = selection,
-                onSelection = { selection = setOf(it) })
+                onSelection = { onSelectionChange(it, true) })
         } else {
             MultiPlayerChoice(
+                game = game,
                 players = players,
                 selectedPlayers = selection,
-                onSelectionChange = { id, selected ->
-                    selection = if (selected) selection + id
-                    else selection - id
-                })
+                onSelectionChange = onSelectionChange
+            )
         }
     }
 }
 
+
 @Composable
 private fun MultiPlayerChoice(
+    game: Game,
     players: Players,
-    selectedPlayers: Set<PlayerId>,
+    selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     Column(
-        modifier,
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        players.forEach { (id, player) ->
-            val checked = selectedPlayers.contains(id)
+        game.order.forEach { playerId ->
+            val player = players[playerId] ?: return@forEach
+            val checked = playerId in selectedPlayers
             val enabled = checked || selectedPlayers.size < 2
-            PlayerCheckBox(id, player, selectedPlayers.contains(id), enabled, onSelectionChange)
+
+            PlayerCheckBox(
+                playerId = playerId,
+                player = player,
+                selected = checked,
+                enabled = enabled,
+                onSelectionChange = onSelectionChange
+            )
         }
     }
-
 }
 
 
 @Composable
 private fun PlayerCheckBox(
-    id: PlayerId,
+    playerId: PlayerId,
     player: Player,
     selected: Boolean,
     enabled: Boolean,
@@ -82,43 +106,51 @@ private fun PlayerCheckBox(
     Selectable(
         selected = selected,
         enabled = enabled,
-        onClick = { onSelectionChange(id, !selected) },
+        onClick = { onSelectionChange(playerId, !selected) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            player.name, Modifier.padding(Style.Dimensions.paddingLarge),
+            text = player.name,
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge),
         )
     }
 }
 
 @Composable
 private fun SinglePlayerChoice(
+    game: Game,
     players: Players,
-    selectedPlayers: Set<PlayerId>,
+    selectedPlayers: PersistentSet<PlayerId>,
     modifier: Modifier = Modifier,
     onSelection: (PlayerId) -> Unit,
 ) {
     Column(
-        modifier,
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
     ) {
-        players.forEach { (id, player) ->
-            PlayerRadioButton(id, player, selectedPlayers.contains(id), onSelection)
+        game.order.forEach { playerId ->
+            val player = players[playerId] ?: return@forEach
+            PlayerRadioButton(
+                playerId = playerId,
+                player = player,
+                selected = playerId in selectedPlayers,
+                onSelection = onSelection
+            )
+
         }
     }
-
 }
 
 @Composable
 private fun PlayerRadioButton(
-    id: PlayerId,
+    playerId: PlayerId,
     player: Player,
     selected: Boolean,
     onSelection: (PlayerId) -> Unit
 ) {
     Selectable(
         selected = selected,
-        onClick = { onSelection(id) },
+        onClick = { onSelection(playerId) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
@@ -126,20 +158,3 @@ private fun PlayerRadioButton(
         )
     }
 }
-
-private val RoundType.title: String
-    get() = when (this) {
-        RoundType.Regular -> "Select player(s)"
-        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Select player"
-        RoundType.Treble -> "Select players"
-        RoundType.Pass -> ""
-    }
-
-
-private val RoundType.description: String
-    get() = when (this) {
-        RoundType.Regular -> "Choose between one and two players that played this round"
-        RoundType.Abandonce, RoundType.SoloSlim, RoundType.AbandonceInTrump, RoundType.Misere, RoundType.OpenMisere -> "Choose the player that played this round"
-        RoundType.Treble -> "Choose the two players that played this round"
-        RoundType.Pass -> ""
-    }

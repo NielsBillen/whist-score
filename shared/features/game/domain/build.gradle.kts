@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotest)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kover)
 }
 
 kotlin {
@@ -27,11 +28,14 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.compose.runtime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.rounds.domain)
         }
         commonTest.dependencies {
+            implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
         }

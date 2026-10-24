@@ -1,3 +1,4 @@
+status: closed
 wayfinder:task
 
 ## Question

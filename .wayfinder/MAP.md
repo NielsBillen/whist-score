@@ -15,12 +15,18 @@ Reaching the end of this map looks like a robust whist application with: correct
 
 <!-- populated as tickets close -->
 
+- [Deepen the scoring module](tickets/01-deepen-scoring.md) — done: `Round.points` hides the multiplier, `Rounds` is a real domain type `Game` delegates to, and `RoundTest`/`GameTest` cover the scoring surface; the dead-`Game` deletion is superseded because `Game` became the live `GameRepository` aggregate.
+- [Pass rounds](tickets/08-pass-rounds.md) — done: a `PassRound` is a zero-point placeholder that keeps the round sequence intact and doubles nothing — the 2× pass multiplier is not wired to any real round (inert, tested in `GameTest`); if a pass round must actually double the prior deal, that is new work.
+- [Dealer, first-move & per-round winners](tickets/09-dealer-first-move.md) — done: winners are derived from `Round.won(playerId)` (no `wonBy` field, no DTO change); dealer & first-lead are derived from the Edit-Players seat order (deal *n*: dealer = seat `(n−1) mod 4`, lead = seat `n mod 4`, passes advance one seat); reordering is seat identity. Decision: ship a reorderable Edit Players (persisted seat order) + dealer/lead shown per round.
+- [RoundType display metadata](tickets/04-roundtype-metadata.md) — done: canonical `displayName`/`description` live on the domain `RoundType`; both add-round screens read them, the screens' divergent `title`/guidance re-derivations are deleted.
+- [nav3 usability research](tickets/06-research-nav3.md) — adopt nav3: `navigation3-ui:1.1.1` supports all four targets, is Koin-compatible, and the app's versions are ahead of its requirements; findings in `research/nav3-research.md`.
+- [Extract a deep NumberInput component](tickets/05-numberinput.md) — superseded, no code change: the "Bid" stage is now the boolean `BidAchievedInput`, so `SlamInputScreen` is the only number-range input left and a shared `NumberInput` would have one caller; also resolves the `03-dead-code` "dead `SELECT_BID` stage" unit (replaced, not deleted).
+- [Astryx UI-rebuild path research](tickets/07-research-astryx.md) — done: Astryx (React 19 + StyleX) can't be consumed as a library in Compose — no DOM/React/StyleX surface and no official Kotlin/Compose/Wasm bridge — but its tokens are plain data and it ships `resolveThemeTokens` to export them as concrete values; the UI path is a hand-authored Compose theme mirroring Astryx's `neutral` theme (not a dependency, not a third-party design system). Unblocks [14-astryx-ui](tickets/14-astryx-ui.md).
+- [Player roster](tickets/10-player-roster.md) — done: the old `PlayerId` enum splits into `Seat` (4 fixed table positions, all per-round count rules & dealer/lead derivation stay seat-keyed) and a real `PlayerId(PlayerUUID)` identity; `Player = PlayerId + name`, an extensible persisted `Roster`, and `Game.players = Map<Seat, PlayerId>` with colors bound to seats. `Game` owns the 4-player set and validates each added round's players against it (the 5-and-6 flaw); `Rounds` stays a thin stateless scorer; reseating remaps seats and recorded rounds keep their real `PlayerId`s so scores follow people. New game = pick 4 from the roster (Overview picker, default last game's 4) + a separate Roster screen; no data migration (old saves fall back to defaults). Unblocks [11-game-history](tickets/11-game-history.md) and [12-stats-tracking](tickets/12-stats-tracking.md).
+
 ## Not yet specified
 
-- How dealer and first-move state model in the domain and survive across round types.
-- The shape of game history (a `Game` aggregate? a per-round `win` record needed for stats?) — the current `Round` interface records no `won`/`wonBy` beyond point math, so stats and history may need new fields.
-- Whether nav3 fits Compose Multiplatform's current release line or whether an alternative navigation approach is warranted.
-- Which Astryx components apply to a Compose UI, or whether the Astryx integration should target a lighter design system.
+- The history container (a `GameHistory` of current + past games?) — the single-game aggregate is now settled by [10-player-roster](tickets/10-player-roster.md) (`Game = Map<Seat, PlayerId>` + `List<Round>`, serializable via the DTO layer), so only the current-vs-past container and its persistence remain open (ticket 11). Per-round winners are already derived from `Round.won()` (09), so no new win field is needed.
 - The exact stats surfaced first (win rate, trick win rate, total points, points per game, win rate over time) and their storage format.
 
 ## Out of scope

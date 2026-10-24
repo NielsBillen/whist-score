@@ -2,9 +2,11 @@ package be.niels.billen.whistscore.feature.game
 
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Round
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// DTO field types stay stdlib Set: kotlinx.serialization cannot serialize Persistent* (issue #63).
 @Serializable
 sealed interface RoundDto {
     val value: Round
@@ -23,7 +25,7 @@ sealed interface RoundDto {
     ) : RoundDto {
         override val value by lazy {
             Round.Regular(
-                playerIds = players,
+                playerIds = players.toPersistentSet(),
                 slams = slams,
             )
         }
@@ -93,7 +95,7 @@ sealed interface RoundDto {
     ) : RoundDto {
         override val value by lazy {
             Round.Treble(
-                playerIds = playerIds,
+                playerIds = playerIds.toPersistentSet(),
                 slams = slams,
             )
         }

@@ -1,17 +1,7 @@
 package be.niels.billen.whistscore.feature.overview
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,45 +9,47 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Icons
 import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
 import be.niels.billen.whistscore.feature.rounds.RoundsView
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun Overview(
-    viewModel: OverviewViewModel = koinInject(),
+    modifier: Modifier = Modifier,
+    viewModel: OverviewViewModel = koinViewModel(),
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
     onEditPlayers: () -> Unit,
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
 
-    Overview(canStartNewGame = canStartNewGame, onResetGame = onResetGame, onAddRound = onAddRound, onEditPlayers = onEditPlayers)
+    Overview(
+        canStartNewGame = canStartNewGame,
+        onResetGame = onResetGame,
+        onAddRound = onAddRound,
+        onEditPlayers = onEditPlayers,
+        modifier = modifier,
+    )
 }
 
 @Composable
-fun Overview(
+internal fun Overview(
     canStartNewGame: Boolean,
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
     onEditPlayers: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.padding(Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
+        modifier = modifier
+            .padding(Style.Dimensions.paddingLarge)
+            .wrapContentSize()
+            .widthIn(max = 800.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
-
-            IconButton(onClick = onEditPlayers) {
-                Icon(imageVector = Icons.Pencil, contentDescription = "Edit players")
-            }
-        }
+        TitleRow(onEditPlayers = onEditPlayers)
 
         PlayersView()
 
@@ -69,6 +61,20 @@ fun Overview(
             onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+private fun TitleRow(onEditPlayers: () -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
+
+        IconButton(onClick = onEditPlayers) {
+            Icon(imageVector = Pencil, contentDescription = "Edit players")
+        }
     }
 }
 

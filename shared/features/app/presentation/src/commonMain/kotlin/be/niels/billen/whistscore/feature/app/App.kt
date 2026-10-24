@@ -1,22 +1,23 @@
 package be.niels.billen.whistscore.feature.app
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import be.niels.billen.whistscore.feature.addround.AddRoundView
+import be.niels.billen.whistscore.feature.addround.slideTransition
 import be.niels.billen.whistscore.feature.core.AppTheme
 import be.niels.billen.whistscore.feature.core.Background
-import be.niels.billen.whistscore.feature.addround.AddRoundView
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
@@ -24,42 +25,49 @@ fun App(modifier: Modifier = Modifier) {
         Surface(modifier = modifier.fillMaxSize()) {
             Background(Modifier.fillMaxSize())
 
-            val viewModel: AppViewModel = koinInject()
+            val viewModel: AppViewModel = koinViewModel()
             val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                NavDisplay(
-                    backStack = backStack,
-                    onBack = { backStack.removeLastOrNull() },
-                    entryProvider = { key ->
-                        when (key) {
-                            is AppNavigation.OverviewRoute -> NavEntry(key) {
-                                Overview(
-                                    onResetGame = { viewModel.onAction(AppAction.ResetGame) },
-                                    onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
-                                    onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
-                                )
-                            }
+            NavDisplay(
+                modifier = Modifier.fillMaxSize(),
+                backStack = backStack,
+                onBack = { backStack.removeLastOrNull() },
+                transitionSpec = slideTransition(1),
+                popTransitionSpec = slideTransition(-1),
+                entryDecorators = listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator()
+                ),
+                entryProvider = { key ->
+                    when (key) {
+                        is AppNavigation.OverviewRoute -> NavEntry(key) {
+                            Overview(
+                                onResetGame = { viewModel.onAction(AppAction.ResetGame) },
+                                onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
+                                onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
+                            )
+                        }
 
-                            is AppNavigation.AddRoundRoute -> NavEntry(key) {
-                                AddRoundView(
-                                    onCancel = { backStack.removeLastOrNull() },
-                                    onSave = { round ->
-                                        viewModel.onAction(AppAction.AddRound(round))
-                                        backStack.removeLastOrNull()
-                                    },
-                                )
-                            }
+                        is AppNavigation.AddRoundRoute -> NavEntry(key) {
+                            AddRoundView(
+                                onCancel = { backStack.removeLastOrNull() },
+                                onSave = { round ->
+                                    viewModel.onAction(AppAction.AddRound(round))
+                                    backStack.removeLastOrNull()
+                                },
+                            )
+                        }
 
-                            is AppNavigation.EditPlayersRoute -> NavEntry(key) {
-                                EditPlayersView(
-                                    onSave = { backStack.removeLastOrNull() },
-                                )
-                            }
+                        is AppNavigation.EditPlayersRoute -> NavEntry(key) {
+                            EditPlayersView(
+                                onSave = { backStack.removeLastOrNull() },
+                            )
                         }
                     }
-                )
-            }
+                },
+            )
         }
     }
+
 }
+

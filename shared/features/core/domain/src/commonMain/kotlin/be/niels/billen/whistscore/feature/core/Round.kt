@@ -1,14 +1,16 @@
 package be.niels.billen.whistscore.feature.core
 
+import androidx.compose.runtime.Immutable
 import kotlin.math.abs
+import kotlinx.collections.immutable.PersistentSet
 
+@Immutable
 sealed interface Round {
-    fun points(playerId: PlayerId, passRound: Boolean): Int = points(playerId) * passRound.passRoundMultiplier
-
     fun points(playerId: PlayerId): Int = 0
 
     fun won(playerId: PlayerId): Boolean
 
+    @Immutable
     data object PassRound : Round {
 
         override fun points(playerId: PlayerId) = 0
@@ -16,8 +18,9 @@ sealed interface Round {
         override fun won(playerId: PlayerId) = false
     }
 
+    @Immutable
     sealed interface MultiPlayerRound : Round {
-        val playerIds: Set<PlayerId>
+        val playerIds: PersistentSet<PlayerId>
         val playersWon: Boolean
 
         override fun won(playerId: PlayerId) = when (playersWon) {
@@ -37,6 +40,7 @@ sealed interface Round {
         val basePoints: Int
     }
 
+    @Immutable
     sealed interface SinglePlayerRound : Round {
         val playerId: PlayerId
         val playerWon: Boolean
@@ -51,8 +55,9 @@ sealed interface Round {
         }
     }
 
+    @Immutable
     data class Regular(
-        override val playerIds: Set<PlayerId>,
+        override val playerIds: PersistentSet<PlayerId>,
         val slams: Int = 0,
     ) : MultiPlayerRound {
 
@@ -69,6 +74,7 @@ sealed interface Round {
             get() = 2 + abs(slams - requiredSlams)
     }
 
+    @Immutable
     data class Abandonce(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -76,6 +82,7 @@ sealed interface Round {
         override val penaltyPoints = 3
     }
 
+    @Immutable
     data class Misere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -84,6 +91,7 @@ sealed interface Round {
         override val penaltyPoints = 5
     }
 
+    @Immutable
     data class OpenMisere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -92,6 +100,7 @@ sealed interface Round {
         override val penaltyPoints = 10
     }
 
+    @Immutable
     data class SoloSlim(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -99,9 +108,9 @@ sealed interface Round {
         override val penaltyPoints = 15
     }
 
-
+    @Immutable
     data class Treble(
-        override val playerIds: Set<PlayerId>,
+        override val playerIds: PersistentSet<PlayerId>,
         val slams: Int = 0,
     ) : MultiPlayerRound {
         val requiredSlams = if (playerIds.size == 1) 5 else 8
@@ -116,5 +125,3 @@ sealed interface Round {
             get() = 4 + abs(slams - requiredSlams) * 2
     }
 }
-
-private val Boolean.passRoundMultiplier: Int get() = if (this) 2 else 1

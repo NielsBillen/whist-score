@@ -10,46 +10,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.Selectable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BidAchievedInput(
     modifier: Modifier = Modifier,
-    initialBidAchieved: Boolean?,
-    onCancel: () -> Unit,
-    onAction: (AddRoundAction) -> Unit
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onBidAchievedSelected: (Boolean) -> Unit,
 ) {
-    var selectedBidAchieved by remember { mutableStateOf(initialBidAchieved) }
+    val state by viewModel.state.collectAsState()
+    BidAchievedInput(
+        modifier = modifier,
+        bidAchieved = state.bidAchieved,
+        onBidAchievedSelected = onBidAchievedSelected,
+    )
+}
 
+@Composable
+internal fun BidAchievedInput(
+    bidAchieved: Boolean?,
+    modifier: Modifier = Modifier,
+    onBidAchievedSelected: (Boolean) -> Unit,
+) {
     AddRoundPanel(
         title = "Bid Achieved",
         description = "Choose whether the player achieved the bid",
-        onBack = onCancel,
-        onNext = { selectedBidAchieved?.let { onAction(AddRoundAction.SetBidAchieved(it)) } },
-        nextEnabled = { selectedBidAchieved != null },
         modifier = modifier,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
         ) {
             Selectable(
-                selectedBidAchieved == true,
-                onClick = { selectedBidAchieved = true },
+                selected = bidAchieved == true,
+                onClick = { onBidAchievedSelected(true) },
                 Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "Yes",
-                    Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                    text = "Yes",
+                    modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                 )
             }
 
             Selectable(
-                selectedBidAchieved == false,
-                onClick = { selectedBidAchieved = false },
-                Modifier.fillMaxWidth()
+                selected = bidAchieved == false,
+                onClick = { onBidAchievedSelected(false) },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "No",
-                    Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                    text = "No",
+                    modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                 )
             }
         }

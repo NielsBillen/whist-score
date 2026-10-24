@@ -6,31 +6,39 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.Selectable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SlamInputScreen(
     modifier: Modifier = Modifier,
-    initialSlams: Int?,
-    onCancel: () -> Unit,
-    onAction: (AddRoundAction) -> Unit
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onSlamsSelected: (Int) -> Unit,
 ) {
-    var selectedSlams by remember { mutableStateOf(initialSlams) }
+    val state by viewModel.state.collectAsState()
 
+    SlamInputScreen(
+        modifier = modifier,
+        selectedSlams = state.slams,
+        onSlamsSelected = onSlamsSelected,
+    )
+}
+
+@Composable
+internal fun SlamInputScreen(
+    selectedSlams: Int?,
+    modifier: Modifier = Modifier,
+    onSlamsSelected: (Int) -> Unit,
+) {
     AddRoundPanel(
         title = "Select slams",
         description = "Choose the number of slams the player(s) achieved this round.",
-        onBack = onCancel,
-        onNext = { selectedSlams?.let { onAction(AddRoundAction.SetSlams(it)) } },
-        nextEnabled = { selectedSlams != null },
         modifier = modifier,
     ) {
         FlowRow(
@@ -48,13 +56,13 @@ fun SlamInputScreen(
                 val selected = selectedSlams == slams
 
                 Selectable(
-                    selected,
-                    onClick = { selectedSlams = slams },
-                    Modifier.requiredSize(56.dp)
+                    selected = selected,
+                    onClick = { onSlamsSelected(slams) },
+                    modifier = Modifier.requiredSize(56.dp)
                 ) {
                     Text(
-                        "$slams",
-                        Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                        text = "$slams",
+                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
                     )
                 }
             }

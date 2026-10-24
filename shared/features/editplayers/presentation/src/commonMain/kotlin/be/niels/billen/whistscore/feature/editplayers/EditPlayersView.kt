@@ -1,43 +1,42 @@
 package be.niels.billen.whistscore.feature.editplayers
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import be.niels.billen.whistscore.feature.core.Player
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.Style
-import org.koin.compose.koinInject
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import be.niels.billen.whistscore.feature.core.icons.ArrowDown
+import be.niels.billen.whistscore.feature.core.icons.ArrowUp
+import kotlinx.collections.immutable.ImmutableList
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditPlayersView(
-    viewModel: EditPlayersViewModel = koinInject(),
+    modifier: Modifier = Modifier,
+    viewModel: EditPlayersViewModel = koinViewModel(),
     onSave: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
+    val order by viewModel.order.collectAsState()
     val players by viewModel.players.collectAsState()
 
-    EditPlayersView(players = players, onAction = viewModel::onAction, onSave = onSave, modifier = modifier)
+    EditPlayersView(
+        order = order,
+        players = players,
+        onAction = viewModel::onAction,
+        onSave = onSave,
+        modifier = modifier
+    )
 }
 
 @Composable
-fun EditPlayersView(
+internal fun EditPlayersView(
+    order: ImmutableList<PlayerId>,
     players: Players,
     modifier: Modifier = Modifier,
     onSave: () -> Unit,
@@ -50,7 +49,7 @@ fun EditPlayersView(
     ) {
         Text(text = "Edit player names", style = MaterialTheme.typography.titleLarge)
 
-        PlayerNameInputs(players = players, onAction = onAction, modifier = Modifier.weight(1f))
+        PlayerNameInputs(order = order, players = players, onAction = onAction, modifier = Modifier.weight(1f))
 
         Button(
             modifier = Modifier.align(Alignment.End),
@@ -63,6 +62,7 @@ fun EditPlayersView(
 
 @Composable
 private fun PlayerNameInputs(
+    order: ImmutableList<PlayerId>,
     players: Players,
     onAction: (EditPlayersAction) -> Unit,
     modifier: Modifier = Modifier
@@ -71,29 +71,54 @@ private fun PlayerNameInputs(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(space = Style.Dimensions.paddingSmall),
     ) {
-        players.entries.sortedBy { it.key }.forEach { (playerId, player) ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text(
-                    text = "Player ${playerId.ordinal + 1}:",
-                    modifier = Modifier.width(96.dp),
-                    maxLines = 1,
-                    softWrap = false
-                )
+        order.forEachIndexed { index, playerId ->
+            val player = players[playerId] ?: return@forEachIndexed
 
-                PlayerNameInput(
-                    playerId = playerId,
-                    name = player.name,
-                    onAction = onAction,
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            PlayerEntry(
+                index = index,
+                playerId = playerId,
+                player = player,
+                onAction = onAction
+            )
+
         }
     }
+}
 
+@Composable
+private fun PlayerEntry(
+    index: Int,
+    playerId: PlayerId,
+    player: Player,
+    onAction: (EditPlayersAction) -> Unit,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        key(playerId) {
+            PlayerNameInput(
+                playerId = playerId,
+                name = player.name,
+                onAction = onAction,
+                modifier = Modifier.weight(1f),
+            )
+        }
+
+        IconButton(
+            enabled = index > 0,
+            onClick = { onAction(EditPlayersAction.MoveUp(playerId)) }
+        ) {
+            Icon(imageVector = ArrowUp, contentDescription = "Move up")
+        }
+
+        IconButton(
+            enabled = index < PlayerId.entries.size - 1,
+            onClick = { onAction(EditPlayersAction.MoveDown(playerId)) }
+        ) {
+            Icon(imageVector = ArrowDown, contentDescription = "Move down")
+        }
+    }
 }
 
 @Composable

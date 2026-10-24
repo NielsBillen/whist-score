@@ -24,7 +24,7 @@ kotlin {
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
 
-            implementation(compose.ui)
+            implementation(libs.compose.ui)
             implementation(libs.koin)
             implementation(libs.koin.compose)
             implementation(libs.multiplatform.settings)

@@ -29,7 +29,9 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.core)
+            implementation(libs.kotlinx.collections.immutable)
             implementation(projects.shared.features.game.domain)
+            implementation(projects.shared.features.rounds.domain)
             implementation(projects.shared.features.core.domain)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.serialization)

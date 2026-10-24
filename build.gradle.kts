@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -7,4 +10,42 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.kover)
 }
+
+// Treat every Kotlin compiler warning as an error in all modules.
+subprojects {
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        extensions.configure<KotlinMultiplatformExtension> {
+            compilerOptions {
+                allWarningsAsErrors = true
+            }
+        }
+    }
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        extensions.configure<KotlinJvmProjectExtension> {
+            compilerOptions {
+                allWarningsAsErrors = true
+            }
+        }
+    }
+}
+
+dependencies {
+    kover(projects.shared.features.core.domain)
+    kover(projects.shared.features.game.domain)
+    kover(projects.shared.features.addround.presentation)
+    kover(projects.shared.features.app.presentation)
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                // *Kt = file-facade classes (top-level declarations, e.g. composables).
+                classes("*Kt")
+            }
+        }
+    }
+}
+
