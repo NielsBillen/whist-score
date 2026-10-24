@@ -1,5 +1,6 @@
 package be.niels.billen.whistscore.feature.game
 
+import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.rounds.Rounds
 import kotlinx.serialization.Serializable
@@ -8,7 +9,7 @@ import kotlinx.serialization.Serializable
 data class GameDto(val players: Map<PlayerIdDto, PlayerDto>, val rounds: List<RoundDto>) {
     val value by lazy {
         Game(
-            players = players.entries.associate { (id, player) -> id.value to player.value },
+            players = Players(players.entries.associate { (id, player) -> id.value to player.value }),
             rounds = Rounds(rounds.map(RoundDto::value))
         )
     }

@@ -2,6 +2,7 @@ package be.niels.billen.whistscore.feature.editplayers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.players.PlayerRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -10,7 +11,7 @@ class EditPlayersViewModel(private val playersRepository: PlayerRepository) : Vi
     val players = playersRepository.players.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = emptyMap()
+        initialValue = Players()
     )
 
     fun onAction(action: EditPlayersAction) {

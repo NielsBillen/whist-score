@@ -5,28 +5,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.feature.core.Player
-import be.niels.billen.whistscore.feature.core.PlayerId
-import be.niels.billen.whistscore.feature.core.Players
-import be.niels.billen.whistscore.feature.core.RoundType
-import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Selectable
+import be.niels.billen.whistscore.feature.core.*
 
 @Composable
 fun PlayerSelectionScreen(
-    modifier: Modifier = Modifier,
     roundType: RoundType,
     players: Players,
     selection: Set<PlayerId>,
+    modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     AddRoundPanel(
         title = roundType.displayName,
         description = roundType.description,
         modifier = modifier,
-    ) {
+
+        ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
                 players = players,
@@ -36,7 +32,8 @@ fun PlayerSelectionScreen(
             MultiPlayerChoice(
                 players = players,
                 selectedPlayers = selection,
-                onSelectionChange = onSelectionChange)
+                onSelectionChange = onSelectionChange
+            )
         }
     }
 }

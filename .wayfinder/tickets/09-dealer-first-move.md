@@ -16,7 +16,7 @@ Details:
 
 Resolved by derivation — nothing is stored on `Round`/`Game`, and no DTO field is added.
 
-- **Winners are derived, not stored.** No `wonBy` field on `Round`. Every consumer computes "who won deal N" from `Round.won(playerId)` (multi-player: `playerIds` if `playersWon` else the other two; single-player: `playerId` if `playerWon` else the other three; `PassRound`: no winner). So `12-stats-tracking` and `11-game-history` no longer depend on 09 for a `wonBy` field — the per-trick win rate reads winners straight from the round.
+- **Winners are derived, not stored.** No `wonBy` field on `Round`. Every consumer computes "who won deal N" from `Round.won(playerId)` (multi-player: `playerIds` if `playersWon` else the other two; single-player: `playerId` if `bidAchieved` else the other three; `PassRound`: no winner). So `12-stats-tracking` and `11-game-history` no longer depend on 09 for a `wonBy` field — the per-trick win rate reads winners straight from the round.
 - **Dealer & first-lead are derived from the seat order** (the Edit-Players player list, seat 0→3); they are never persisted:
   - Deal *n* (1-indexed) is dealt by seat `((n−1) mod 4)`.
   - The first lead is the next seat, `n mod 4` — "second hand plays first" (deal 1: seat 0 deals, seat 1 leads).

@@ -28,6 +28,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.compose.runtime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.rounds.domain)

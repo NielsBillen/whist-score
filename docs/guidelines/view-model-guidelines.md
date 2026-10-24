@@ -27,7 +27,7 @@ sealed interface ExampleAction {
 
 The ViewModel exposes **`val state: StateFlow<State?>`** and **`fun onAction(action: Action)`**.
 
-- **`setPlayers` only dispatches** to private handlers — never inline logic.
+- **`onAction` only dispatches** to private handlers — never inline logic.
 - **The `when` is exhaustive without `else`**, so the compiler flags new actions.
 - **Never expose `MutableStateFlow`.** Internal mutable state is `private`.
 
@@ -95,7 +95,7 @@ view is gone must be state.
 
 ### Collecting in the view
 
-**The internal `state`/`setPlayers` overload takes the effects flow as a parameter,
+**The internal `state`/`onAction` overload takes the effects flow as a parameter,
 defaulting to `emptyFlow()`**, and collects it with the shared `CollectEffects`
 helper; the public ViewModel-injecting overload passes `viewModel.effects`. This
 keeps effect handling next to the UI state it manipulates (a `FocusRequester`, a

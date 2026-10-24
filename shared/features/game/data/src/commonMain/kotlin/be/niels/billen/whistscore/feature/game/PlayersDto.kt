@@ -8,7 +8,7 @@ data class PlayersDto(
     val players: Map<PlayerIdDto, PlayerDto>,
 ) : Map<PlayerIdDto, PlayerDto> by players {
     val value by lazy {
-        entries.associate { (idDto, playerDto) -> idDto.value to playerDto.value }
+        Players(players = entries.associate { (idDto, playerDto) -> idDto.value to playerDto.value })
     }
 }
 

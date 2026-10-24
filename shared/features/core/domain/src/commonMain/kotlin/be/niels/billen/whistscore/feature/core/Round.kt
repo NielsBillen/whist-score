@@ -1,12 +1,15 @@
 package be.niels.billen.whistscore.feature.core
 
+import androidx.compose.runtime.Immutable
 import kotlin.math.abs
 
+@Immutable
 sealed interface Round {
     fun points(playerId: PlayerId): Int = 0
 
     fun won(playerId: PlayerId): Boolean
 
+    @Immutable
     data object PassRound : Round {
 
         override fun points(playerId: PlayerId) = 0
@@ -14,6 +17,7 @@ sealed interface Round {
         override fun won(playerId: PlayerId) = false
     }
 
+    @Immutable
     sealed interface MultiPlayerRound : Round {
         val playerIds: Set<PlayerId>
         val playersWon: Boolean
@@ -35,6 +39,7 @@ sealed interface Round {
         val basePoints: Int
     }
 
+    @Immutable
     sealed interface SinglePlayerRound : Round {
         val playerId: PlayerId
         val playerWon: Boolean
@@ -49,6 +54,7 @@ sealed interface Round {
         }
     }
 
+    @Immutable
     data class Regular(
         override val playerIds: Set<PlayerId>,
         val slams: Int = 0,
@@ -67,6 +73,7 @@ sealed interface Round {
             get() = 2 + abs(slams - requiredSlams)
     }
 
+    @Immutable
     data class Abandonce(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -74,6 +81,7 @@ sealed interface Round {
         override val penaltyPoints = 3
     }
 
+    @Immutable
     data class Misere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -82,6 +90,7 @@ sealed interface Round {
         override val penaltyPoints = 5
     }
 
+    @Immutable
     data class OpenMisere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -90,6 +99,7 @@ sealed interface Round {
         override val penaltyPoints = 10
     }
 
+    @Immutable
     data class SoloSlim(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
@@ -97,7 +107,7 @@ sealed interface Round {
         override val penaltyPoints = 15
     }
 
-
+    @Immutable
     data class Treble(
         override val playerIds: Set<PlayerId>,
         val slams: Int = 0,
