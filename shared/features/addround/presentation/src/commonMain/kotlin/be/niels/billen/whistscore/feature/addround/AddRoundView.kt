@@ -60,70 +60,62 @@ fun AddRoundView(
         selectedBidAchieved = selectedBidAchieved,
     )
 
-    Column(modifier) {
-        // NavDisplay sizes to its visible child, so the full-width Box centres the 800 dp panel.
-        BoxWithConstraints(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            contentAlignment = Alignment.TopCenter,
-        ) {
-            // The box spans the window, so its max constraint is the window width.
-            val windowWidth = constraints.maxWidth
-            NavDisplay(
-                backStack = backStack,
-                modifier = Modifier.padding(Style.Dimensions.paddingLarge),
-                contentAlignment = Alignment.Center,
-                entryProvider = { key ->
-                    when (key) {
-                        is AddRoundNavigation.SelectRoundTypeRoute -> NavEntry(key) {
-                            RoundTypeInputScreen(
-                                selectedRoundType = selectedRoundType,
-                                onRoundTypeSelected = { selectedRoundType = it },
-                            )
-                        }
-
-                        is AddRoundNavigation.SelectPlayersRoute -> NavEntry(key) {
-                            val roundType = requireNotNull(state.roundType)
-                            PlayerSelectionScreen(
-                                roundType = roundType,
-                                players = game.players,
-                                selection = selectedPlayers,
-                                onSelectionChange = { id, selected ->
-                                    selectedPlayers = if (selected) {
-                                        if (roundType.singlePlayer) setOf(id) else selectedPlayers + id
-                                    } else {
-                                        selectedPlayers - id
-                                    }
-                                },
-                            )
-                        }
-
-                        is AddRoundNavigation.SelectSlamsRoute -> NavEntry(key) {
-                            SlamInputScreen(
-                                selectedSlams = selectedSlams,
-                                onSlamsSelected = { selectedSlams = it },
-                            )
-                        }
-
-                        is AddRoundNavigation.SelectBidAchievedRoute -> NavEntry(key) {
-                            BidAchievedInput(
-                                selectedBidAchieved = selectedBidAchieved,
-                                onBidAchievedSelected = { selectedBidAchieved = it },
-                            )
-                        }
-
-                        is AddRoundNavigation.SummaryRoute -> NavEntry(key) {
-                            SummaryScreen(
-                                game = game,
-                                round = requireNotNull(state.round),
-                            )
-                        }
+    Column(modifier = modifier) {
+        NavDisplay(
+            backStack = backStack,
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge).weight(1f).fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+            entryProvider = { key ->
+                when (key) {
+                    is AddRoundNavigation.SelectRoundTypeRoute -> NavEntry(key) {
+                        RoundTypeInputScreen(
+                            selectedRoundType = selectedRoundType,
+                            onRoundTypeSelected = { selectedRoundType = it },
+                        )
                     }
-                },
-                sizeTransform = slideSizeTransform,
-                transitionSpec = pushSlideTransition(windowWidth),
-                popTransitionSpec = popSlideTransition(windowWidth),
-            )
-        }
+
+                    is AddRoundNavigation.SelectPlayersRoute -> NavEntry(key) {
+                        val roundType = requireNotNull(state.roundType)
+                        PlayerSelectionScreen(
+                            roundType = roundType,
+                            players = game.players,
+                            selection = selectedPlayers,
+                            onSelectionChange = { id, selected ->
+                                selectedPlayers = if (selected) {
+                                    if (roundType.singlePlayer) setOf(id) else selectedPlayers + id
+                                } else {
+                                    selectedPlayers - id
+                                }
+                            },
+                        )
+                    }
+
+                    is AddRoundNavigation.SelectSlamsRoute -> NavEntry(key) {
+                        SlamInputScreen(
+                            selectedSlams = selectedSlams,
+                            onSlamsSelected = { selectedSlams = it },
+                        )
+                    }
+
+                    is AddRoundNavigation.SelectBidAchievedRoute -> NavEntry(key) {
+                        BidAchievedInput(
+                            selectedBidAchieved = selectedBidAchieved,
+                            onBidAchievedSelected = { selectedBidAchieved = it },
+                        )
+                    }
+
+                    is AddRoundNavigation.SummaryRoute -> NavEntry(key) {
+                        SummaryScreen(
+                            game = game,
+                            round = requireNotNull(state.round),
+                        )
+                    }
+                }
+            },
+            transitionSpec = slideTransition(1),
+            popTransitionSpec = slideTransition(-1)
+        )
+
 
         Row(
             modifier = Modifier
