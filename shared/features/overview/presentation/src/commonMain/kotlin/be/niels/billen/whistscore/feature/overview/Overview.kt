@@ -43,7 +43,7 @@ internal fun Overview(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(Style.Dimensions.paddingLarge)
             .wrapContentSize()
             .widthIn(max = 800.dp),
