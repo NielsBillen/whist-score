@@ -56,6 +56,8 @@ kotlin {
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {

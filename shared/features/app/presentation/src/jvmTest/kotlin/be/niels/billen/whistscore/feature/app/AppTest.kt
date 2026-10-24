@@ -56,7 +56,6 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Add Round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
 
                 onNodeWithText("Player 1").performClick()
                 onNodeWithText("Player 2").performClick()
@@ -67,11 +66,8 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Select slams").assertIsDisplayed()
                 onNodeWithText("8").performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
-
-                waitForIdle()
                 onNodeWithText("Summary").assertIsDisplayed()
-                onNodeWithText("Next").performClick()
+                onNodeWithText("Save").performClick()
                 waitForIdle()
                 onNodeWithText("Whist score").assertIsDisplayed()
             }
@@ -82,10 +78,8 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Add Round").performClick()
                 onNodeWithText("Pass", substring = true).performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
-                waitForIdle()
                 onNodeWithText("Summary").assertIsDisplayed()
-                onNodeWithText("Next").performClick()
+                onNodeWithText("Save").performClick()
                 waitForIdle()
                 onNodeWithText("Whist score").assertIsDisplayed()
             }
@@ -96,20 +90,14 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Add Round").performClick()
                 onNodeWithText("Misere - One player bids to achieve no slams").performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
 
                 onNodeWithText("Player 1").performClick()
-                waitForIdle()
-                onNodeWithText("Next").performClick()
-
                 waitForIdle()
                 onNodeWithText("Bid Achieved").assertIsDisplayed()
                 onNodeWithText("Yes").performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
-                waitForIdle()
                 onNodeWithText("Summary").assertIsDisplayed()
-                onNodeWithText("Next").performClick()
+                onNodeWithText("Save").performClick()
                 waitForIdle()
                 onNodeWithText("Whist score").assertIsDisplayed()
             }
@@ -120,15 +108,12 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Add Round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
-                waitForIdle()
                 onNodeWithText("Back").performClick()
                 waitForIdle()
                 onNodeWithText("Select round type").assertIsDisplayed()
                 onNodeWithText("Regular", substring = true).performClick()
-                onNodeWithText("Next").performClick()
                 waitForIdle()
-                onNodeWithText("Regular").assertIsDisplayed()
+                onNodeWithText("Player 1").assertIsDisplayed()
             }
         }
 
@@ -137,15 +122,12 @@ class AppTest : FreeSpec() {
                 onNodeWithText("Add Round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
-                onNodeWithText("Next").performClick()
                 onNodeWithText("Player 1").performClick()
                 onNodeWithText("Player 2").performClick()
                 waitForIdle()
                 onNodeWithText("Next").performClick()
                 waitForIdle()
                 onNodeWithText("8").performClick()
-                waitForIdle()
-                onNodeWithText("Next").performClick()
                 waitForIdle()
                 onNodeWithText("Back").performClick()
                 waitForIdle()
@@ -170,10 +152,11 @@ class AppTest : FreeSpec() {
                     waitForIdle()
                     onNodeWithText("Back").performClick()
                     waitForIdle()
-                    val node = onNodeWithText("Whist score").fetchSemanticsNode()
-                    // The 800 dp inner content is centred; its left edge is (window - 800) / 2.
-                    val expectedLeft = wideWindow.width / 2f - 800f / 2f
-                    kotlin.math.abs(node.positionInRoot.x - expectedLeft) shouldBeLessThan 4f
+                    val button = onNodeWithText("New game").fetchSemanticsNode()
+                    // The button row spans the 800 dp centred content column (plus its 16 dp
+                    // outer padding), so the first button sits (window - 832) / 2 + 24 px in.
+                    val expectedLeft = wideWindow.width / 2f - 832f / 2f + 24f
+                    kotlin.math.abs(button.positionInRoot.x - expectedLeft) shouldBeLessThan 4f
                 }
             }
 
@@ -183,7 +166,10 @@ class AppTest : FreeSpec() {
                     waitForIdle()
                     onNodeWithText("Regular", substring = true).performClick()
                     waitForIdle()
-                    val restRight = onNodeWithText("Select round type").fetchSemanticsNode().let { n ->
+                    onNodeWithText("Player 1").performClick()
+                    onNodeWithText("Player 2").performClick()
+                    waitForIdle()
+                    val restRight = onNodeWithText("Regular").fetchSemanticsNode().let { n ->
                         n.positionInRoot.x + n.size.width
                     }
                     mainClock.autoAdvance = false
@@ -192,7 +178,7 @@ class AppTest : FreeSpec() {
                     // leaving no part of the exiting screen visible.
                     mainClock.advanceTimeUntil(5000) {
                         runWithoutImplicitWait {
-                            val node = onNodeWithText("Select round type").fetchSemanticsNode()
+                            val node = onNodeWithText("Regular").fetchSemanticsNode()
                             restRight - (node.positionInRoot.x + node.size.width) > 800f + 100f
                         }
                     }
@@ -205,16 +191,12 @@ class AppTest : FreeSpec() {
                     waitForIdle()
                     onNodeWithText("Regular", substring = true).performClick()
                     waitForIdle()
-                    onNodeWithText("Next").performClick()
-                    waitForIdle()
                     onNodeWithText("Player 1").performClick()
                     onNodeWithText("Player 2").performClick()
                     waitForIdle()
                     onNodeWithText("Next").performClick()
                     waitForIdle()
                     onNodeWithText("8").performClick()
-                    waitForIdle()
-                    onNodeWithText("Next").performClick()
                     waitForIdle()
                     val restLeft = onNodeWithText("Summary").fetchSemanticsNode().let { n ->
                         n.positionInRoot.x
@@ -239,14 +221,11 @@ class AppTest : FreeSpec() {
                 waitForIdle()
                 mainClock.autoAdvance = false
                 onNodeWithText("Back").performClick()
-                // While the pop animates, the entering screen must slide within its final,
-                // centred position: its title's left edge never drifts to the window edge
-                // (a left-aligned container would leave it at 16 px instead of 560 px).
-                // The entering screen must slide smoothly to its centred resting position. If the
-                // transition container sits left-aligned, the screen settles at the window edge
-                // and only reaches its resting position when the container re-centres it at the
-                // end: a discontinuous 544 px jump in one frame. The slide springs move at most
-                // ~230 px per frame, so a bigger per-frame move is the re-centring jump.
+                // While the pop animates, the entering overview must slide smoothly to its
+                // resting position: the title never makes a discontinuous jump (a
+                // left-aligned container would re-centre the screen at the end of the
+                // transition: a discontinuous jump of over 400 px in one frame), and it
+                // settles at its centred resting position (x = 872 on a 1920 px window).
                 var prev: Float? = null
                 mainClock.advanceTimeUntil(5000) {
                     runWithoutImplicitWait {
@@ -261,9 +240,9 @@ class AppTest : FreeSpec() {
                                 val previous = prev
                                 prev = leftEdge
                                 if (previous != null && leftEdge - previous > 400f) {
-                                    error("the entering overview jumped from x=$previous to x=$leftEdge: it settled at the window edge instead of sliding to its resting position")
+                                    error("the entering overview jumped from x=$previous to x=$leftEdge instead of sliding to its resting position")
                                 }
-                                leftEdge > 500f // reached the centred resting position
+                                leftEdge > 800f // reached the centred resting position
                             }
                         }
                     }

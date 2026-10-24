@@ -214,9 +214,3 @@ private fun SaveButton(onClick: () -> Unit) {
     }
 }
 
-internal sealed interface AddRoundNextStep {
-    data class Dispatch(val action: AddRoundAction) : AddRoundNextStep
-    data class Save(val round: Round) : AddRoundNextStep
-}
-
-internal data class NextButton(val enabled: Boolean, val step: AddRoundNextStep)

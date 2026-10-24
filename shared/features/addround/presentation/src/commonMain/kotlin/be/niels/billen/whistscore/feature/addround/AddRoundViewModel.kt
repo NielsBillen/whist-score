@@ -64,7 +64,7 @@ class AddRoundViewModel(
                 false -> oldState.players - playerId
             }
 
-            if (singlePlayer) {
+            if (singlePlayer && selected) {
                 advanceFromPlayersScreen(oldState.roundType)
             }
 

@@ -48,9 +48,15 @@ kotlin {
             implementation(projects.shared.features.players.domain)
         }
         jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.foundation)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {
+            implementation(libs.compose.ui.test)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
         }
