@@ -6,6 +6,7 @@ import be.niels.billen.whistscore.feature.core.DEFAULT_PLAYERS
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.core.RoundType.*
+import be.niels.billen.whistscore.feature.core.WinCondition
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
 import be.niels.billen.whistscore.feature.players.PlayerRepository
@@ -16,10 +17,11 @@ import kotlinx.coroutines.flow.*
 
 class AddRoundViewModel(
     gameRepository: GameRepository,
-    playerRepository: PlayerRepository
+    playerRepository: PlayerRepository,
+    initialState: AddRoundState = AddRoundState()
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AddRoundState())
+    private val _state = MutableStateFlow(initialState)
     val state: StateFlow<AddRoundState> = _state.asStateFlow()
 
     private val _effects = MutableSharedFlow<AddRoundEffect>(extraBufferCapacity = 1)
@@ -123,24 +125,3 @@ class AddRoundViewModel(
         _effects.tryEmit(AddRoundEffect.PreviousScreen)
     }
 }
-
-private enum class WinCondition {
-    SLAMS,
-    BID_ACHIEVED,
-    NONE
-}
-
-private val RoundType.winCondition: WinCondition
-    get() = when (this) {
-        Pass -> WinCondition.NONE
-
-        Abandonce,
-        AbandonceInTrump,
-        Misere,
-        OpenMisere,
-        SoloSlim -> WinCondition.BID_ACHIEVED
-
-        Regular,
-        Treble -> WinCondition.SLAMS
-
-    }

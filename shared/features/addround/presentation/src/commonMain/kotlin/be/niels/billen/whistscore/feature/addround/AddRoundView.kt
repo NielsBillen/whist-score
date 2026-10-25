@@ -41,8 +41,9 @@ internal fun AddRoundView(
     onAction: (AddRoundAction) -> Unit,
     effects: SharedFlow<AddRoundEffect>,
     state: AddRoundState,
+    initialState: AddRoundState = AddRoundState(),
 ) {
-    val backStack = remember { mutableStateListOf(AddRoundScreen.SELECT_ROUND_TYPE) }
+    val backStack = remember { mutableStateListOf(initialState.screen) }
 
     Column(
         modifier = modifier,
@@ -213,4 +214,3 @@ private fun SaveButton(onClick: () -> Unit) {
         Text("Save")
     }
 }
-

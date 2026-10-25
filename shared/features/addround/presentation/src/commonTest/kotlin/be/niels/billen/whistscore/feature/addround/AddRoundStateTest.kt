@@ -11,6 +11,10 @@ class AddRoundStateTest : FreeSpec() {
 
     private val twoPlayers = persistentSetOf(PlayerId.Player1, PlayerId.Player2)
     private val playerOne = persistentSetOf(PlayerId.Player1)
+    private val regularPlayers = AddRoundState(
+        roundType = RoundType.Regular,
+        players = twoPlayers,
+    )
 
     init {
         "an empty state builds no round" {
@@ -162,6 +166,37 @@ class AddRoundStateTest : FreeSpec() {
                 val state = AddRoundState(roundType = RoundType.SoloSlim, players = playerOne)
 
                 state.round shouldBe null
+            }
+        }
+
+        "the screen to resume on is derived from how much of the round is complete" - {
+            "an empty state resumes on the round type selection" {
+                AddRoundState().screen shouldBe AddRoundScreen.SELECT_ROUND_TYPE
+            }
+
+            "an unfinished regular round resumes on the player selection" {
+                AddRoundState(roundType = RoundType.Regular).screen shouldBe AddRoundScreen.SELECT_PLAYERS
+            }
+
+            "a regular round with players but no slam count resumes on the slam selection" {
+                regularPlayers.screen shouldBe AddRoundScreen.SELECT_SLAMS
+            }
+
+            "an unfinished single-player round resumes on the bid selection" {
+                AddRoundState(roundType = RoundType.Misere, players = playerOne).screen shouldBe
+                    AddRoundScreen.SELECT_BID_ACHIEVED
+            }
+
+            "a pass round resumes on the summary" {
+                AddRoundState(roundType = RoundType.Pass).screen shouldBe AddRoundScreen.SUMMARY
+            }
+
+            "a complete round resumes on the summary" {
+                AddRoundState(
+                    roundType = RoundType.Misere,
+                    players = playerOne,
+                    bidAchieved = true,
+                ).screen shouldBe AddRoundScreen.SUMMARY
             }
         }
     }

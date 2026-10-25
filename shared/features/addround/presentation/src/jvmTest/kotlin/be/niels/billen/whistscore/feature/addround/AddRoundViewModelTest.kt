@@ -54,6 +54,30 @@ class AddRoundViewModelTest : FreeSpec() {
                 }
             }
 
+            "an abandonce round goes to the player selection" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Abandonce))
+
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SELECT_PLAYERS)
+                }
+            }
+
+            "an abandonce in trump round goes to the player selection" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.AbandonceInTrump))
+
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SELECT_PLAYERS)
+                }
+            }
+
+            "a treble round goes to the player selection" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Treble))
+
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SELECT_PLAYERS)
+                }
+            }
+
             "switching from a regular to a single-player round clears the players" {
                 withFixture {
                     viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Regular))
@@ -140,6 +164,19 @@ class AddRoundViewModelTest : FreeSpec() {
                 }
             }
 
+            "a treble round goes to the slam selection" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Treble))
+                    effects.awaitItem()
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player1, true))
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player2, true))
+
+                    viewModel.onAction(AddRoundAction.ConfirmPlayers)
+
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SELECT_SLAMS)
+                }
+            }
+
             "a pass round goes straight to the summary" {
                 withFixture {
                     viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Pass))
@@ -187,6 +224,44 @@ class AddRoundViewModelTest : FreeSpec() {
                     effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
                 }
             }
+
+            "a zero slam count builds a failed regular round" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Regular))
+                    effects.awaitItem()
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player1, true))
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player2, true))
+                    viewModel.onAction(AddRoundAction.ConfirmPlayers)
+                    effects.awaitItem()
+
+                    viewModel.onAction(AddRoundAction.SetSlams(0))
+
+                    viewModel.state.value.round shouldBe Round.Regular(
+                        persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+                        slams = 0,
+                    )
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
+                }
+            }
+
+            "a full deck of slams builds a won regular round" {
+                withFixture {
+                    viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Regular))
+                    effects.awaitItem()
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player1, true))
+                    viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player2, true))
+                    viewModel.onAction(AddRoundAction.ConfirmPlayers)
+                    effects.awaitItem()
+
+                    viewModel.onAction(AddRoundAction.SetSlams(13))
+
+                    viewModel.state.value.round shouldBe Round.Regular(
+                        persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+                        slams = 13,
+                    )
+                    effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
+                }
+            }
         }
 
         "backing out emits the previous-screen effect" {
@@ -214,7 +289,7 @@ class AddRoundViewModelTest : FreeSpec() {
         "acting before a round type is chosen is rejected" - {
             "confirming the players" {
                 withFixture {
-                    shouldThrow<IllegalStateException> {
+                    shouldThrow<IllegalArgumentException> {
                         viewModel.onAction(AddRoundAction.ConfirmPlayers)
                     }
                 }
@@ -222,7 +297,7 @@ class AddRoundViewModelTest : FreeSpec() {
 
             "selecting a player" {
                 withFixture {
-                    shouldThrow<IllegalStateException> {
+                    shouldThrow<IllegalArgumentException> {
                         viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player1, true))
                     }
                 }

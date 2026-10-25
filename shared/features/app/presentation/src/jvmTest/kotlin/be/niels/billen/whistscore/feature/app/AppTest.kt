@@ -22,6 +22,7 @@ import io.kotest.core.spec.style.FreeSpec
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -290,7 +291,7 @@ class AppTest : FreeSpec() {
         single { FakeGameRepository() }.bind<GameRepository>()
         viewModelOf(::AppViewModel)
         viewModelOf(::OverviewViewModel)
-        viewModelOf(::AddRoundViewModel)
+        viewModel { AddRoundViewModel(get(), get()) }
         viewModelOf(::EditPlayersViewModel)
         viewModelOf(::RoundsViewModel)
         viewModelOf(::PlayersViewModel)
