@@ -24,7 +24,13 @@ kotlin {
     jvm()
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodejs()
+        // Compose's skiko wasm runtime cannot load under Node, so node tests can't run
+        // in this module; the common tests still run on JVM.
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
         compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
     sourceSets {
