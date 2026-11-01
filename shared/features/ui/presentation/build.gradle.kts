@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.androidx.nav3.ui)
+            implementation(project(":shared:features:core:presentation"))
         }
         jvmTest.dependencies {
             implementation(compose.desktop.currentOs)
