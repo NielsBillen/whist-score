@@ -44,6 +44,7 @@ kotlin {
             
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
+            implementation(projects.shared.features.ui.presentation)
         }
     }
 }
