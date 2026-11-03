@@ -14,7 +14,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 class UiThemeTest : FreeSpec() {
 
     init {
-        "ui theme applies a two-weight custom family to titleLarge" {
+        "ui theme applies a three-weight custom family to titleLarge" {
             var titleFontFamily: FontFamily? = null
             runSkikoComposeUiTest {
                 setContent {
@@ -25,7 +25,7 @@ class UiThemeTest : FreeSpec() {
             }
             titleFontFamily.shouldNotBeNull()
             val fonts = (titleFontFamily as? FontListFontFamily)?.fonts ?: emptyList()
-            fonts.shouldHaveSize(2)
+            fonts.shouldHaveSize(3)
         }
     }
 }

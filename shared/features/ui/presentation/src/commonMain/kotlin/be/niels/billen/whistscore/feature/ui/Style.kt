@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.Font
 import whist_score.shared.features.ui.presentation.generated.resources.Poppins_Bold
+import whist_score.shared.features.ui.presentation.generated.resources.Poppins_Medium
 import whist_score.shared.features.ui.presentation.generated.resources.Poppins_Regular
 import whist_score.shared.features.ui.presentation.generated.resources.Res
 
@@ -19,6 +20,7 @@ fun UiTheme(content: @Composable () -> Unit) {
     val typography = Typography().run {
         val fontFamily = FontFamily(
             Font(Res.font.Poppins_Regular, weight = FontWeight.Normal, style = FontStyle.Normal),
+            Font(Res.font.Poppins_Medium, weight = FontWeight.Medium, style = FontStyle.Normal),
             Font(Res.font.Poppins_Bold, weight = FontWeight.Bold, style = FontStyle.Normal)
         )
 
