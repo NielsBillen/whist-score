@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.niels.billen.whistscore.feature.core.Icons
-import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.ArrowDown
 import be.niels.billen.whistscore.feature.core.icons.PlayingCard
+import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentList
 import org.koin.compose.koinInject
 
