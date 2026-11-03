@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.*
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.Selectable
+import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 

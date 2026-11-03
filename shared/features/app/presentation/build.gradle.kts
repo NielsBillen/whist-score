@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
+            implementation(projects.shared.features.ui.presentation)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.overview.presentation)
             implementation(projects.shared.features.addround.presentation)
