@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.core.*
 import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.ui.Selectable
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 

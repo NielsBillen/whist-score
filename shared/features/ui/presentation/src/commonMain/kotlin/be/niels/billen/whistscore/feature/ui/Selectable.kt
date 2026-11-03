@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.feature.core
+package be.niels.billen.whistscore.feature.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Selectable
+import be.niels.billen.whistscore.feature.ui.Style
+import be.niels.billen.whistscore.feature.ui.Selectable
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

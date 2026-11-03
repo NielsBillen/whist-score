@@ -16,8 +16,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import be.niels.billen.whistscore.feature.core.RoundType
-import be.niels.billen.whistscore.feature.core.Selectable
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.ui.Selectable
+import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

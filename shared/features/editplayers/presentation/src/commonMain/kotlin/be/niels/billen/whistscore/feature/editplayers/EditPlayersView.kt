@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Player
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Players
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.ArrowDown
 import be.niels.billen.whistscore.feature.core.icons.ArrowUp
 import kotlinx.collections.immutable.ImmutableList
