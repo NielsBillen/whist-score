@@ -39,14 +39,14 @@ class AppTest : FreeSpec() {
 
         "add round shows the add round screen" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Select round type").assertIsDisplayed()
             }
         }
 
         "cancelling add round returns to the overview" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Back").performClick()
                 onNodeWithText("Whist score").assertIsDisplayed()
             }
@@ -54,7 +54,7 @@ class AppTest : FreeSpec() {
 
         "saving a full regular round returns to the overview" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
 
@@ -76,7 +76,7 @@ class AppTest : FreeSpec() {
 
         "saving a pass round returns to the overview" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Pass", substring = true).performClick()
                 waitForIdle()
                 onNodeWithText("Summary").assertIsDisplayed()
@@ -88,7 +88,7 @@ class AppTest : FreeSpec() {
 
         "saving a misere round returns to the overview" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Misere - One player bids to achieve no slams").performClick()
                 waitForIdle()
 
@@ -106,7 +106,7 @@ class AppTest : FreeSpec() {
 
         "backing out of the player selection returns to the round type selection" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
                 onNodeWithText("Back").performClick()
@@ -120,7 +120,7 @@ class AppTest : FreeSpec() {
 
         "backing out of the summary returns to the slams selection" {
             withApp {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 onNodeWithText("Regular", substring = true).performClick()
                 waitForIdle()
                 onNodeWithText("Player 1").performClick()
@@ -139,7 +139,7 @@ class AppTest : FreeSpec() {
         "a wide window centres the 800 dp content columns" - {
             "on the add round screen" {
                 withApp(size = wideWindow) {
-                    onNodeWithText("Add Round").performClick()
+                    onNodeWithText("Add round").performClick()
                     waitForIdle()
                     val node = onNodeWithText("Select round type").fetchSemanticsNode()
                     val centre = node.positionInRoot.x + node.size.width / 2f
@@ -149,21 +149,21 @@ class AppTest : FreeSpec() {
 
             "after backing out of the add round screen" {
                 withApp(size = wideWindow) {
-                    onNodeWithText("Add Round").performClick()
+                    onNodeWithText("Add round").performClick()
                     waitForIdle()
                     onNodeWithText("Back").performClick()
                     waitForIdle()
                     val button = onNodeWithText("New game").fetchSemanticsNode()
                     // The button row spans the 800 dp centred content column (plus its 16 dp
-                    // outer padding), so the first button sits (window - 832) / 2 + 24 px in.
-                    val expectedLeft = wideWindow.width / 2f - 832f / 2f + 24f
+                    // outer padding), so the first button sits (window - 832) / 2 + 16 px in.
+                    val expectedLeft = wideWindow.width / 2f - 832f / 2f + 16f
                     kotlin.math.abs(button.positionInRoot.x - expectedLeft) shouldBeLessThan 4f
                 }
             }
 
             "slides the previous screen fully offscreen when navigating forward" {
                 withApp(size = wideWindow) {
-                    onNodeWithText("Add Round").performClick()
+                    onNodeWithText("Add round").performClick()
                     waitForIdle()
                     onNodeWithText("Regular", substring = true).performClick()
                     waitForIdle()
@@ -188,7 +188,7 @@ class AppTest : FreeSpec() {
 
             "slides the previous screen fully offscreen when popping back" {
                 withApp(size = wideWindow) {
-                    onNodeWithText("Add Round").performClick()
+                    onNodeWithText("Add round").performClick()
                     waitForIdle()
                     onNodeWithText("Regular", substring = true).performClick()
                     waitForIdle()
@@ -218,7 +218,7 @@ class AppTest : FreeSpec() {
 
         "the entering overview never rests left-aligned while the pop animates" {
             withApp(size = wideWindow) {
-                onNodeWithText("Add Round").performClick()
+                onNodeWithText("Add round").performClick()
                 waitForIdle()
                 mainClock.autoAdvance = false
                 onNodeWithText("Back").performClick()
