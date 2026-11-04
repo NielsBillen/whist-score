@@ -15,11 +15,11 @@ fun Card(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val shape = Style.Shapes.mediumRoundedCornerShape
+
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface, shape)
             .border(1.dp, MaterialTheme.colorScheme.secondary, shape),
-    ) {
-        content()
-    }
+        content = content
+    )
 }

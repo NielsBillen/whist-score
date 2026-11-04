@@ -1,16 +1,16 @@
 package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.ui.Button
+import be.niels.billen.whistscore.feature.ui.TextButton
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -98,7 +98,6 @@ private fun AddRoundScreens(
         }
     }
 
-
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -160,57 +159,73 @@ private fun ButtonRow(
     onAction: (AddRoundAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Row(
-        modifier = modifier.padding(
-            start = Style.Dimensions.paddingLarge,
-            bottom = Style.Dimensions.paddingLarge,
-            end = Style.Dimensions.paddingLarge
-        ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier
+            .padding(
+                start = Style.Dimensions.paddingLarge,
+                bottom = Style.Dimensions.paddingLarge,
+                end = Style.Dimensions.paddingLarge
+            )
+            .fillMaxWidth()
+            .requiredWidthIn(max = 800.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(onClick = {
-            when (screen) {
-                AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
-                AddRoundScreen.SELECT_PLAYERS,
-                AddRoundScreen.SELECT_SLAMS,
-                AddRoundScreen.SELECT_BID_ACHIEVED,
-                AddRoundScreen.SUMMARY -> onBack()
+        TextButton(
+            text = "Back",
+            modifier = Modifier.widthIn(min = 96.dp),
+            onClick = {
+                when (screen) {
+                    AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
+                    AddRoundScreen.SELECT_PLAYERS,
+                    AddRoundScreen.SELECT_SLAMS,
+                    AddRoundScreen.SELECT_BID_ACHIEVED,
+                    AddRoundScreen.SUMMARY -> onBack()
+                }
             }
-        }) {
-            Text("Back")
-        }
+        )
 
 
         when (screen) {
             AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
-            AddRoundScreen.SELECT_ROUND_TYPE -> Unit
-            AddRoundScreen.SELECT_PLAYERS ->
-                when (state.roundType?.singlePlayer == true) {
-                    true -> Unit
-                    false -> NextButton(
-                        enabled = state.players.isNotEmpty(),
-                        onClick = { onAction(AddRoundAction.ConfirmPlayers) }
-                    )
-                }
+            AddRoundScreen.SELECT_PLAYERS -> SelectPlayersNextButton(state = state, onAction = onAction)
 
-
-            AddRoundScreen.SELECT_SLAMS -> Unit
+            AddRoundScreen.SELECT_ROUND_TYPE,
+            AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SELECT_BID_ACHIEVED -> Unit
         }
     }
 }
 
 @Composable
-private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
-    Button(enabled = enabled, onClick = onClick) {
-        Text("Next")
+private fun SelectPlayersNextButton(
+    state: AddRoundState,
+    onAction: (AddRoundAction) -> Unit
+) {
+    when (state.roundType?.singlePlayer == true) {
+        true -> Unit
+        false -> NextButton(
+            enabled = state.players.isNotEmpty(),
+            onClick = { onAction(AddRoundAction.ConfirmPlayers) }
+        )
     }
+
+}
+
+@Composable
+private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
+    TextButton(
+        text = "Next",
+        enabled = enabled, onClick = onClick,
+        modifier = Modifier.widthIn(min = 96.dp),
+    )
 }
 
 @Composable
 private fun SaveButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text("Save")
-    }
+    TextButton(
+        text = "Save", onClick = onClick,
+        modifier = Modifier.widthIn(min = 96.dp)
+    )
 }
+

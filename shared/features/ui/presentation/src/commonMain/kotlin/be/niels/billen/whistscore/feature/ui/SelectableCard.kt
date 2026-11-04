@@ -3,13 +3,14 @@ package be.niels.billen.whistscore.feature.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -22,7 +23,7 @@ fun SelectableCard(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val shape = Style.Shapes.mediumRoundedCornerShape
-    Card(
+    Box(
         modifier = modifier
             .background(
                 color = if (selected) MaterialTheme.colorScheme.surfaceBright else MaterialTheme.colorScheme.surface,
@@ -34,8 +35,12 @@ fun SelectableCard(
                 shape = shape,
             )
             .semantics { this.role = role }
-            .clickable(enabled = enabled, onClick = onClick),
-    ) {
-        content()
-    }
+            .clickable(
+                enabled = enabled,
+                onClick = onClick,
+                indication = null,
+                interactionSource = null
+            ),
+        content = content,
+    )
 }

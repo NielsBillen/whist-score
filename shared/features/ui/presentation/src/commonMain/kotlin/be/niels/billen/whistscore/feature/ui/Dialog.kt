@@ -48,12 +48,12 @@ fun ConfirmDialog(
 @Composable
 private fun Scrim(onDismiss: () -> Unit, content: @Composable BoxScope.() -> Unit) {
     Box(
+        contentAlignment = Alignment.Center,
+        content = content,
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.3f))
             .pointerInput(Unit) { detectTapGestures { onDismiss() } },
-        contentAlignment = Alignment.Center,
-        content = content
     )
 }
 
