@@ -53,7 +53,6 @@ fun TextButton(
     ) {
         Text(text = text)
     }
-
 }
 
 private val buttonPadding = PaddingValues(
