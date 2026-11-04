@@ -36,59 +36,45 @@ fun <T> Table(
 ) {
     LazyColumn(modifier = modifier) {
         item {
-            TableHeaderRow(header = header)
+            TableHeader(content = header)
         }
 
         itemsIndexed(rows) { index, item ->
-            TableBodyRow(
-                isLast = index == rows.lastIndex,
-                content = { rowContent(item, index) },
-            )
+            TableRow(modifier = Modifier.fillMaxWidth()) { rowContent(item, index) }
+
         }
     }
 }
 
 @Composable
-private fun TableHeaderRow(header: @Composable RowScope.() -> Unit) {
-    TableRow(hasDivider = true) {
-        header()
-    }
-}
-
-@Composable
-private fun TableBodyRow(
-    isLast: Boolean,
+private fun TableHeader(
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    TableRow(hasDivider = !isLast) {
-        content()
+    Column(modifier = modifier) {
+        TableRow(content = content, modifier = Modifier.fillMaxWidth())
+
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = TableRowDividerThickness,
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
     }
 }
 
 @Composable
 private fun TableRow(
-    hasDivider: Boolean,
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    vertical = TableRowVerticalPadding,
-                    horizontal = TableRowHorizontalPadding,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content()
-        }
-
-        if (hasDivider) {
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = TableRowDividerThickness,
-                color = MaterialTheme.colorScheme.outlineVariant,
-            )
-        }
-    }
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = TableRowVerticalPadding,
+                horizontal = TableRowHorizontalPadding,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        content = content
+    )
 }
