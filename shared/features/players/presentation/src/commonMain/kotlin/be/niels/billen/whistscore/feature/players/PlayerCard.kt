@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Icon
@@ -22,25 +23,38 @@ import be.niels.billen.whistscore.feature.ui.Style
 
 @Composable
 internal fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
-    val textColor =
-        if (player.color.luminance < 0.5f) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
+    val textColor = when {
+        player.color.luminance < 0.5f -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.inverseOnSurface
+    }
+
     Column(
         modifier = modifier
-
-            .background(player.color, Style.Shapes.mediumRoundedCornerShape)
+            .background(color = player.color, shape = Style.Shapes.mediumRoundedCornerShape)
             .padding(Style.Dimensions.paddingMedium)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(player.name, fontWeight = FontWeight.Bold, color = textColor, modifier = Modifier.weight(1f))
+        PlayerName(name = player.name, textColor = textColor, isDealer = player.dealer)
 
-            DealerIcon(isDealer = player.dealer, color = textColor)
-        }
-
-        Text("${player.score}", color = textColor, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
+        PlayerScore(score = player.score, textColor = textColor)
     }
+}
+
+@Composable
+private fun PlayerName(name: String, textColor: Color, isDealer: Boolean) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = name, fontWeight = FontWeight.Bold, color = textColor, modifier = Modifier.weight(1f))
+
+        DealerIcon(isDealer = isDealer, color = textColor)
+    }
+}
+
+@Composable
+private fun PlayerScore(score: Int, textColor: Color) {
+    Text(text = score.toString(), color = textColor, fontWeight = FontWeight.Medium, fontSize = 20.sp)
+
 }
 
 @Composable
@@ -51,7 +65,7 @@ private fun DealerIcon(isDealer: Boolean, color: Color) {
                 imageVector = PlayingCard,
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.requiredSize(24.dp)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
