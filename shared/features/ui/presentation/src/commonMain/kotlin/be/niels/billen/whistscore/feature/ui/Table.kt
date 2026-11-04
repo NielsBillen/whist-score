@@ -49,9 +49,9 @@ fun <T> Table(
 
         if (rows.isNotEmpty()) {
             TableContent(rows = rows, rowContent = rowContent, modifier = modifier.weight(1f))
-        } else {
+        } else if (emptyContent != null) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f)) {
-                emptyContent?.invoke()
+                emptyContent()
             }
         }
     }
