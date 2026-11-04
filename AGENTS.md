@@ -8,8 +8,9 @@ A Kotlin **Compose Multiplatform Desktop** app to easily track score across game
 
 Each functional component of the app is its own module tree; **within a
 component, each architectural layer is a separate submodule** named `data`,
-`domain`, or `presentation`. Feature components live under `features/<name>/`
-(path `:features:<name>:<layer>`); the cross-cutting kernel lives under `core/`.
+`domain`, or `presentation`. Feature components live under `shared/features/<name>/`
+(path `:shared:features:<name>:<layer>`); the cross-cutting kernel lives under
+`shared/features/core/`.
 Package names carry the feature but **never the layer** — see
 docs/guidelines/code-guidelines.md § "Modules & packages".
 
@@ -23,14 +24,10 @@ Layer dependency rules:
 
 `settings.gradle.kts` lists every module.
 
-A feature is `features/<name>/{domain,data,presentation}` — ports+model, adapters, screen+
-ViewModel — plus a `testfixtures` sibling per layer holding that layer's fakes and matchers.
-A feature ships only the layers it has content for.
-
-**Every fact about a module tree that you would not guess lives in that tree's own `CLAUDE.md`**
-(it will be created in each feature and `core` tree as the architecture is built out). It loads
-when you touch a file inside, so the detail arrives next to the code instead of in every window.
-The index below is only enough to know which tree to open; open it before editing there.
+A feature is `shared/features/<name>/{domain,data,presentation}` — ports+model, adapters,
+screen+ViewModel. A feature ships only the layers it has content for.
+A repository's `FakeX` lives in the owning feature's `domain` module (`commonMain`),
+so other features' tests can import it — fakes have no `testfixtures` module of their own.
 
 **Cross-module dependency direction** (on top of the layer rules above): a module may depend
 on another feature's **same** layer when that module is a shared library (e.g. shared UI components).
@@ -40,7 +37,7 @@ composes another's composable; the shared one takes plain callbacks, never a spe
 
 ## Build & test commands
 
-`./gradlew build` compiles and tests everything, screenshot goldens excluded.
+`./gradlew build` compiles and tests everything.
 
 ## Guidelines
 

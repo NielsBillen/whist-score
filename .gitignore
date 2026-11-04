@@ -18,7 +18,7 @@
 .s2c
 .superpowers
 captures
+docs/handoff
 kotlin-js-store/wasm/
 local.properties
 xcuserdata
-docs

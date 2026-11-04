@@ -133,21 +133,6 @@ multiple `withFixture` overloads (richer ones delegating to a base) or distinct
 | Randomness | inject a `Random`, pass a seeded one |
 | IO | in-memory fake repository/client — never a real socket or disk |
 
-### Integration tests are the exception
-
-A few tests exercise **one component** against a real dependency that cannot be
-meaningfully faked — faking it would test the fake:
-
-| Test | Real dependency, and why |
-|---|---|
-
-The determinism rules above do not apply to these; everything else in this document
-still does. They test one component, so they live in `src/test` beside it.
-
-A **system test** — the assembled app driven end-to-end — is a different animal.
-There is no assembled app to drive yet, so there are none; when there are, they get
-their own module.
-
 ## Avoid Koin in unit tests
 
 **Wire dependencies by hand.** Narrow exception: a component composing children that
@@ -195,40 +180,16 @@ assertSoftly(device) {
 }
 ```
 
-## A new atomic component ships a screenshot gallery
+## Shared fakes live beside their port
 
-**Every component in `:features:ui:components:presentation` carries an
-`XScreenshotTest`** beside the others, tagged `@RequiresTag("Screenshot")` +
-`@Tags("Screenshot")` and built on `ComponentGallery` (`captureVariations`,
-`captureInteractionStates`). Minimum: a `variants` gallery covering every state the
-component takes, an `overflow` variation where a label can outgrow its box, and the
-pointer-state triptych if it is interactive. Both schemes come for free.
+**A fake consumed by more than one module lives in the owning feature's
+`domain` module (`commonMain`)**, next to the port it stands in — e.g.
+`FakeGameRepository` in `:shared:features:game:domain`. Only `commonMain` code
+there is visible to consumers.
 
-Record with `./gradlew recordRoborazzi -Pscreenshots`, review the images, commit them.
+## Compose UI tests
 
-## Shared fakes live in `testfixtures/`
-
-**A fake consumed by more than one module goes in the feature's `testfixtures/`
-sibling module.** Only `commonMain` code there is visible to consumers.
-
-## Compose tests match through a fixture matcher, never a tag
-
-**A test never names a `testTag`.** A presentation module whose nodes any test
-addresses has a `testfixtures` sibling publishing an `isXxx()` matcher per kind, a
-`hasXxx(id)` matcher per identity property, and an
-`onXxx(useUnmergedTree: Boolean = false)` lookup per addressable node; a test calls
-those. A module with no such node has no sibling — `:core:presentation` and
-`:features:terminals:jediterm:presentation` publish none, while
-`:features:shell:presentation:testfixtures` publishes the sidebar's. So the same match is
-written once per feature, and re-tagging a node changes one file instead of every test
-that reached it.
-
-- **Anchor a leaf, don't name its host's tag.** A leaf tag carries its kind only
-  (`"Confirm button"`), so pair it with its anchor through `onDescendant` from
-  `:core:domain:testfixtures`.
-- **Identify an instance by its semantic property**, not a tag — compose the kind
-  matcher with the id matcher (`hasWorktreeId`, `hasTicketKey`).
-
-`onNodeWithTag`, `onAllNodesWithTag`, `onNodeWithTagContains` and `hasTestTag` are
-banned in test sources by `TestTagMatcherArchitectureTest`; only a `testfixtures`
-module may name them. It keys on imports, so a fully-qualified call escapes it — don't.
+**Compose UI tests run on the `jvm` target** via `runSkikoComposeUiTest`
+(`androidx.compose.ui.test.v2`), with kotest assertions inside them, and match
+nodes by their visible text (`onNodeWithText`) or content description
+(`onNodeWithContentDescription`) — never by tags.
