@@ -1,4 +1,4 @@
-package be.niels.billen.whistscore.ui
+package be.niels.billen.whistscore.feature.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.ui.Style
 
 enum class ButtonVariant { Primary, Secondary, Ghost, Destructive }
 
@@ -21,7 +20,7 @@ fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    variant: ButtonVariant = ButtonVariant.Secondary,
+    variant: ButtonVariant = ButtonVariant.Primary,
     content: @Composable RowScope.() -> Unit
 ) {
     Button(
@@ -43,7 +42,7 @@ fun TextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    variant: ButtonVariant = ButtonVariant.Secondary,
+    variant: ButtonVariant = ButtonVariant.Primary,
     text: String
 ) {
     Button(
@@ -52,7 +51,7 @@ fun TextButton(
         enabled = enabled,
         variant = variant,
     ) {
-        Text(text = text, fontWeight = FontWeight.Medium)
+        Text(text = text)
     }
 
 }

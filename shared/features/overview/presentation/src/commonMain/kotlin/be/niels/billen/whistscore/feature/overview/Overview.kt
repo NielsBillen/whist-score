@@ -21,9 +21,8 @@ import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
 import be.niels.billen.whistscore.feature.rounds.RoundsView
-import be.niels.billen.whistscore.ui.Button
-import be.niels.billen.whistscore.ui.ButtonVariant
-import be.niels.billen.whistscore.ui.TextButton
+import be.niels.billen.whistscore.feature.ui.ButtonVariant
+import be.niels.billen.whistscore.feature.ui.TextButton
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

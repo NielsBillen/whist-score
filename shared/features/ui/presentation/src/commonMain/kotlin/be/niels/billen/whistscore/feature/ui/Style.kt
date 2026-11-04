@@ -37,9 +37,9 @@ fun UiTheme(content: @Composable () -> Unit) {
             bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
             bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
             bodySmall = bodySmall.copy(fontFamily = fontFamily),
-            labelLarge = labelLarge.copy(fontFamily = fontFamily),
-            labelMedium = labelMedium.copy(fontFamily = fontFamily),
-            labelSmall = labelSmall.copy(fontFamily = fontFamily)
+            labelLarge = labelLarge.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
+            labelMedium = labelMedium.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
+            labelSmall = labelSmall.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium)
         )
     }
 

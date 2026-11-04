@@ -10,7 +10,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.ui.Button
+import be.niels.billen.whistscore.feature.ui.Button
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
