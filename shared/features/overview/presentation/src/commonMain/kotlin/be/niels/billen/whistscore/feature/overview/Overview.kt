@@ -14,9 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import be.niels.billen.whistscore.feature.ui.ConfirmDialog
 import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
@@ -34,20 +38,31 @@ fun Overview(
     onEditPlayers: () -> Unit,
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
+    var showNewGameDialog by remember { mutableStateOf(false) }
 
     Overview(
         canStartNewGame = canStartNewGame,
-        onResetGame = onResetGame,
+        onNewGameRequested = { showNewGameDialog = true },
         onAddRound = onAddRound,
         onEditPlayers = onEditPlayers,
         modifier = modifier,
     )
+
+    if (showNewGameDialog) {
+        NewGameDialog(
+            onConfirm = {
+                showNewGameDialog = false
+                onResetGame()
+            },
+            onDismiss = { showNewGameDialog = false }
+        )
+    }
 }
 
 @Composable
 internal fun Overview(
     canStartNewGame: Boolean,
-    onResetGame: () -> Unit,
+    onNewGameRequested: () -> Unit,
     onAddRound: () -> Unit,
     onEditPlayers: () -> Unit,
     modifier: Modifier = Modifier,
@@ -68,7 +83,7 @@ internal fun Overview(
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
-            onResetGame = onResetGame,
+            onNewGameRequested = onNewGameRequested,
             onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth()
         )
@@ -90,9 +105,26 @@ private fun TitleRow(onEditPlayers: () -> Unit) {
 }
 
 @Composable
+private fun NewGameDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ConfirmDialog(
+        title = "New game",
+        body = "Starting a new game will discard all recorded rounds and reset the scoreboard.",
+        confirmText = "Start new game",
+        dismissText = "Cancel",
+        onConfirm = onConfirm,
+        onDismiss = onDismiss,
+        modifier = modifier
+    )
+}
+
+@Composable
 private fun ButtonRow(
     canStartNewGame: Boolean,
-    onResetGame: () -> Unit,
+    onNewGameRequested: () -> Unit,
     onAddRound: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -105,7 +137,7 @@ private fun ButtonRow(
         TextButton(
             variant = ButtonVariant.Destructive,
             enabled = canStartNewGame,
-            onClick = onResetGame,
+            onClick = onNewGameRequested,
             modifier = buttonModifier,
             text = "New game"
         )

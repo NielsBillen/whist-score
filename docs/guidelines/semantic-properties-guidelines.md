@@ -76,21 +76,12 @@ var SemanticsPropertyReceiver.ticketKey by ticketKeyKey
 // in a composable
 Modifier.semantics { ticketKey = key }
 
-// Matcher.kt, in the module's testfixtures/ sibling
+// test matcher
 fun hasTicketKey(key: TicketKey) = SemanticsMatcher.expectValue(SemanticsProperties.TicketKey, key)
 ```
 
-**Each key carries its own one-line why, and nothing else repeats it.** A `<Feature>Tags`
-object or a matcher file restating "a tag is a kind, the instance is a property" adds a
-copy to keep current; `TestTagFormatArchitectureTest` and `TestTagMatcherArchitectureTest` enforce
-that rule already.
-
-The property is named `<Concept>Semantics.kt` in the module that renders the node
-(`NavDestinationSemantics.kt` in `:desktopApp`, beside the sidebar that writes it) — or
-in the concept's own `domain` module when two features annotate it
-(`WorktreeSemantics.kt` in `:features:worktrees:domain`, `ProjectSemantics.kt` in
-`:features:projects:domain`, `ConnectionSemantics.kt` in
-`:features:connections:domain`).
+The property is named `<Concept>Semantics.kt` in the module that renders the node —
+or in the concept's own `domain` module when two features annotate it.
 
 ## Guidelines
 
@@ -120,9 +111,8 @@ property. Tests then identify a node by component type (`hasRole(Role.Button)`,
 ### Identify a specific instance, in order of preference
 
 **A `testTag` never identifies an instance** — it names a kind, and a repeated kind
-(every backlog row, every connection card) is disambiguated by a typed property, never
-by a tag suffix. A tag built by interpolation fails `TestTagFormatArchitectureTest`
-(`docs/guidelines/code-guidelines.md` § testTag on every interactive node). So:
+(every row of a list) is disambiguated by a typed property, never by a tag suffix.
+So:
 
 1. **Existing properties** (`role`, `text`) if they already identify it uniquely —
    don't add properties solely for testing when the component is already described

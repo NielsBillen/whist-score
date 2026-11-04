@@ -25,14 +25,12 @@ sealed interface ExampleAction {
 
 ### State and action dispatch
 
-The ViewModel exposes **`val state: StateFlow<State?>`** and **`fun onAction(action: Action)`**.
+The ViewModel exposes **`val state: StateFlow<State>`** (non-null — it has an initial value
+in its constructor or a known empty value) and **`fun onAction(action: Action)`**.
 
 - **`onAction` only dispatches** to private handlers — never inline logic.
 - **The `when` is exhaustive without `else`**, so the compiler flags new actions.
 - **Never expose `MutableStateFlow`.** Internal mutable state is `private`.
-
-A ViewModel may have extra action handlers where shared behaviour was extracted
-(reusable table or expandable-section behaviour).
 
 ```kotlin
 fun onAction(action: ExampleAction) {
@@ -63,18 +61,14 @@ callback. Use one only when both hold:
 - Anything the UI renders is state, even when transient (an error dialog carrying a
   VM-produced message).
 - **Exception — self-contained modals.** A dialog opened by a UI affordance holding
-  only transient local input (`NewWorktreeDialog`, `RemoveWorktreeDialog`) keeps its
-  open flag, target and field contents in component-local `remember`, not in
-  `[Feature]State`. MVI governs domain state, not modal presentation: such a dialog
-  needs no VM knowledge, is not part of the restore contract, and folding it in only
-  grows `combine` and the action surface. Distinct from ADR-0004's tree expansion,
-  which *is* VM state because it must survive restart. Once a dialog's content is
-  VM-produced (an async error, server-validated data), it becomes state.
+  only transient local input keeps its open flag and field contents in
+  component-local `remember`, not in `[Feature]State`. MVI governs domain state, not
+  modal presentation: such a dialog needs no VM knowledge, is not part of the restore
+  contract, and folding it in only grows state and the action surface. Once a
+  dialog's content is VM-produced (an async error, validated data), it becomes state.
 - **If handling the signal depends on rendered state that may not have caught up,
-  use state plus an acknowledge action.** Locating the current project must scroll to
-  a row that may not be composed yet, so `ManageProjectsViewModel` keeps
-  `locateTarget` in state until the view scrolls and acknowledges with
-  `ManageProjectsAction.LocateHandled`.
+  use state plus an acknowledge action.** The state carries the pending target until
+  the view acts on it and acknowledges with a follow-up action.
 
 ### Declaring and emitting
 
@@ -95,40 +89,28 @@ view is gone must be state.
 
 ### Collecting in the view
 
-**The internal `state`/`onAction` overload takes the effects flow as a parameter,
-defaulting to `emptyFlow()`**, and collects it with the shared `CollectEffects`
-helper; the public ViewModel-injecting overload passes `viewModel.effects`. This
-keeps effect handling next to the UI state it manipulates (a `FocusRequester`, a
-`LazyListState`, a snackbar host) and testable without Koin or a ViewModel, while the
-default keeps previews and rendering-only tests unaffected.
-
-`CollectEffects` owns the `rememberUpdatedState` + `LaunchedEffect(effects)` plumbing
-so each call site keeps only its exhaustive `when`:
+**The internal state-driven overload takes the effects flow as a parameter**, and
+collects it with a plain `LaunchedEffect(effects) { effects.collect { … } }`; the
+public ViewModel-injecting overload passes `viewModel.effects`. This keeps effect
+handling next to the UI state it manipulates and testable without Koin or a ViewModel.
 
 ```kotlin
-@Composable
-fun <Effect> CollectEffects(effects: Flow<Effect>, onEffect: (Effect) -> Unit) {
-    val currentOnEffect by rememberUpdatedState(onEffect)
-    LaunchedEffect(effects) { effects.collect { currentOnEffect(it) } }
-}
-
 @Composable
 internal fun ExampleView(
     state: ExampleState,
     onAction: (ExampleAction) -> Unit,
-    onDismissRequest: () -> Unit,
-    effects: Flow<ExampleEffect> = emptyFlow(),
+    effects: SharedFlow<ExampleEffect>,
 ) {
-    CollectEffects(effects) { effect ->
-        when (effect) {
-            is ExampleEffect.Dismiss -> onDismissRequest()
+    LaunchedEffect(effects) {
+        effects.collect { effect ->
+            when (effect) {
+                is ExampleEffect.NextScreen -> pushScreen(effect.screen)
+            }
         }
     }
 }
 ```
 
-- Referencing a hoisted callback directly inside the `when` is safe —
-  `CollectEffects` calls the latest lambda without restarting.
 - **The `when` is exhaustive without `else`**, like actions.
 - **An effect targeting UI the triggering state change is about to add races
   recomposition** — model that as state plus an acknowledge action.
@@ -137,45 +119,30 @@ internal fun ExampleView(
 
 ## Building view state
 
-### `stateWhileSubscribed`
+### Sharing upstream flows
 
-**Every exposed `StateFlow` is shared with `stateWhileSubscribed(initialValue)`** from
-**`:core:presentation`** (`be.nielsbillen.aid.core`) — never a hand-written `stateIn`. It takes
-the ViewModel as a **context parameter**, so the scope (`viewModelScope`) and the 5-second
-`WhileSubscribed` grace are its decision, not the call site's, and no ViewModel carries its own
-copy of that timeout.
+**Every exposed `StateFlow` is a `stateIn` on `viewModelScope` with
+`SharingStarted.WhileSubscribed()`**:
+
+```kotlin
+val game = gameRepository.game.stateIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(),
+    initialValue = Game.DEFAULT,
+)
+```
 
 Join several upstreams with `combine(…)` first, and pick the initial value:
 
-- **Main view state → `null`.** The type becomes `StateFlow<State?>` and the composable
-  early-returns until all upstreams emitted.
-- **A real empty value** where one exists (`WorkspaceState.Empty`,
-  `NotificationCenterState.EMPTY`), so the view never renders around a null.
+- **A real empty value** where one exists (`Game.DEFAULT`, `persistentListOf()`), so
+  the view never renders around a null.
 - **Derived flags/scalars gating UI → a conservative default** ("can't until proven
   otherwise"), so a transient pre-subscription state never enables risky UI.
 
 ```kotlin
-val state: StateFlow<WorkspaceState> =
-    combine(
-        projectRepository.projects(),
-        worktreeRepository.worktrees(),
-        workspaceRepository.openWorktrees(),
-        activation.history,
-        expandedProjects,
-        blockedRemoval,
-        ::makeState,
-    ).stateWhileSubscribed(initialValue = WorkspaceState.Empty)
-
-val unreadCount: StateFlow<Int> = repository.unreadCount().stateWhileSubscribed(initialValue = 0)
+val players = combine(gameRepository.game, playerRepository.players, ::makeState)
+    .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = persistentListOf())
 ```
-
-kotlinx types `combine` up to five flows; `:core:domain` adds the six-, seven- and eight-flow
-overloads — the six-flow one is what the example above uses.
-
-An upstream-typed variant that computes the initial value synchronously from each `.value` (so the
-state needs no initial value and can never be null) is only possible when **every** upstream is a
-`StateFlow`. No screen is in that position — repository reads are cold `Flow`s by design — so no
-such helper exists. Add one when a ViewModel appears that combines nothing but `StateFlow`s.
 
 ### The `makeState` free function
 
@@ -184,37 +151,26 @@ body**, so it cannot accidentally depend on ViewModel internals. State derivatio
 stays pure and independently testable.
 
 ```kotlin
-private fun makeState(
-    paneState: ExamplePaneState,
-    devices: Map<DeviceUrn, Device>,
-    isBlinking: Boolean,
-) = ExampleState(
-    deviceIds = devices.keys.toList(),
-    selectedDeviceId = paneState.selectedDeviceId,
-    isBlinking = isBlinking,
-)
+private fun makeState(game: Game, players: Players): PersistentList<PlayerView> { … }
 ```
 
 ---
 
 ## Coroutine scopes
 
-| Scope | Use for |
-|---|---|
-| **`viewModelScope`** | work that should be cancelled with the ViewModel — transient UI effects, animations, one-shot observations |
-| **`backgroundScope`** (constructor-injected) | work that must survive ViewModel destruction — e.g. a repository write when the user closes the pane mid-save |
-
-`backgroundScope` is a Koin singleton with a `SupervisorJob`, so one failure doesn't
-cancel others. **Errors in `backgroundScope.launch` don't propagate** — handle them
-inside the launch if the user must be notified.
+**`viewModelScope`** is the only scope the ViewModels use today — work cancels with
+the ViewModel. If a piece of work must outlive the ViewModel (e.g. a repository
+write that finishes after the user navigates away), give the ViewModel a
+constructor-injected scope and handle its errors inside the `launch`, since
+`launch` failures do not propagate.
 
 ---
 
 ## Dependency injection
 
 **Register with `viewModelOf(::ExampleViewModel)`** — never as a `single`. Koin
-resolves repositories and `backgroundScope` from the graph; call-site parameters
-(`paneId`) come from the call site.
+resolves the repositories from the graph; call-site parameters (e.g.
+`initialState`) come from the call site.
 
 ---
 
@@ -229,31 +185,40 @@ directly** — the ViewModel is the only thing the UI talks to.
 resolves from the nearest `LocalViewModelStoreOwner`, so the instance is cached per
 owner and its `viewModelScope` is cancelled when that owner clears. `koinInject()`
 returns a raw graph instance with no owner, so the scope never clears and the
-instance leaks across screens. Pass call-site parameters with
-`koinViewModel(parameters = { parametersOf(paneId) })`.
+instance leaks across screens.
 
-**Collect with `collectAsStateWithLifecycle()`**, not `collectAsState()`: it stops
-collecting when the lifecycle is inactive, which together with `stateWhileSubscribed`
-stops the upstreams too, and keeps the codebase consistent across targets.
-**When state is `null`, render nothing — early return.**
+**Collect with `collectAsState()`.** The state is non-null (it has an initial value),
+so the view renders from the first emission — there is no null to early-return.
 
 ```kotlin
 // Injects the ViewModel and delegates
 @Composable
-internal fun ExampleView(
-    paneId: PaneUrn,
-    viewModel: ExampleViewModel = koinViewModel(parameters = { parametersOf(paneId) }),
+fun AddRoundView(
+    modifier: Modifier = Modifier,
+    viewModel: AddRoundViewModel = koinViewModel(),
+    onCancel: () -> Unit,
+    onSave: (Round) -> Unit,
 ) {
-    val state = viewModel.state.collectAsStateWithLifecycle().value ?: return
-    ExampleView(state = state, onAction = viewModel::onAction, effects = viewModel.effects)
+    val state by viewModel.state.collectAsState()
+    AddRoundView(
+        modifier = modifier,
+        onCancel = onCancel,
+        onSave = onSave,
+        state = state,
+        onAction = viewModel::onAction,
+        effects = viewModel.effects,
+    )
 }
 
 // Pure function of state — previewable and testable without a ViewModel
 @Composable
-internal fun ExampleView(
-    state: ExampleState,
-    onAction: (ExampleAction) -> Unit,
+internal fun AddRoundView(
     modifier: Modifier = Modifier,
+    onCancel: () -> Unit,
+    onSave: (Round) -> Unit,
+    onAction: (AddRoundAction) -> Unit,
+    effects: SharedFlow<AddRoundEffect>,
+    state: AddRoundState,
 )
 ```
 
@@ -269,47 +234,39 @@ whose `ViewModelStore` caches instances — composables under the same owner sha
 instance, composables under different owners each get their own. Clearing the store
 destroys them (`viewModelScope` cancelled, `onCleared()` called).
 
-**Scoping to a pane:** each pane gets its own owner keyed by `PaneUrn`, so removing
-the pane clears the store and destroys its ViewModels.
-
-```kotlin
-val viewModelStoreOwner = rememberViewModelStoreOwner(id)
-CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-    paneView(id)
-}
-```
+**Per-route scoping:** the app's `NavDisplay` carries
+`rememberViewModelStoreNavEntryDecorator()`, so each route gets its own
+`ViewModelStoreOwner` and popping the route clears the store and destroys its
+ViewModels.
 
 ---
 
 ## Testing ViewModels
 
 **Setup:** kotest `FreeSpec` with `coroutineTestScope = true`; override
-`Dispatchers.Main` with `StandardTestDispatcher()` to control `viewModelScope`; pass
-kotest's `backgroundScope` to the ViewModel.
+`Dispatchers.Main` with `StandardTestDispatcher()` in `beforeSpec`/`afterSpec` to
+control `viewModelScope`.
 
-**Fixture:** fakes/spies for dependencies, the ViewModel, and a Turbine receiver per
-`StateFlow` under test.
+**Fixture:** the owning features' `FakeX` repositories, the ViewModel, and a Turbine
+receiver per effect flow under test — started inside `turbineScope` with kotest's
+`backgroundScope`.
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
-class ExampleViewModelTest : FreeSpec() {
+class AddRoundViewModelTest : FreeSpec() {
 
-    abstract inner class Fixture(initialPaneState: ExamplePaneState, backgroundScope: CoroutineScope) {
-        val paneId = PaneUrn(1u)
-        val paneStateRepository = FakePaneStateRepository(mapOf(paneId to initialPaneState))
-        val deviceRepository = spyk(FakeDeviceRepository())
-        val viewModel = ExampleViewModel(paneId, paneStateRepository, deviceRepository, backgroundScope)
-        abstract val viewState: ReceiveTurbine<ExampleState>
+    private class Fixture {
+        val gameRepository = FakeGameRepository()
+        val playerRepository = FakePlayerRepository()
+        val viewModel = AddRoundViewModel(gameRepository, playerRepository)
+        lateinit var effects: ReceiveTurbine<AddRoundEffect>
     }
 
-    suspend fun TestScope.withFixture(
-        initialPaneState: ExamplePaneState = ExamplePaneState(),
-        block: suspend Fixture.() -> Unit,
-    ) {
+    private suspend fun TestScope.withFixture(block: suspend Fixture.() -> Unit) {
         turbineScope {
-            object : Fixture(initialPaneState, backgroundScope) {
-                override val viewState by lazy { viewModel.state.filterNotNull().testIn(backgroundScope) }
-            }.block()
+            val fixture = Fixture()
+            fixture.effects = fixture.viewModel.effects.testIn(backgroundScope)
+            fixture.block()
         }
     }
 
@@ -326,35 +283,13 @@ class ExampleViewModelTest : FreeSpec() {
 period, emit something after it and `awaitItem()`; an unexpected emission in between
 fails the test.
 
-**`backgroundScope` work:** `testCoroutineScheduler.runCurrent()`, then `coVerify`.
-**Time in `viewModelScope`:** `testCoroutineScheduler.advanceTimeBy(…)`.
+**Async work:** `testCoroutineScheduler.runCurrent()` to run pending launches, then
+`coVerify`. **Time in `viewModelScope`:** `testCoroutineScheduler.advanceTimeBy(…)`.
 
-```kotlin
-"set name" {
-    withFixture {
-        coEvery { deviceRepository.setName(any(), any()) } returns true
-        viewModel.onAction(ExampleAction.SetName(deviceId, "Foo"))
-        testCoroutineScheduler.runCurrent()
-        coVerify { deviceRepository.setName(listOf(deviceId), "Foo") }
-    }
-}
-```
+**Effects:** start the Turbine receiver **eagerly in `withFixture`, not `by lazy`** —
+with `replay = 0`, an effect emitted before the turbine subscribes is dropped and
+`awaitItem()` hangs.
 
-**Effects:** add a Turbine receiver **eagerly, not `by lazy`** — with `replay = 0`, an
-effect emitted before the turbine subscribes is dropped and `awaitItem()` hangs.
-
-```kotlin
-override val effectsTurbine = viewModel.effects.testIn(backgroundScope) // eager
-```
-
-**To test the view's *handling* of an effect**, compose the internal overload with a
-`MutableSharedFlow` and emit from the test:
-
-```kotlin
-runComposeUiTest {
-    setContent { ExampleView(state = state, onAction = {}, onDismissRequest = onDismissRequest, effects = effects) }
-    effects.tryEmit(ExampleEffect.Dismiss)
-    waitForIdle()
-    verify { onDismissRequest() }
-}
-```
+**To test the view's *handling* of an effect**, compose the internal
+state-driven overload with a `MutableSharedFlow` and emit from the test inside
+`runSkikoComposeUiTest`.

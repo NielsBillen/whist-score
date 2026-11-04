@@ -70,22 +70,25 @@ next reader that it is fine.
 Data is stored **using multiplatform-settings**, hidden behind repository *ports*.
 
 - **The interface and its return types live in a `domain` module** — the owning
-  feature's. Consumers stand it in with a `FakeX` from `testfixtures` (`mockk` is for
-  narrow callbacks, not repositories).
-- **The multiplatform settngs adapter is confined to `data`, all `internal`** — 
-  Domain models carry no annotations to serialize; the repository maps DTO ↔ domain at the boundary.
-- **Reads return a cold `Flow`** collections as `Flow<ImmutableList<T>>`; **writes are `suspend`**.
+  feature's. Consumers stand it in with the owning feature's `FakeX`, which lives
+  next to the port in the same `domain` module (`mockk` is for narrow callbacks,
+  not repositories).
+- **The multiplatform-settings adapter is confined to `data`** — domain models
+  carry no annotations to serialize; the repository maps DTO ↔ domain at the
+  boundary.
+- **Reads are `Flow`s**; **writes are `update(transform: (T) -> T)`**.
 
 ```kotlin
-fun worktrees(): Flow<ImmutableMap<WorktreeId, Worktree>>
-suspend fun upsert(worktree: Worktree)
+val players: Flow<Players>
+fun update(transform: (Players) -> Players)
 ```
 
 ## kotest for all unit tests
 
 **All test files use `FreeSpec` with the `init { }` body** — never the
-lambda-constructor form — and kotest assertions (`shouldBe`, `shouldThrow`, …), on
-the JUnit 5 platform (wired in the root `subprojects` block).
+lambda-constructor form — and kotest assertions (`shouldBe`, `shouldThrow`, …),
+on the JUnit 5 platform (`kotest-runner-junit5` and `useJUnitPlatform()` in each
+module that has tests).
 
 ```kotlin
 class SessionIdTest : FreeSpec() {
@@ -122,8 +125,7 @@ Follow the **`/tdd`** skill.
 ## Tight functions
 
 Short, single-responsibility, strongly-typed — no God-functions. **If a function
-needs a comment to explain its second half, it is two functions.** Use the
-**`/tight-function`** skill when writing or rewriting any function.
+needs a comment to explain its second half, it is two functions.**
 
 - **Method reference over a forwarding lambda:** `also(Files::createDirectories)`,
   `.map(::transform)`.
@@ -224,14 +226,14 @@ invented abbreviations crossing a module/type boundary.
   stdlib call's own `Pair` inside a function body is fine — it never gets a name because it
   never gets a declaration.
 
-## Enforce representable states 
+## Enforce representable states
 
-Force correct code by avoiding clients to create unreprentable states. Every combination
-of a function should be a representable one. (E.g. Two nullable
-parameters offer four; when three mean something and the fourth means nothing, that fourth
-is a case every call site rules out by hand — until one does not, and the compiler says
-nothing. Model the real cases and the impossible one stops existing.). Model the real cases and
-the impossible one stops existing.
+Force correct code by avoiding clients to create unrepresentable states. Every
+combination a function takes should be a representable one. (E.g. two nullable
+parameters offer four combinations; when three mean something and the fourth means
+nothing, that fourth is a case every call site rules out by hand — until one does
+not, and the compiler says nothing. Model the real cases and the impossible one
+stops existing.)
 
 ## Factory functions in a companion object
 
@@ -279,37 +281,6 @@ over two places and leaves the caller unable to add anything the author did not 
 The parameter is named `modifier`, defaults to `Modifier`, and follows every required
 parameter — the platform convention, and what makes the default worth having.
 
-## testTag on every interactive node
-
-**Every interactive / user-facing composable carries a stable
-`Modifier.testTag("…")`** — the same tags feed compose-ui-test and (F5) the MCP
-live driver, so an untagged node is invisible to both.
-
-**A tag is one capitalised prose name: first letter upper case, words separated by
-single spaces, nothing else.** No dots, no mashed words, no owner prefix chain, and
-never a string built from parts or interpolated. A later word may carry an acronym's
-capitals (`"Base URL field"`). Tags come in two tiers:
-
-- an **anchor** — a screen root, dialog root, list root, row or section — carries a
-  name that identifies it app-wide (`"Workspace screen"`, `"Commit dialog"`,
-  `"Backlog row"`);
-- a **leaf** — a control inside an anchor — carries its kind only
-  (`"Confirm button"`, `"Message field"`, `"Changed files"`), and the matcher supplies
-  the anchor. A leaf several hosts render gets one kind-named constant, not one per
-  host.
-
-**Instance identity never enters a tag** — a typed semantic property carries it
-(`docs/guidelines/semantic-properties-guidelines.md`).
-
-**Every tag literal lives in exactly one place: a `<Feature>Tags` object in the
-presentation module that renders the node.** An inline `testTag("literal")` is a build
-failure.
-
-**Tests never name a tag.** Each presentation module's `testfixtures` sibling
-publishes an `isXxx()` matcher per kind, a `hasXxx(id)` matcher per identity property,
-and an `onXxx(useUnmergedTree: Boolean = false)` lookup per addressable node; anchor a
-leaf with `onDescendant` from `:core:domain:testfixtures`.
-
 ## Dependency injection: Koin (DSL)
 
 **Wire singletons with Koin's DSL** (`module { single { … } }`), not a hand-rolled
@@ -332,32 +303,33 @@ spending it on a supertype reads as though it were carrying one of those:
 
 **Before writing a component into a feature module, name every feature that will
 call it.** Two or more, and it belongs in the shared module both already depend on —
-`:features:<thing>:presentation` for a composable, `:features:<thing>:domain` for a
-port, a model, or an orchestrator with no Compose in it.
+`:shared:features:<thing>:presentation` for a composable,
+`:shared:features:<thing>:domain` for a port, a model, or an orchestrator with no
+Compose in it.
 
 **The layer follows the component, not its callers:** a shared orchestrator two
 ViewModels drive still belongs in `domain` if it names no Compose type.
-`WorktreeRemover` serves both the workspace and the projects list and lives in
-`:features:workspace:domain`, which owns `OpenWorktreeId`, the key the cascade takes.
+`Player` and `PlayerId` serve both the `players` and the `game` features and live
+in `:shared:features:core:domain`.
 
 **A shared composable takes callbacks, not another feature's action type** — that
 is what makes it reachable from the second caller at all:
 
 ```kotlin
-// yes — in :features:worktrees:presentation
+// yes — :shared:features:addround:presentation, driven from :app
 @Composable
-fun BlockedRemovalDialog(blocker: RemovalBlocker, onConfirm: () -> Unit, onDismiss: () -> Unit, modifier: Modifier)
+fun AddRoundView(modifier: Modifier, viewModel: AddRoundViewModel, onCancel: () -> Unit, onSave: (Round) -> Unit)
 // no — pins the component to one feature, so the other copies it
 @Composable
-internal fun BlockedRemovalDialog(blockedRemoval: BlockedRemoval, onAction: (ProjectsAction) -> Unit)
+internal fun AddRoundView(modifier: Modifier, onAction: (AppAction) -> Unit)
 ```
 
 ## Modules & packages
 
-- **Package root `be.nielsbillen.whistscore`** — no exceptions.
-- **A feature's package is `be.nielsbillen.whistscore.feature.<feature>`** — singular
-  `feature`, and **the layer is never part of the package**: all three layer
-  modules and their testfixtures share one package.
+- **Package root `be.niels.billen.whistscore`** — no exceptions.
+- **A feature's package is `be.niels.billen.whistscore.feature.<feature>`** — singular
+  `feature`, and **the layer is never part of the package**: all of a feature's
+  layer modules share one package.
   Sub-packages are spent on concepts (`…feature.ui.component`), never on layers.
 - **No two modules of one feature may contain a same-named file.** A package spans
   several modules, so two `Helpers.kt` would put two `HelpersKt` facades on the

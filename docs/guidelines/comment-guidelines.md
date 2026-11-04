@@ -1,7 +1,7 @@
 # Comment guidelines
 
-Comments persist the *why* that the code and tests cannot. Swept once per branch by
-the `comment-sweep` skill, before review.
+Comments persist the *why* that the code and tests cannot. Sweep them once per
+branch, before review.
 
 - **Comment only what the code cannot say.** If the name, type, or signature
   already conveys it, add nothing. A comment paraphrasing the code is noise —
