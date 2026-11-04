@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
@@ -44,11 +44,12 @@ fun <T> Table(
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = shape,
             )
+            .clip(shape = shape)
     ) {
-        TableHeader(content = header)
+        TableRow(content = header)
 
         if (rows.isNotEmpty()) {
-            TableContent(rows = rows, rowContent = rowContent, modifier = modifier.weight(1f))
+            TableRows(rows = rows, rowContent = rowContent, modifier = modifier.weight(1f))
         } else if (emptyContent != null) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f)) {
                 emptyContent()
@@ -58,7 +59,7 @@ fun <T> Table(
 }
 
 @Composable
-private fun <T> TableContent(
+private fun <T> TableRows(
     rows: ImmutableList<T>,
     rowContent: @Composable RowScope.(item: T, index: Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -70,32 +71,27 @@ private fun <T> TableContent(
     }
 }
 
-@Composable
-private fun TableHeader(
-    modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
-) {
-    Column(modifier = modifier) {
-        TableRow(content = content)
 
-        HorizontalDivider(
-            thickness = TableRowDividerThickness,
-            color = MaterialTheme.colorScheme.outlineVariant,
-        )
-    }
-}
+@Composable
+private fun TableDivider() = HorizontalDivider(
+    thickness = TableRowDividerThickness,
+    color = MaterialTheme.colorScheme.outlineVariant,
+)
 
 @Composable
 private fun TableRow(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    Row(
-        modifier = modifier.padding(
-            vertical = TableRowVerticalPadding,
-            horizontal = TableRowHorizontalPadding,
-        ),
-        verticalAlignment = Alignment.CenterVertically,
-        content = content
-    )
+    Column(modifier = modifier) {
+        Row(
+            modifier = modifier.padding(
+                vertical = TableRowVerticalPadding,
+                horizontal = TableRowHorizontalPadding,
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
+        TableDivider()
+    }
 }

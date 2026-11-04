@@ -1,13 +1,9 @@
 package be.niels.billen.whistscore.feature.rounds
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
@@ -21,13 +17,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.Style
@@ -35,7 +29,7 @@ import be.niels.billen.whistscore.feature.ui.Table
 import org.koin.compose.viewmodel.koinViewModel
 
 private val ROUNDS_COLUMN_WIDTH = 32.dp
-private val ICONS_SIZE = 32.dp
+private val ICONS_SIZE = 20.dp
 
 @Composable
 fun RoundsView(
@@ -104,6 +98,7 @@ private fun RowScope.RoundRow(
     Text(
         text = "${index + 1}",
         modifier = Modifier.width(ROUNDS_COLUMN_WIDTH),
+        style = MaterialTheme.typography.labelLarge,
         textAlign = TextAlign.Center,
     )
 
@@ -121,7 +116,7 @@ private fun RowScope.RoundRow(
         Icon(
             imageVector = Trash,
             contentDescription = "Delete round",
-            modifier = Modifier.fillMaxSize().padding(Style.Dimensions.paddingSmall)
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

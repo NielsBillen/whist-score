@@ -21,5 +21,5 @@ fun Points(points: Int, modifier: Modifier = Modifier){
         else -> MaterialTheme.colorScheme.primary
     }
 
-    Text("${pointsSign}${abs(points)}", modifier, color = pointsColor, textAlign = TextAlign.Center)
+    Text("${pointsSign}${abs(points)}", modifier, color = pointsColor, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
 }
