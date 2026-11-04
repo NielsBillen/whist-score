@@ -36,7 +36,6 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private val ROUNDS_COLUMN_WIDTH = 32.dp
 private val ICONS_SIZE = 32.dp
-private val TABLE_OUTLINE_WIDTH = 1.dp
 
 @Composable
 fun RoundsView(
@@ -56,35 +55,19 @@ fun RoundsView(
     modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit,
 ) {
-    Column(
+    Table(
+        rows = game.rounds.rounds,
+        header = { RoundHeader(game = game, players = players) },
+        rowContent = { _, index ->
+            RoundRow(
+                game = game,
+                index = index,
+                onDelete = { onAction(RoundsViewAction.DeleteRound(index = index)) },
+            )
+        },
+        emptyContent = ::NoRoundsMessage,
         modifier = modifier
-            .background(color = Color(0xFF1a1a1f), shape = Style.Shapes.mediumRoundedCornerShape)
-            .border(
-                width = TABLE_OUTLINE_WIDTH,
-                color = MaterialTheme.colorScheme.outlineVariant,
-                shape = Style.Shapes.mediumRoundedCornerShape,
-            )
-            .clip(Style.Shapes.mediumRoundedCornerShape),
-    ) {
-        if (game.rounds.isEmpty()) {
-            NoRoundsMessage(modifier = Modifier.fillMaxSize())
-        } else {
-            Table(
-                rows = game.rounds.rounds,
-                header = { RoundHeader(game = game, players = players) },
-                rowContent = { _, index ->
-                    RoundRow(
-                        game = game,
-                        index = index,
-                        onDelete = { onAction(RoundsViewAction.DeleteRound(index = index)) },
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-            )
-        }
-    }
+    )
 }
 
 @Composable

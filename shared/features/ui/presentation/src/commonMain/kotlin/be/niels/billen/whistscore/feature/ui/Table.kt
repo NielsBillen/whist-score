@@ -1,9 +1,12 @@
 package be.niels.billen.whistscore.feature.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -12,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 
@@ -19,29 +23,49 @@ import kotlinx.collections.immutable.ImmutableList
 private val TableRowVerticalPadding = Style.Dimensions.paddingSmall
 private val TableRowHorizontalPadding = Style.Dimensions.paddingMedium
 private val TableRowDividerThickness = 1.dp
+private val TableOutlineWidth = 1.dp
 
-/**
- * A data-driven table: a header row plus one body row per item, separated by
- * hairline dividers (none under the last row).
- *
- * The header and each row lay out their own cells inside the given [RowScope],
- * so cell content can be any composable — text, icons, buttons.
- */
 @Composable
 fun <T> Table(
     rows: ImmutableList<T>,
     header: @Composable RowScope.() -> Unit,
     rowContent: @Composable RowScope.(item: T, index: Int) -> Unit,
     modifier: Modifier = Modifier,
+    emptyContent: (@Composable () -> Unit)? = null,
+) {
+    val shape = Style.Shapes.mediumRoundedCornerShape
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .background(color = Color(0xFF1a1a1f), shape = shape)
+            .border(
+                width = TableOutlineWidth,
+                color = MaterialTheme.colorScheme.outlineVariant,
+                shape = shape,
+            )
+    ) {
+        TableHeader(content = header)
+
+        if (rows.isNotEmpty()) {
+            TableContent(rows = rows, rowContent = rowContent, modifier = modifier.weight(1f))
+        } else {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f)) {
+                emptyContent?.invoke()
+            }
+        }
+    }
+}
+
+@Composable
+private fun <T> TableContent(
+    rows: ImmutableList<T>,
+    rowContent: @Composable RowScope.(item: T, index: Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        item {
-            TableHeader(content = header)
-        }
-
         itemsIndexed(rows) { index, item ->
-            TableRow(modifier = Modifier.fillMaxWidth()) { rowContent(item, index) }
-
+            TableRow { rowContent(item, index) }
         }
     }
 }
@@ -52,10 +76,9 @@ private fun TableHeader(
     content: @Composable RowScope.() -> Unit,
 ) {
     Column(modifier = modifier) {
-        TableRow(content = content, modifier = Modifier.fillMaxWidth())
+        TableRow(content = content)
 
         HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
             thickness = TableRowDividerThickness,
             color = MaterialTheme.colorScheme.outlineVariant,
         )
@@ -68,12 +91,10 @@ private fun TableRow(
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                vertical = TableRowVerticalPadding,
-                horizontal = TableRowHorizontalPadding,
-            ),
+        modifier = modifier.padding(
+            vertical = TableRowVerticalPadding,
+            horizontal = TableRowHorizontalPadding,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         content = content
     )
