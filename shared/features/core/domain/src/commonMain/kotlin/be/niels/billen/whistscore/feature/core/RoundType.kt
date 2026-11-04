@@ -43,6 +43,13 @@ enum class RoundType(
             Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> true
         }
 
+    val winCondition: WinCondition
+        get() = when (this) {
+            Pass -> WinCondition.NONE
+            Regular, Treble -> WinCondition.SLAMS
+            Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> WinCondition.BID_ACHIEVED
+        }
+
     val playerCountRange: IntRange
         get() = when (this) {
             Pass -> 4..4

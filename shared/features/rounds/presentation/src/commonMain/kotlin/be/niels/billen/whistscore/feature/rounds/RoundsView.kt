@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.Points
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import org.koin.compose.viewmodel.koinViewModel

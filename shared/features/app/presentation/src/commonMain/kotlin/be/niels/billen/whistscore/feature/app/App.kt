@@ -12,16 +12,16 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.addround.AddRoundView
 import be.niels.billen.whistscore.feature.addround.slideTransition
-import be.niels.billen.whistscore.feature.core.AppTheme
 import be.niels.billen.whistscore.feature.core.Background
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
+import be.niels.billen.whistscore.feature.ui.UiTheme
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
-    AppTheme {
+    UiTheme {
         Surface(modifier = modifier.fillMaxSize()) {
             Background(Modifier.fillMaxSize())
 

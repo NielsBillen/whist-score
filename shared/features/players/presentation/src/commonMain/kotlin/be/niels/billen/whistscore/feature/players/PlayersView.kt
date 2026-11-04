@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.niels.billen.whistscore.feature.core.Icons
-import be.niels.billen.whistscore.feature.core.Style
 import be.niels.billen.whistscore.feature.core.icons.ArrowDown
 import be.niels.billen.whistscore.feature.core.icons.PlayingCard
+import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentList
 import org.koin.compose.koinInject
 
@@ -35,6 +35,7 @@ fun PlayersView(
     PlayersView(players = players, modifier = modifier)
 }
 
+@OptIn(ExperimentalGridApi::class)
 @Composable
 fun PlayersView(players: PersistentList<PlayerView>, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) {
@@ -47,7 +48,7 @@ fun PlayersView(players: PersistentList<PlayerView>, modifier: Modifier = Modifi
             columns = GridCells.Fixed(columns)
         ) {
             items(players) { player ->
-                PlayerCard(player, Modifier)
+                PlayerCard(player = player, modifier = modifier.fillMaxHeight())
             }
         }
     }
@@ -57,19 +58,22 @@ fun PlayersView(players: PersistentList<PlayerView>, modifier: Modifier = Modifi
 fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
     val textColor =
         if (player.color.luminance < 0.5f) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
-    Box(modifier = modifier.background(player.color, RoundedCornerShape(Style.Dimensions.radiusMedium))) {
-        Column(Modifier.padding(Style.Dimensions.paddingMedium)) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(player.name, fontWeight = FontWeight.Bold, color = textColor, modifier = Modifier.weight(1f))
+    Column(
+        modifier = modifier
 
-                DealerIcon(isDealer = player.dealer, color = textColor)
-            }
+            .background(player.color, Style.Shapes.mediumRoundedCornerShape)
+            .padding(Style.Dimensions.paddingMedium)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(player.name, fontWeight = FontWeight.Bold, color = textColor, modifier = Modifier.weight(1f))
 
-            Text("${player.score}", color = textColor, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
+            DealerIcon(isDealer = player.dealer, color = textColor)
         }
+
+        Text("${player.score}", color = textColor, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
     }
 }
 

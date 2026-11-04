@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.kover)
+    alias(libs.plugins.detekt)
 }
 
 // Treat every Kotlin compiler warning as an error in all modules.
@@ -36,6 +37,7 @@ dependencies {
     kover(projects.shared.features.game.domain)
     kover(projects.shared.features.addround.presentation)
     kover(projects.shared.features.app.presentation)
+    detektPlugins(libs.composeRules)
 }
 
 kover {
@@ -49,3 +51,8 @@ kover {
     }
 }
 
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = true
+}

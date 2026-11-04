@@ -24,7 +24,13 @@ kotlin {
     jvm()
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodejs()
+        // Compose's skiko wasm runtime cannot load under Node, so node tests can't run
+        // in this module; the common tests still run on JVM.
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
         compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
     sourceSets {
@@ -44,13 +50,19 @@ kotlin {
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
             implementation(projects.shared.features.game.domain)
-            implementation(projects.shared.features.rounds.domain)
             implementation(projects.shared.features.players.domain)
+            implementation(projects.shared.features.ui.presentation)
         }
         jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.foundation)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {
+            implementation(libs.compose.ui.test)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
         }

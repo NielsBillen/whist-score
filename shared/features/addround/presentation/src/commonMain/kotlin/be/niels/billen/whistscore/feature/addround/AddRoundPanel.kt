@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.ui.Style
 
 @Composable
 fun AddRoundPanel(

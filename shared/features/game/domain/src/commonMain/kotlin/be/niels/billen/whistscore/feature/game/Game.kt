@@ -16,6 +16,8 @@ data class Game(
         require(order.toSet().size == 4) { "Each game must have 4 players" }
     }
 
+    fun hasRounds() = rounds.isNotEmpty()
+
     fun clearRounds() = copy(rounds = Rounds.EMPTY)
 
     operator fun plus(round: Round) = copy(rounds = rounds + round)

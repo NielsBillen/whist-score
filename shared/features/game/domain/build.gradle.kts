@@ -32,7 +32,7 @@ kotlin {
             implementation(libs.compose.runtime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.core.domain)
-            implementation(projects.shared.features.rounds.domain)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlinx.collections.immutable)

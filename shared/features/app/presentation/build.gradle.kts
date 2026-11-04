@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
+            implementation(projects.shared.features.ui.presentation)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.overview.presentation)
             implementation(projects.shared.features.addround.presentation)
@@ -56,6 +57,8 @@ kotlin {
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(libs.kotest.runner.junit5)
         }
         commonTest.dependencies {

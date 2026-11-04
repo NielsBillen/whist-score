@@ -1,7 +1,6 @@
 package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -10,7 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
-import be.niels.billen.whistscore.feature.core.Style
+import be.niels.billen.whistscore.feature.ui.Style
+import be.niels.billen.whistscore.feature.ui.Button
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -41,8 +41,9 @@ internal fun AddRoundView(
     onAction: (AddRoundAction) -> Unit,
     effects: SharedFlow<AddRoundEffect>,
     state: AddRoundState,
+    initialState: AddRoundState = AddRoundState(),
 ) {
-    val backStack = remember { mutableStateListOf(AddRoundScreen.SELECT_ROUND_TYPE) }
+    val backStack = remember { mutableStateListOf(initialState.screen) }
 
     Column(
         modifier = modifier,
@@ -213,10 +214,3 @@ private fun SaveButton(onClick: () -> Unit) {
         Text("Save")
     }
 }
-
-internal sealed interface AddRoundNextStep {
-    data class Dispatch(val action: AddRoundAction) : AddRoundNextStep
-    data class Save(val round: Round) : AddRoundNextStep
-}
-
-internal data class NextButton(val enabled: Boolean, val step: AddRoundNextStep)

@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.feature.core.Style
-import be.niels.billen.whistscore.feature.core.Selectable
+import be.niels.billen.whistscore.feature.ui.Style
+import be.niels.billen.whistscore.feature.ui.Selectable
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

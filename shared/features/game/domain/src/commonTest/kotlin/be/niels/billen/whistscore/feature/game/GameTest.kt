@@ -2,8 +2,10 @@ package be.niels.billen.whistscore.feature.game
 
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Round
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentHashSetOf
 
 class GameTest : FreeSpec() {
@@ -58,6 +60,58 @@ class GameTest : FreeSpec() {
                 PlayerId.Player1 to 0, PlayerId.Player2 to 0,
                 PlayerId.Player3 to 0, PlayerId.Player4 to 0,
             )
+        }
+
+        "an empty game scores zero for every player" {
+            PlayerId.entries.associateWith { Game.DEFAULT.score(it) } shouldBe mapOf(
+                PlayerId.Player1 to 0, PlayerId.Player2 to 0,
+                PlayerId.Player3 to 0, PlayerId.Player4 to 0,
+            )
+        }
+
+        "removing a round before another drops its pass-round doubling" {
+            val game = Game.DEFAULT + Round.PassRound +
+                    Round.Regular(persistentHashSetOf(PlayerId.Player1, PlayerId.Player2), 8)
+            val removed = game.removeAt(0)
+
+            PlayerId.entries.associateWith { removed.score(it) } shouldBe mapOf(
+                PlayerId.Player1 to 2,
+                PlayerId.Player2 to 2,
+                PlayerId.Player3 to -2,
+                PlayerId.Player4 to -2,
+            )
+        }
+
+        "removing a later round re-scores the surviving rounds" {
+            val game = Game.DEFAULT +
+                    Round.Regular(persistentHashSetOf(PlayerId.Player1, PlayerId.Player2), 8) +
+                    Round.PassRound
+            val removed = game.removeAt(2)
+
+            PlayerId.entries.associateWith { removed.score(it) } shouldBe mapOf(
+                PlayerId.Player1 to 2,
+                PlayerId.Player2 to 2,
+                PlayerId.Player3 to -2,
+                PlayerId.Player4 to -2,
+            )
+        }
+
+        "removing out of range leaves the game unchanged" {
+            val game = Game.DEFAULT + Round.PassRound
+
+            game.removeAt(-1) shouldBe game
+            game.removeAt(5) shouldBe game
+        }
+
+        "a game requires exactly four distinct players in its order" {
+            shouldThrow<IllegalArgumentException> {
+                Game(order = persistentListOf(
+                    PlayerId.Player1, PlayerId.Player1, PlayerId.Player3, PlayerId.Player4,
+                ))
+            }
+            shouldThrow<IllegalArgumentException> {
+                Game(order = persistentListOf(PlayerId.Player1, PlayerId.Player2, PlayerId.Player3))
+            }
         }
     }
 }

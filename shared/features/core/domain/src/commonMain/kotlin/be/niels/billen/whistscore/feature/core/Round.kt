@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.PersistentSet
 
 @Immutable
 sealed interface Round {
-    fun points(playerId: PlayerId): Int = 0
+    fun points(playerId: PlayerId): Int
 
     fun won(playerId: PlayerId): Boolean
 
