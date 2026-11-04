@@ -89,7 +89,7 @@ class AppTest : FreeSpec() {
         "saving a misere round returns to the overview" {
             withApp {
                 onNodeWithText("Add round").performClick()
-                onNodeWithText("Misere - One player bids to achieve no slams").performClick()
+                onNodeWithText("Misere").performClick()
                 waitForIdle()
 
                 onNodeWithText("Player 1").performClick()
