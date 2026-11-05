@@ -6,26 +6,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.ui.ConfirmDialog
-import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.players.PlayersView
 import be.niels.billen.whistscore.feature.rounds.RoundsView
 import be.niels.billen.whistscore.feature.ui.ButtonVariant
+import be.niels.billen.whistscore.feature.ui.ConfirmDialog
+import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.TextButton
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,7 +30,6 @@ fun Overview(
     viewModel: OverviewViewModel = koinViewModel(),
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
-    onEditPlayers: () -> Unit,
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
     var showNewGameDialog by remember { mutableStateOf(false) }
@@ -44,8 +38,7 @@ fun Overview(
         canStartNewGame = canStartNewGame,
         onNewGameRequested = { showNewGameDialog = true },
         onAddRound = onAddRound,
-        onEditPlayers = onEditPlayers,
-        modifier = modifier,
+        modifier = modifier.padding(Style.Dimensions.paddingSmall)
     )
 
     if (showNewGameDialog) {
@@ -64,22 +57,18 @@ internal fun Overview(
     canStartNewGame: Boolean,
     onNewGameRequested: () -> Unit,
     onAddRound: () -> Unit,
-    onEditPlayers: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
-            .padding(Style.Dimensions.paddingLarge)
-            .wrapContentSize()
+            .wrapContentWidth()
             .widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
-        TitleRow(onEditPlayers = onEditPlayers)
-
         PlayersView()
 
-        RoundsView(Modifier.weight(1f))
+        RoundsView(modifier = Modifier.weight(1f))
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
@@ -87,20 +76,6 @@ internal fun Overview(
             onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth()
         )
-    }
-}
-
-@Composable
-private fun TitleRow(onEditPlayers: () -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = "Whist score", style = MaterialTheme.typography.titleLarge)
-
-        IconButton(onClick = onEditPlayers) {
-            Icon(imageVector = Pencil, contentDescription = "Edit players")
-        }
     }
 }
 
@@ -132,7 +107,7 @@ private fun ButtonRow(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         TextButton(
             variant = ButtonVariant.Destructive,

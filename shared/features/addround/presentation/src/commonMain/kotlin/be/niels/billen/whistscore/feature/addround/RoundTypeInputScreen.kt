@@ -1,22 +1,27 @@
 package be.niels.billen.whistscore.feature.addround
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.GridConfigurationScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import be.niels.billen.whistscore.feature.core.RoundType
-import be.niels.billen.whistscore.feature.ui.Selectable
+import be.niels.billen.whistscore.feature.ui.ListItem
+import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,40 +40,59 @@ fun RoundTypeInputScreen(
     )
 }
 
+@OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun RoundTypeInputScreen(
     selectedRoundType: RoundType?,
     modifier: Modifier = Modifier,
     onRoundTypeSelected: (RoundType) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     AddRoundPanel(
         title = "Select round type",
-        modifier = modifier,
+        modifier = modifier
     ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)) {
-            items(items = RoundType.entries) { type ->
-                RoundTypeButton(type, selectedRoundType == type) {
-                    onRoundTypeSelected(type)
-                }
+        Grid(
+            config = {
+                column(1.fr)
+                gap(Style.Dimensions.paddingSmall)
+                column(1.fr)
+            },
+            modifier =  Modifier.verticalScroll(scrollState),
+        ) {
+            RoundType.entries.forEachIndexed { index, roundType ->
+                RoundTypeButton(
+                    index = index,
+                    roundType = roundType,
+                    selected = selectedRoundType == roundType,
+                    modifier = Modifier.fillMaxSize(),
+                    onClick = {
+                        onRoundTypeSelected(roundType)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RoundTypeButton(roundType: RoundType, selected: Boolean, onClick: () -> Unit) {
-    Selectable(selected, onClick, Modifier.fillMaxWidth()) {
-        Column(
-            Modifier.padding(Style.Dimensions.paddingLarge),
-            verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)
-        ) {
-            Text(buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(roundType.displayName)
-                }
-                append(" - ")
-                append(roundType.description)
-            })
-        }
+private fun RoundTypeButton(
+    index: Int,
+    roundType: RoundType,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    SelectableCard(
+        selected = selected,
+        onClick = onClick,
+        modifier = modifier,
+    ) {
+        ListItem(
+            label = "${index + 1}. ${roundType.displayName}",
+            description = roundType.description,
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge)
+        )
     }
 }

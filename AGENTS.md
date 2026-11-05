@@ -4,6 +4,12 @@
 
 A Kotlin **Compose Multiplatform Desktop** app to easily track score across games.
 
+## Styling
+
+The app uses the **astryx Y2K theme (dark mode)** — its palette and Poppins
+typography are mapped onto Material 3 roles in `Style`
+(`shared/features/ui/presentation`).
+
 ## Layered module architecture (lasting convention)
 
 Each functional component of the app is its own module tree; **within a

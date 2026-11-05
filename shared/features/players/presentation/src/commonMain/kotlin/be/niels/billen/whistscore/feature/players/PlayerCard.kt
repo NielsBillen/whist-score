@@ -45,7 +45,7 @@ private fun PlayerName(name: String, textColor: Color, isDealer: Boolean) {
         horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = name, fontWeight = FontWeight.Bold, color = textColor, modifier = Modifier.weight(1f))
+        Text(text = name, fontWeight = FontWeight.Medium, color = textColor, modifier = Modifier.weight(1f))
 
         DealerIcon(isDealer = isDealer, color = textColor)
     }
@@ -53,7 +53,7 @@ private fun PlayerName(name: String, textColor: Color, isDealer: Boolean) {
 
 @Composable
 private fun PlayerScore(score: Int, textColor: Color) {
-    Text(text = score.toString(), color = textColor, fontWeight = FontWeight.Medium, fontSize = 20.sp)
+    Text(text = score.toString(), color = textColor, fontWeight = FontWeight.Bold, fontSize = 24.sp)
 
 }
 

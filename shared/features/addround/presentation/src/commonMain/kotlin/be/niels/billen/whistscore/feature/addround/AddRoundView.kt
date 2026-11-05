@@ -1,16 +1,26 @@
 package be.niels.billen.whistscore.feature.addround
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.ui.Button
+import be.niels.billen.whistscore.feature.ui.TextButton
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -69,18 +79,22 @@ internal fun AddRoundView(
                 onSave = { state.round?.let(onSave) },
                 onAction = onAction,
                 onCancel = onCancel,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(
+                    start = Style.Dimensions.paddingSmall,
+                    end = Style.Dimensions.paddingSmall,
+                    bottom = Style.Dimensions.paddingSmall
+                )
             )
         }
     }
 }
 
-private val screenModifier = Modifier.padding(
-    start = Style.Dimensions.paddingLarge,
-    end = Style.Dimensions.paddingLarge,
-    top = Style.Dimensions.paddingLarge
-)
-
+private val screenModifier =
+    Modifier.padding(
+        start = Style.Dimensions.paddingSmall,
+        end = Style.Dimensions.paddingSmall,
+        top = Style.Dimensions.paddingSmall
+    )
 
 @Composable
 private fun AddRoundScreens(
@@ -98,7 +112,6 @@ private fun AddRoundScreens(
         }
     }
 
-
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -108,7 +121,7 @@ private fun AddRoundScreens(
                 AddRoundScreen.SELECT_ROUND_TYPE -> NavEntry(key) {
                     RoundTypeInputScreen(
                         modifier = screenModifier,
-                        onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) }
+                        onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) },
                     )
                 }
 
@@ -161,56 +174,66 @@ private fun ButtonRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(
-            start = Style.Dimensions.paddingLarge,
-            bottom = Style.Dimensions.paddingLarge,
-            end = Style.Dimensions.paddingLarge
-        ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier
+            .fillMaxWidth()
+            .widthIn(max = 800.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(onClick = {
-            when (screen) {
-                AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
-                AddRoundScreen.SELECT_PLAYERS,
-                AddRoundScreen.SELECT_SLAMS,
-                AddRoundScreen.SELECT_BID_ACHIEVED,
-                AddRoundScreen.SUMMARY -> onBack()
+        TextButton(
+            text = "Back",
+            modifier = Modifier.widthIn(min = 96.dp),
+            onClick = {
+                when (screen) {
+                    AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
+                    AddRoundScreen.SELECT_PLAYERS,
+                    AddRoundScreen.SELECT_SLAMS,
+                    AddRoundScreen.SELECT_BID_ACHIEVED,
+                    AddRoundScreen.SUMMARY -> onBack()
+                }
             }
-        }) {
-            Text("Back")
-        }
+        )
 
 
         when (screen) {
             AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
-            AddRoundScreen.SELECT_ROUND_TYPE -> Unit
-            AddRoundScreen.SELECT_PLAYERS ->
-                when (state.roundType?.singlePlayer == true) {
-                    true -> Unit
-                    false -> NextButton(
-                        enabled = state.players.isNotEmpty(),
-                        onClick = { onAction(AddRoundAction.ConfirmPlayers) }
-                    )
-                }
+            AddRoundScreen.SELECT_PLAYERS -> SelectPlayersNextButton(state = state, onAction = onAction)
 
-
-            AddRoundScreen.SELECT_SLAMS -> Unit
+            AddRoundScreen.SELECT_ROUND_TYPE,
+            AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SELECT_BID_ACHIEVED -> Unit
         }
     }
 }
 
 @Composable
-private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
-    Button(enabled = enabled, onClick = onClick) {
-        Text("Next")
+private fun SelectPlayersNextButton(
+    state: AddRoundState,
+    onAction: (AddRoundAction) -> Unit
+) {
+    when (state.roundType?.singlePlayer == true) {
+        true -> Unit
+        false -> NextButton(
+            enabled = state.players.isNotEmpty(),
+            onClick = { onAction(AddRoundAction.ConfirmPlayers) }
+        )
     }
+
+}
+
+@Composable
+private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
+    TextButton(
+        text = "Next",
+        enabled = enabled, onClick = onClick,
+        modifier = Modifier.widthIn(min = 96.dp),
+    )
 }
 
 @Composable
 private fun SaveButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text("Save")
-    }
+    TextButton(
+        text = "Save", onClick = onClick,
+        modifier = Modifier.widthIn(min = 96.dp)
+    )
 }
+

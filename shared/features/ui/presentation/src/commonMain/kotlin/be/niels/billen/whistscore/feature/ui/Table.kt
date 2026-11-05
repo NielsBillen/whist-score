@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 
@@ -38,7 +37,7 @@ fun <T> Table(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .background(color = Color(0xFF1a1a1f), shape = shape)
+            .background(color = Style.Colors.surface, shape = shape)
             .border(
                 width = TableOutlineWidth,
                 color = MaterialTheme.colorScheme.outlineVariant,

@@ -10,15 +10,15 @@ enum class RoundType(
     ),
     Regular(
         displayName = "Regular",
-        description = "Two players try to achieve 8 slams together or one player tries to achieve 5 slams if no partner is found"
+        description = "Two players bid 8 slams together or one player bids 5 slams if no partner is found"
     ),
     Abandonce(
         displayName = "Abandonce",
-        description = "Players bids to achieve between 9 and 12 slams on their own and in the trump of their choice"
+        description = "A player bids between 9 and 12 slams on their own and in the trump of their choice"
     ),
     AbandonceInTrump(
         displayName = "Abandonce in Trump",
-        description = "Players bid to achieve between 9 and 12 slams on their own in the dealt trump suit"
+        description = "A player bids between 9 and 12 slams on their own in the dealt trump suit"
     ),
     Misere(
         displayName = "Misere",
@@ -26,15 +26,15 @@ enum class RoundType(
     ),
     Treble(
         displayName = "Treble",
-        description = "The player with three aces teams up with the player with the last ace to achieve 8 slams"
+        description = "The player with three aces joins the player with the last ace to achieve 8 slams"
     ),
     OpenMisere(
         displayName = "Open Misere",
-        description = "One player bids to achieve no slams with cards on the table"
+        description = "A player bids to achieve no slams with open cards"
     ),
     SoloSlim(
         displayName = "Solo Slim",
-        description = "One player bids to achieve 13 slams"
+        description = "A player bids 13 slams"
     );
 
     val singlePlayer: Boolean

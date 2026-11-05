@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.ui.Selectable
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -55,7 +55,7 @@ internal fun SlamInputScreen(
             for (slams in 0..13) {
                 val selected = selectedSlams == slams
 
-                Selectable(
+                SelectableCard(
                     selected = selected,
                     onClick = { onSlamsSelected(slams) },
                     modifier = Modifier.requiredSize(56.dp)

@@ -3,9 +3,11 @@ package be.niels.billen.whistscore.feature.core
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.VectorPainter
@@ -32,7 +34,7 @@ fun Background(modifier: Modifier = Modifier, tint: Color = Color(0xFF1a1a1f)) {
     val painters = images.map { rememberVectorPainter(it) }
     val colorFilter = ColorFilter.tint(tint)
 
-    Canvas(modifier = modifier) {
+    Canvas(modifier = modifier.clip(RectangleShape)) {
         val maxSize = painters.map { it.intrinsicSize }.maxOf { max(it.width, it.height) } * scale
         val spacing = 0.25f * maxSize
         val offset = (0.1f * maxSize).mod(maxSize)

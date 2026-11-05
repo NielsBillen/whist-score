@@ -9,9 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import be.niels.billen.whistscore.feature.core.*
+import androidx.compose.ui.semantics.Role
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.game.Game
-import be.niels.billen.whistscore.feature.ui.Selectable
+import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,8 +50,18 @@ internal fun PlayerSelectionScreen(
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     AddRoundPanel(
-        title = roundType.displayName,
-        description = roundType.description,
+        title = "Select players",
+        description = when (roundType) {
+            RoundType.Pass -> "Everyone passed"
+            RoundType.Regular -> "Select one or two players"
+            RoundType.AbandonceInTrump,
+            RoundType.Misere,
+            RoundType.OpenMisere,
+            RoundType.SoloSlim,
+            RoundType.Abandonce -> "Select the player"
+
+            RoundType.Treble -> "Select the player with three aces and the player with the last ace"
+        },
         modifier = modifier
     ) {
         if (roundType.singlePlayer) {
@@ -105,11 +119,12 @@ private fun PlayerCheckBox(
     enabled: Boolean,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
-    Selectable(
+    SelectableCard(
         selected = selected,
         enabled = enabled,
         onClick = { onSelectionChange(playerId, !selected) },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        role = Role.Checkbox,
     ) {
         Text(
             text = player.name,
@@ -150,13 +165,14 @@ private fun PlayerRadioButton(
     selected: Boolean,
     onSelection: (PlayerId) -> Unit
 ) {
-    Selectable(
+    SelectableCard(
         selected = selected,
         onClick = { onSelection(playerId) },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            player.name, Modifier.padding(Style.Dimensions.paddingLarge),
+            text = player.name,
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge),
         )
     }
 }

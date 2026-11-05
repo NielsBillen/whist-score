@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.ui.Selectable
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -40,10 +40,10 @@ internal fun BidAchievedInput(
         Column(
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
         ) {
-            Selectable(
+            SelectableCard(
                 selected = bidAchieved == true,
                 onClick = { onBidAchievedSelected(true) },
-                Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "Yes",
@@ -51,10 +51,10 @@ internal fun BidAchievedInput(
                 )
             }
 
-            Selectable(
+            SelectableCard(
                 selected = bidAchieved == false,
                 onClick = { onBidAchievedSelected(false) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "No",
