@@ -78,6 +78,9 @@ object Style {
         val paddingMedium = 12.dp
         val paddingLarge = 16.dp
         val paddingExtraExtraLarge = 48.dp
+        // astryx neutral --radius-element (0.625rem), the theme used for the
+        // official icon-button visual baselines.
+        val radiusSmall = 10.dp
         val radiusMedium = 16.dp
     }
 
@@ -99,6 +102,7 @@ object Style {
 
 
     object Shapes {
+        val smallRoundedCornerShape = RoundedCornerShape(Dimensions.radiusSmall)
         val mediumRoundedCornerShape = RoundedCornerShape(Dimensions.radiusMedium)
     }
 }

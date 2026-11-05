@@ -1,13 +1,9 @@
 package be.niels.billen.whistscore.feature.ui
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -74,13 +70,9 @@ private fun withTable(
                             if (onDelete != null) {
                                 IconButton(
                                     onClick = { onDelete(index) },
-                                    modifier = Modifier.requiredSize(32.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Trash,
-                                        contentDescription = "Delete row $index"
-                                    )
-                                }
+                                    icon = Trash,
+                                    contentDescription = "Delete row $index",
+                                )
                             }
                         }
                     },

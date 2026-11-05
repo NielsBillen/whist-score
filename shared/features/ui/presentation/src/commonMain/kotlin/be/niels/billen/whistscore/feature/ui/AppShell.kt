@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
@@ -46,15 +45,13 @@ fun AppShell(
             modifier = Modifier.fillMaxWidth(),
         )
 
-        AppContent(modifier = Modifier.padding(Style.Dimensions.paddingMedium).weight(1f), content = content)
+        AppContent(modifier = Modifier.weight(1f), content = content)
     }
 }
 
 @Composable
 private fun AppContent(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Box(
-        modifier = modifier
-    ) {
+    Box(modifier = modifier) {
         Background(modifier = Modifier.fillMaxSize(), tint = Style.Colors.surface)
 
         Column(
@@ -72,8 +69,7 @@ private fun TopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .background(Style.Colors.surface),
+        modifier = modifier.background(Style.Colors.surface),
         contentAlignment = Alignment.Center,
     ) {
         Row(

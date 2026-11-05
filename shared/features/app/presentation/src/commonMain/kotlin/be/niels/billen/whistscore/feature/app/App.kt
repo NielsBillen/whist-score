@@ -1,14 +1,10 @@
 package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -20,6 +16,7 @@ import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import be.niels.billen.whistscore.feature.ui.AppShell
+import be.niels.billen.whistscore.feature.ui.IconButton
 import be.niels.billen.whistscore.feature.ui.UiTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -36,9 +33,15 @@ fun App(
             appIcon = Clubs,
             modifier = modifier.fillMaxSize(),
             actions = {
-                IconButton(onClick = { backStack.add(AppNavigation.EditPlayersRoute) }, modifier = Modifier.size(24.dp)) {
-                    Icon(imageVector = Pencil, contentDescription = "Edit players", modifier = Modifier.size(16.dp))
-                }
+                IconButton(
+                    onClick = {
+                        if (backStack.lastOrNull() != AppNavigation.EditPlayersRoute) {
+                            backStack.add(AppNavigation.EditPlayersRoute)
+                        }
+                    },
+                    icon = Pencil,
+                    contentDescription = "Edit players",
+                )
             },
         ) {
             NavDisplay(
@@ -62,22 +65,31 @@ fun App(
 
                         is AppNavigation.AddRoundRoute -> NavEntry(key) {
                             AddRoundView(
-                                onCancel = { backStack.removeLastOrNull() },
+                                onCancel = {
+                                    backStack.back()
+                                },
                                 onSave = { round ->
                                     viewModel.onAction(AppAction.AddRound(round))
-                                    backStack.removeLastOrNull()
+                                    backStack.back()
                                 },
                             )
                         }
 
                         is AppNavigation.EditPlayersRoute -> NavEntry(key) {
                             EditPlayersView(
-                                onSave = { backStack.removeLastOrNull() },
+                                onSave = { backStack.back() },
                             )
                         }
                     }
                 },
             )
         }
+    }
+}
+
+private fun MutableList<AppNavigation>.back() = apply {
+    when {
+        size > 1 -> removeLastOrNull()
+        else -> Unit
     }
 }

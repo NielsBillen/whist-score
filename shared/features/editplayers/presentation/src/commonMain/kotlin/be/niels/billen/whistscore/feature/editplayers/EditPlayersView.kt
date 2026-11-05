@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.Player
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.ui.Button
+import be.niels.billen.whistscore.feature.ui.IconButton
 import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.core.icons.ArrowDown
 import be.niels.billen.whistscore.feature.core.icons.ArrowUp
@@ -108,17 +110,17 @@ private fun PlayerEntry(
 
         IconButton(
             enabled = index > 0,
-            onClick = { onAction(EditPlayersAction.MoveUp(playerId)) }
-        ) {
-            Icon(imageVector = ArrowUp, contentDescription = "Move up")
-        }
+            onClick = { onAction(EditPlayersAction.MoveUp(playerId)) },
+            icon = ArrowUp,
+            contentDescription = "Move up",
+        )
 
         IconButton(
             enabled = index < PlayerId.entries.size - 1,
-            onClick = { onAction(EditPlayersAction.MoveDown(playerId)) }
-        ) {
-            Icon(imageVector = ArrowDown, contentDescription = "Move down")
-        }
+            onClick = { onAction(EditPlayersAction.MoveDown(playerId)) },
+            icon = ArrowDown,
+            contentDescription = "Move down",
+        )
     }
 }
 

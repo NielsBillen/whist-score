@@ -1,10 +1,12 @@
 package be.niels.billen.whistscore.feature.addround
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
@@ -75,13 +77,6 @@ internal fun AddRoundView(
     }
 }
 
-// The top padding is owned by the AppShell content area.
-private val screenModifier = Modifier.padding(
-    start = Style.Dimensions.paddingLarge,
-    end = Style.Dimensions.paddingLarge
-)
-
-
 @Composable
 private fun AddRoundScreens(
     modifier: Modifier = Modifier,
@@ -106,14 +101,12 @@ private fun AddRoundScreens(
             when (key) {
                 AddRoundScreen.SELECT_ROUND_TYPE -> NavEntry(key) {
                     RoundTypeInputScreen(
-                        modifier = screenModifier,
                         onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) }
                     )
                 }
 
                 AddRoundScreen.SELECT_PLAYERS -> NavEntry(key) {
                     PlayerSelectionScreen(
-                        modifier = screenModifier,
                         onSelectionChange = { id, selected ->
                             onAction(
                                 AddRoundAction.SetPlayerSelected(
@@ -127,20 +120,18 @@ private fun AddRoundScreens(
 
                 AddRoundScreen.SELECT_SLAMS -> NavEntry(key) {
                     SlamInputScreen(
-                        modifier = screenModifier,
                         onSlamsSelected = { onAction(AddRoundAction.SetSlams(it)) },
                     )
                 }
 
                 AddRoundScreen.SELECT_BID_ACHIEVED -> NavEntry(key) {
                     BidAchievedInput(
-                        modifier = screenModifier,
                         onBidAchievedSelected = { onAction(AddRoundAction.SetBidAchieved(it)) },
                     )
                 }
 
                 AddRoundScreen.SUMMARY -> NavEntry(key) {
-                    SummaryScreen(modifier = screenModifier)
+                    SummaryScreen()
                 }
             }
         },
@@ -159,16 +150,10 @@ private fun ButtonRow(
     onAction: (AddRoundAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Row(
         modifier = modifier
-            .padding(
-                start = Style.Dimensions.paddingLarge,
-                bottom = Style.Dimensions.paddingLarge,
-                end = Style.Dimensions.paddingLarge
-            )
             .fillMaxWidth()
-            .requiredWidthIn(max = 800.dp),
+            .widthIn(max = 800.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TextButton(

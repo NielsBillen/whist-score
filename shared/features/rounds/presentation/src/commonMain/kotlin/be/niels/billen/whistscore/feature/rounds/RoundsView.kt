@@ -3,13 +3,9 @@ package be.niels.billen.whistscore.feature.rounds
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +20,7 @@ import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
+import be.niels.billen.whistscore.feature.ui.IconButton
 import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.Table
 import org.koin.compose.viewmodel.koinViewModel
@@ -111,14 +108,9 @@ private fun RowScope.RoundRow(
 
     IconButton(
         onClick = onDelete,
-        modifier = Modifier.requiredSize(ICONS_SIZE)
-    ) {
-        Icon(
-            imageVector = Trash,
-            contentDescription = "Delete round",
-            modifier = Modifier.fillMaxSize()
-        )
-    }
+        icon = Trash,
+        contentDescription = "Delete round",
+    )
 }
 
 @Composable
