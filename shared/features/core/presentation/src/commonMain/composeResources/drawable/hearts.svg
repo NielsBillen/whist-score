@@ -1,44 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="380.71799"
-   height="355.62399"
-   viewBox="0 0 100.73163 94.092178"
-   version="1.1"
-   id="svg1"
-   sodipodi:docname="hearts.svg"
-   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2.3704812"
-     inkscape:cx="190.25673"
-     inkscape:cy="177.812"
-     inkscape:window-width="1920"
-     inkscape:window-height="1052"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg1" />
-  <defs
-     id="defs1" />
-  <g
-     id="layer1">
-    <path
-       d="M 71.59365,0 C 63.4929,0 55.83279,3.51376 50.36536,9.57892 44.89793,3.51376 37.23824,0 29.137072,0 13.071252,0 0,13.62195 0,30.36615 c 0,14.4713 8.26457,29.56007 24.56436,44.84627 11.88418,11.14572 23.59782,18.12073 24.09096,18.41182 0.52759,0.3121 1.11902,0.46794 1.71046,0.46794 0.59144,0 1.18287,-0.15584 1.71046,-0.46794 C 52.56897,93.33315 64.2826,86.35814 76.1672,75.21242 92.46699,59.92622 100.73156,44.83745 100.73156,30.36615 100.73156,13.62195 87.66031,0 71.59365,0 Z"
-       id="path2"
-       style="stroke-width:0.420054"
-       sodipodi:nodetypes="scssccsccss" />
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="380.72" height="355.62" version="1.1" viewBox="0 0 100.73 94.092" xmlns="http://www.w3.org/2000/svg">
+  <path d="m71.594 0c-8.1008 0-15.761 3.5138-21.228 9.5789-5.4674-6.0652-13.127-9.5789-21.228-9.5789-16.066 0-29.137 13.622-29.137 30.366 0 14.471 8.2646 29.56 24.564 44.846 11.884 11.146 23.598 18.121 24.091 18.412 0.52759 0.3121 1.119 0.46794 1.7105 0.46794s1.1829-0.15584 1.7105-0.46794c0.49273-0.29109 12.206-7.2661 24.091-18.412 16.3-15.286 24.564-30.375 24.564-44.846 0-16.744-13.071-30.366-29.138-30.366z" stroke-width=".42005"/>
 </svg>
