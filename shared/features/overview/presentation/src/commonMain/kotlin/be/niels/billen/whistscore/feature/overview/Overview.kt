@@ -38,7 +38,7 @@ fun Overview(
         canStartNewGame = canStartNewGame,
         onNewGameRequested = { showNewGameDialog = true },
         onAddRound = onAddRound,
-        modifier = modifier.padding(Style.Dimensions.paddingSmall),
+        modifier = modifier.padding(Style.Dimensions.paddingSmall)
     )
 
     if (showNewGameDialog) {

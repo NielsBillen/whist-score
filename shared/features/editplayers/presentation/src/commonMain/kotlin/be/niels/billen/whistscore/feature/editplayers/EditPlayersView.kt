@@ -59,7 +59,7 @@ internal fun EditPlayersView(
 ) {
     // The top and bottom padding are owned by the AppShell content area.
     Column(
-        modifier = modifier.padding(horizontal = Style.Dimensions.paddingLarge).widthIn(max = 800.dp),
+        modifier = modifier.padding(horizontal = Style.Dimensions.paddingLarge).widthIn(max = 800.dp).padding(Style.Dimensions.paddingSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingExtraExtraLarge)
     ) {

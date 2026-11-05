@@ -1,6 +1,7 @@
 package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
 import be.niels.billen.whistscore.feature.ui.AppShell
 import be.niels.billen.whistscore.feature.ui.IconButton
+import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.UiTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -97,3 +99,4 @@ private fun MutableList<AppNavigation>.back() = apply {
         else -> Unit
     }
 }
+

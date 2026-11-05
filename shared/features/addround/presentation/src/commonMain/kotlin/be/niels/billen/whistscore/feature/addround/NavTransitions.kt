@@ -14,4 +14,4 @@ fun <T : Any> slideTransition(scale: Int): AnimatedContentTransitionScope<Scene<
     )
 }
 
-private const val animationDuration = 2500
+private const val animationDuration = 250
