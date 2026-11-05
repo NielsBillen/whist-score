@@ -11,7 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import be.niels.billen.whistscore.feature.core.*
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.Points
+import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.Card
 import be.niels.billen.whistscore.feature.ui.Style
@@ -35,10 +37,10 @@ internal fun SummaryScreen(
     game: Game,
     players: Players,
     round: Round?,
-
-    ) {
+) {
     AddRoundPanel(
         title = "Summary",
+        description = "Score changes from this round",
         modifier = modifier,
     ) {
         if (round == null) {

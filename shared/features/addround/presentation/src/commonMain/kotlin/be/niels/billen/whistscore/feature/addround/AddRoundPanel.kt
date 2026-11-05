@@ -20,7 +20,7 @@ fun AddRoundPanel(
     Column(
         modifier = modifier.fillMaxSize().wrapContentSize().widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingExtraExtraLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
         Text(text = title, style = MaterialTheme.typography.titleLarge)
 

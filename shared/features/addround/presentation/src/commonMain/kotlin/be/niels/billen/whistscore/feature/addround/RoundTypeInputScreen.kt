@@ -1,10 +1,20 @@
 package be.niels.billen.whistscore.feature.addround
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.GridConfigurationScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,35 +40,57 @@ fun RoundTypeInputScreen(
     )
 }
 
+@OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun RoundTypeInputScreen(
     selectedRoundType: RoundType?,
     modifier: Modifier = Modifier,
     onRoundTypeSelected: (RoundType) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     AddRoundPanel(
         title = "Select round type",
-        modifier = modifier,
+        modifier = modifier
     ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall)) {
-            items(items = RoundType.entries) { type ->
-                RoundTypeButton(type, selectedRoundType == type) {
-                    onRoundTypeSelected(type)
-                }
+        Grid(
+            config = {
+                column(1.fr)
+                gap(Style.Dimensions.paddingSmall)
+                column(1.fr)
+            },
+            modifier =  Modifier.verticalScroll(scrollState),
+        ) {
+            RoundType.entries.forEachIndexed { index, roundType ->
+                RoundTypeButton(
+                    index = index,
+                    roundType = roundType,
+                    selected = selectedRoundType == roundType,
+                    modifier = Modifier.fillMaxSize(),
+                    onClick = {
+                        onRoundTypeSelected(roundType)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RoundTypeButton(roundType: RoundType, selected: Boolean, onClick: () -> Unit) {
+private fun RoundTypeButton(
+    index: Int,
+    roundType: RoundType,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     SelectableCard(
         selected = selected,
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
     ) {
         ListItem(
-            label = roundType.displayName,
+            label = "${index + 1}. ${roundType.displayName}",
             description = roundType.description,
             modifier = Modifier.padding(Style.Dimensions.paddingLarge)
         )
