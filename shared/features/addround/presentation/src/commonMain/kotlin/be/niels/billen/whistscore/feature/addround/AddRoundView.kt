@@ -75,10 +75,10 @@ internal fun AddRoundView(
     }
 }
 
+// The top padding is owned by the AppShell content area.
 private val screenModifier = Modifier.padding(
     start = Style.Dimensions.paddingLarge,
-    end = Style.Dimensions.paddingLarge,
-    top = Style.Dimensions.paddingLarge
+    end = Style.Dimensions.paddingLarge
 )
 
 

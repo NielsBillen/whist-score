@@ -49,7 +49,7 @@ class AddRoundViewTest : FreeSpec() {
             withAddRound {
                 onNodeWithText("Regular", substring = true).assertIsDisplayed()
                 onNodeWithText("Treble", substring = true).assertIsDisplayed()
-                onNodeWithText("Misere").assertIsDisplayed()
+                onNodeWithText("5. Misere").assertIsDisplayed()
                 onNodeWithText("Pass", substring = true).assertIsDisplayed()
             }
         }

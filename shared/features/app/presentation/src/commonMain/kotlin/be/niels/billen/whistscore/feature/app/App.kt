@@ -1,7 +1,8 @@
 package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -12,22 +13,30 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.addround.AddRoundView
 import be.niels.billen.whistscore.feature.addround.slideTransition
-import be.niels.billen.whistscore.feature.core.Background
+import be.niels.billen.whistscore.feature.core.icons.Pencil
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersView
 import be.niels.billen.whistscore.feature.overview.Overview
+import be.niels.billen.whistscore.feature.ui.AppShell
 import be.niels.billen.whistscore.feature.ui.UiTheme
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun App(modifier: Modifier = Modifier) {
+fun App(
+    modifier: Modifier = Modifier,
+    viewModel: AppViewModel = koinViewModel(),
+) {
     UiTheme {
-        Surface(modifier = modifier.fillMaxSize()) {
-            Background(Modifier.fillMaxSize())
+        val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
 
-            val viewModel: AppViewModel = koinViewModel()
-            val backStack = remember { mutableStateListOf<AppNavigation>(AppNavigation.OverviewRoute) }
-
+        AppShell(
+            title = "Whist score",
+            modifier = modifier.fillMaxSize(),
+            actions = {
+                IconButton(onClick = { backStack.add(AppNavigation.EditPlayersRoute) }) {
+                    Icon(imageVector = Pencil, contentDescription = "Edit players")
+                }
+            },
+        ) {
             NavDisplay(
                 modifier = Modifier.fillMaxSize(),
                 backStack = backStack,
@@ -44,7 +53,6 @@ fun App(modifier: Modifier = Modifier) {
                             Overview(
                                 onResetGame = { viewModel.onAction(AppAction.ResetGame) },
                                 onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
-                                onEditPlayers = { backStack.add(AppNavigation.EditPlayersRoute) },
                             )
                         }
 
@@ -68,6 +76,4 @@ fun App(modifier: Modifier = Modifier) {
             )
         }
     }
-
 }
-

@@ -89,7 +89,7 @@ class AppTest : FreeSpec() {
         "saving a misere round returns to the overview" {
             withApp {
                 onNodeWithText("Add round").performClick()
-                onNodeWithText("Misere").performClick()
+                onNodeWithText("5. Misere").performClick()
                 waitForIdle()
 
                 onNodeWithText("Player 1").performClick()
@@ -223,15 +223,17 @@ class AppTest : FreeSpec() {
                 mainClock.autoAdvance = false
                 onNodeWithText("Back").performClick()
                 // While the pop animates, the entering overview must slide smoothly to its
-                // resting position: the title never makes a discontinuous jump (a
-                // left-aligned container would re-centre the screen at the end of the
-                // transition: a discontinuous jump of over 400 px in one frame), and it
-                // settles at its centred resting position (x = 872 on a 1920 px window).
+                // resting position. Track the "New game" button: it sits in the centred
+                // 800 dp content column (left edge ≈ 560 px on a 1920 px window), so a
+                // left-aligned transition container would leave it near the window edge
+                // and only re-centre it at the end of the transition — a discontinuous
+                // jump of over 400 px in one frame. (The "Whist score" title now lives in
+                // the shell's full-width top bar and no longer slides with the screen.)
                 var prev: Float? = null
                 mainClock.advanceTimeUntil(5000) {
                     runWithoutImplicitWait {
                         val leftEdge = try {
-                            onNodeWithText("Whist score").fetchSemanticsNode().positionInRoot.x
+                            onNodeWithText("New game").fetchSemanticsNode().positionInRoot.x
                         } catch (e: AssertionError) {
                             null
                         }
@@ -243,7 +245,7 @@ class AppTest : FreeSpec() {
                                 if (previous != null && leftEdge - previous > 400f) {
                                     error("the entering overview jumped from x=$previous to x=$leftEdge instead of sliding to its resting position")
                                 }
-                                leftEdge > 800f // reached the centred resting position
+                                leftEdge > 500f // reached the centred resting position (≈ 560 px)
                             }
                         }
                     }
@@ -276,7 +278,7 @@ class AppTest : FreeSpec() {
         startKoin { modules(testAppModule) }
         try {
             runSkikoComposeUiTest(size = size) {
-                setContent { App() }
+                setContent { App(viewModel = AppViewModel(FakeGameRepository())) }
                 block()
             }
         } finally {
@@ -289,7 +291,6 @@ class AppTest : FreeSpec() {
     private val testAppModule = module {
         single { FakePlayerRepository() }.bind<PlayerRepository>()
         single { FakeGameRepository() }.bind<GameRepository>()
-        viewModelOf(::AppViewModel)
         viewModelOf(::OverviewViewModel)
         viewModel { AddRoundViewModel(get(), get()) }
         viewModelOf(::EditPlayersViewModel)
