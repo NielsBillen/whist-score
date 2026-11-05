@@ -10,7 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import be.niels.billen.whistscore.feature.core.*
+import be.niels.billen.whistscore.feature.core.Player
+import be.niels.billen.whistscore.feature.core.PlayerId
+import be.niels.billen.whistscore.feature.core.Players
+import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
@@ -47,8 +50,18 @@ internal fun PlayerSelectionScreen(
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     AddRoundPanel(
-        title = roundType.displayName,
-        description = roundType.description,
+        title = "Select players",
+        description = when (roundType) {
+            RoundType.Pass -> "Everyone passed"
+            RoundType.Regular -> "Select one or two players"
+            RoundType.AbandonceInTrump,
+            RoundType.Misere,
+            RoundType.OpenMisere,
+            RoundType.SoloSlim,
+            RoundType.Abandonce -> "Select the player"
+
+            RoundType.Treble -> "Select the player with three aces and the player with the last ace"
+        },
         modifier = modifier
     ) {
         if (roundType.singlePlayer) {

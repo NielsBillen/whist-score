@@ -12,8 +12,8 @@ import be.niels.billen.whistscore.feature.ui.UiTheme
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 @OptIn(ExperimentalTestApi::class)
 class UiThemeTest : FreeSpec() {
@@ -40,6 +40,7 @@ class UiThemeTest : FreeSpec() {
                     UiTheme {
                         onSurface = MaterialTheme.colorScheme.onSurface
                     }
+
                 }
             }
             onSurface shouldBe Style.Colors.textPrimary

@@ -59,7 +59,11 @@ fun App(
                         is AppNavigation.OverviewRoute -> NavEntry(key) {
                             Overview(
                                 onResetGame = { viewModel.onAction(AppAction.ResetGame) },
-                                onAddRound = { backStack.add(AppNavigation.AddRoundRoute) },
+                                onAddRound = {
+                                    if (backStack.last() != AppNavigation.AddRoundRoute) {
+                                        backStack.add(AppNavigation.AddRoundRoute)
+                                    }
+                                },
                             )
                         }
 

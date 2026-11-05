@@ -71,11 +71,22 @@ internal fun AddRoundView(
                 onSave = { state.round?.let(onSave) },
                 onAction = onAction,
                 onCancel = onCancel,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(
+                    start = Style.Dimensions.paddingSmall,
+                    end = Style.Dimensions.paddingSmall,
+                    bottom = Style.Dimensions.paddingSmall
+                )
             )
         }
     }
 }
+
+private val screenModifier =
+    Modifier.padding(
+        start = Style.Dimensions.paddingSmall,
+        end = Style.Dimensions.paddingSmall,
+        top = Style.Dimensions.paddingSmall
+    )
 
 @Composable
 private fun AddRoundScreens(
@@ -101,12 +112,14 @@ private fun AddRoundScreens(
             when (key) {
                 AddRoundScreen.SELECT_ROUND_TYPE -> NavEntry(key) {
                     RoundTypeInputScreen(
-                        onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) }
+                        modifier = screenModifier,
+                        onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) },
                     )
                 }
 
                 AddRoundScreen.SELECT_PLAYERS -> NavEntry(key) {
                     PlayerSelectionScreen(
+                        modifier = screenModifier,
                         onSelectionChange = { id, selected ->
                             onAction(
                                 AddRoundAction.SetPlayerSelected(
@@ -120,18 +133,20 @@ private fun AddRoundScreens(
 
                 AddRoundScreen.SELECT_SLAMS -> NavEntry(key) {
                     SlamInputScreen(
+                        modifier = screenModifier,
                         onSlamsSelected = { onAction(AddRoundAction.SetSlams(it)) },
                     )
                 }
 
                 AddRoundScreen.SELECT_BID_ACHIEVED -> NavEntry(key) {
                     BidAchievedInput(
+                        modifier = screenModifier,
                         onBidAchievedSelected = { onAction(AddRoundAction.SetBidAchieved(it)) },
                     )
                 }
 
                 AddRoundScreen.SUMMARY -> NavEntry(key) {
-                    SummaryScreen()
+                    SummaryScreen(modifier = screenModifier)
                 }
             }
         },

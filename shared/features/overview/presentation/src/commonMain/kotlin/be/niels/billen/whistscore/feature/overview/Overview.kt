@@ -6,22 +6,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import be.niels.billen.whistscore.feature.ui.ConfirmDialog
-import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.players.PlayersView
 import be.niels.billen.whistscore.feature.rounds.RoundsView
 import be.niels.billen.whistscore.feature.ui.ButtonVariant
+import be.niels.billen.whistscore.feature.ui.ConfirmDialog
+import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.TextButton
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -39,7 +38,7 @@ fun Overview(
         canStartNewGame = canStartNewGame,
         onNewGameRequested = { showNewGameDialog = true },
         onAddRound = onAddRound,
-        modifier = modifier,
+        modifier = modifier.padding(Style.Dimensions.paddingSmall),
     )
 
     if (showNewGameDialog) {
@@ -62,14 +61,14 @@ internal fun Overview(
 ) {
     Column(
         modifier = modifier
-            .wrapContentSize()
+            .wrapContentWidth()
             .widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
     ) {
         PlayersView()
 
-        RoundsView(Modifier.weight(1f))
+        RoundsView(modifier = Modifier.weight(1f))
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
@@ -108,7 +107,7 @@ private fun ButtonRow(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         TextButton(
             variant = ButtonVariant.Destructive,
