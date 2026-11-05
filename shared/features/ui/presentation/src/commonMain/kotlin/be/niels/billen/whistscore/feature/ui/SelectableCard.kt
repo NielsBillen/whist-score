@@ -31,7 +31,7 @@ fun SelectableCard(
             )
             .border(
                 width = 1.dp,
-                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                 shape = shape,
             )
             .semantics { this.role = role }

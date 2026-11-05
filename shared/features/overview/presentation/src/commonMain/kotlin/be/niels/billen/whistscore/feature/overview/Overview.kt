@@ -62,7 +62,6 @@ internal fun Overview(
 ) {
     Column(
         modifier = modifier
-            .padding(Style.Dimensions.paddingLarge)
             .wrapContentSize()
             .widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -19,7 +19,7 @@ fun Card(
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface, shape)
-            .border(1.dp, MaterialTheme.colorScheme.secondary, shape),
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape),
         content = content
     )
 }
