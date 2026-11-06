@@ -5,10 +5,14 @@ plugins {
 }
 
 ktlint {
-
+    ktlintVersion = libs.versions.ktlint.asProvider().get()
 }
 
 detekt {
     buildUponDefaultConfig = true
     allRules = true
+}
+
+dependencies {
+    detektPlugins(libs.composeRules)
 }

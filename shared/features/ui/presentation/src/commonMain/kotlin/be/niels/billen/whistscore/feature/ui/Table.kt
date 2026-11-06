@@ -36,14 +36,14 @@ fun <T> Table(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .background(color = Style.Colors.surface, shape = shape)
-            .border(
-                width = TableOutlineWidth,
-                color = MaterialTheme.colorScheme.outlineVariant,
-                shape = shape,
-            )
-            .clip(shape = shape)
+        modifier =
+            modifier
+                .background(color = Style.Colors.surface, shape = shape)
+                .border(
+                    width = TableOutlineWidth,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = shape,
+                ).clip(shape = shape),
     ) {
         TableRow(content = header)
 
@@ -70,12 +70,12 @@ private fun <T> TableRows(
     }
 }
 
-
 @Composable
-private fun TableDivider() = HorizontalDivider(
-    thickness = TableRowDividerThickness,
-    color = MaterialTheme.colorScheme.outlineVariant,
-)
+private fun TableDivider() =
+    HorizontalDivider(
+        thickness = TableRowDividerThickness,
+        color = MaterialTheme.colorScheme.outlineVariant,
+    )
 
 @Composable
 private fun TableRow(
@@ -84,12 +84,13 @@ private fun TableRow(
 ) {
     Column(modifier = modifier) {
         Row(
-            modifier = modifier.padding(
-                vertical = TableRowVerticalPadding,
-                horizontal = TableRowHorizontalPadding,
-            ),
+            modifier =
+                modifier.padding(
+                    vertical = TableRowVerticalPadding,
+                    horizontal = TableRowHorizontalPadding,
+                ),
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
         TableDivider()
     }

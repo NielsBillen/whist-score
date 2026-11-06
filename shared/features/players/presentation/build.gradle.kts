@@ -1,8 +1,8 @@
 plugins {
-    id("kmp")
+    id("kmp-library")
     id("compose")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 kotlin {
@@ -15,6 +15,10 @@ kotlin {
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(projects.shared.features.core.domain)

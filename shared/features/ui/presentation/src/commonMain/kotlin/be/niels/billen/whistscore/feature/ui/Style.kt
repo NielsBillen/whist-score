@@ -7,9 +7,9 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.Font
@@ -20,47 +20,50 @@ import whist_score.shared.features.ui.presentation.generated.resources.Res
 
 @Composable
 fun UiTheme(content: @Composable () -> Unit) {
-    val typography = Typography().run {
-        val fontFamily = FontFamily(
-            Font(Res.font.Poppins_Regular, weight = FontWeight.Normal, style = FontStyle.Normal),
-            Font(Res.font.Poppins_Medium, weight = FontWeight.Medium, style = FontStyle.Normal),
-            Font(Res.font.Poppins_Bold, weight = FontWeight.Bold, style = FontStyle.Normal)
-        )
+    val typography =
+        Typography().run {
+            val fontFamily =
+                FontFamily(
+                    Font(Res.font.Poppins_Regular, weight = FontWeight.Normal, style = FontStyle.Normal),
+                    Font(Res.font.Poppins_Medium, weight = FontWeight.Medium, style = FontStyle.Normal),
+                    Font(Res.font.Poppins_Bold, weight = FontWeight.Bold, style = FontStyle.Normal),
+                )
 
-        copy(
-            displayLarge = displayLarge.copy(fontFamily = fontFamily),
-            displayMedium = displayMedium.copy(fontFamily = fontFamily),
-            displaySmall = displaySmall.copy(fontFamily = fontFamily),
-            headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
-            headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
-            headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
-            titleLarge = titleLarge.copy(fontFamily = fontFamily, fontWeight = FontWeight.Bold),
-            titleMedium = titleMedium.copy(fontFamily = fontFamily, fontWeight = FontWeight.Bold),
-            titleSmall = titleSmall.copy(fontFamily = fontFamily),
-            bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
-            bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
-            bodySmall = bodySmall.copy(fontFamily = fontFamily),
-            labelLarge = labelLarge.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
-            labelMedium = labelMedium.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
-            labelSmall = labelSmall.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium)
-        )
-    }
+            copy(
+                displayLarge = displayLarge.copy(fontFamily = fontFamily),
+                displayMedium = displayMedium.copy(fontFamily = fontFamily),
+                displaySmall = displaySmall.copy(fontFamily = fontFamily),
+                headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+                headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+                headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+                titleLarge = titleLarge.copy(fontFamily = fontFamily, fontWeight = FontWeight.Bold),
+                titleMedium = titleMedium.copy(fontFamily = fontFamily, fontWeight = FontWeight.Bold),
+                titleSmall = titleSmall.copy(fontFamily = fontFamily),
+                bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+                bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+                bodySmall = bodySmall.copy(fontFamily = fontFamily),
+                labelLarge = labelLarge.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
+                labelMedium = labelMedium.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
+                labelSmall = labelSmall.copy(fontFamily = fontFamily, fontWeight = FontWeight.Medium),
+            )
+        }
 
     // astryx y2k theme, dark: semantic tokens mapped onto M3 roles.
-    val colorScheme = darkColorScheme(
-        primary = Style.Colors.textPrimary,
-        onPrimary = Style.Colors.onAccent,
-        secondary = Style.Colors.neonGreen,
-        onSecondary = Style.Colors.onNeonGreen,
-        surface = Style.Colors.surface,
-        onSurface = Style.Colors.textPrimary,
-        onSurfaceVariant = Style.Colors.textSecondary,
-        surfaceVariant = Style.Colors.elevated,
-        surfaceBright = Style.Colors.elevated,
-        surfaceContainerHigh = Style.Colors.elevated,
-        outline = Style.Colors.border,
-        outlineVariant = Style.Colors.border,
-    )
+    val colorScheme =
+        darkColorScheme(
+            primary = Style.Colors.textPrimary,
+            onPrimary = Style.Colors.onAccent,
+            secondary = Style.Colors.neonGreen,
+            onSecondary = Style.Colors.onNeonGreen,
+            surface = Style.Colors.surface,
+            onSurface = Style.Colors.textPrimary,
+            onSurfaceVariant = Style.Colors.textSecondary,
+            surfaceVariant = Style.Colors.elevated,
+            surfaceBright = Style.Colors.elevated,
+            surfaceContainerHigh = Style.Colors.elevated,
+            outline = Style.Colors.border,
+            outlineVariant = Style.Colors.border,
+        )
 
     MaterialTheme(typography = typography, colorScheme = colorScheme) {
         // M3 1.12+ no longer provides a default content color (it falls back to black);
@@ -78,6 +81,7 @@ object Style {
         val paddingMedium = 12.dp
         val paddingLarge = 16.dp
         val paddingExtraExtraLarge = 48.dp
+
         // astryx neutral --radius-element (0.625rem), the theme used for the
         // official icon-button visual baselines.
         val radiusSmall = 10.dp
@@ -101,7 +105,6 @@ object Style {
 
         val border = Color(0xFF636889) // --color-border-emphasized
     }
-
 
     object Shapes {
         val smallRoundedCornerShape = RoundedCornerShape(Dimensions.radiusSmall)

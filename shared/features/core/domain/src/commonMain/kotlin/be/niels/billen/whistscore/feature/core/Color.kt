@@ -5,4 +5,6 @@ import kotlin.jvm.JvmInline
 
 @JvmInline
 @Immutable
-value class Color(val argb: Int)
+value class Color(
+    val argb: Int,
+)

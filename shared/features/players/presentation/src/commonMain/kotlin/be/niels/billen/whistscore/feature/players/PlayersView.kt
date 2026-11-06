@@ -16,7 +16,7 @@ import org.koin.compose.koinInject
 @Composable
 fun PlayersView(
     modifier: Modifier = Modifier,
-    viewModel: PlayersViewModel = koinInject()
+    viewModel: PlayersViewModel = koinInject(),
 ) {
     val players by viewModel.players.collectAsState()
 
@@ -24,16 +24,18 @@ fun PlayersView(
 }
 
 @Composable
-fun PlayersView(players: PersistentList<PlayerView>, modifier: Modifier = Modifier) {
+fun PlayersView(
+    players: PersistentList<PlayerView>,
+    modifier: Modifier = Modifier,
+) {
     BoxWithConstraints(modifier) {
         val columns = if (maxWidth > maxHeight) 4 else 2
-
 
         LazyVerticalGrid(
             userScrollEnabled = false,
             horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
-            columns = GridCells.Fixed(columns)
+            columns = GridCells.Fixed(columns),
         ) {
             items(players) { player ->
                 PlayerCard(player = player, modifier = modifier)

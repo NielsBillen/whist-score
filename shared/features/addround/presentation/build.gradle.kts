@@ -2,11 +2,11 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kover)
-    alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
-    id("kmp")
+    id(libs.plugins.kover.get().pluginId)
+    id(libs.plugins.ksp.get().pluginId) // must precede test: kotest's wasm wiring checks for it
+    id("kmp-library")
     id("compose")
-    id("test")
+    id("kmp-test")
 }
 
 kotlin {
@@ -29,6 +29,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.nav3.ui)
+            implementation(libs.compose.animation)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.kotlinx.collections.immutable)

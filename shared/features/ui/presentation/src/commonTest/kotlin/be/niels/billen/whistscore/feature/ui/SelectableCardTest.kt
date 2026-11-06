@@ -14,7 +14,6 @@ import io.kotest.matchers.shouldBe
 
 @OptIn(ExperimentalTestApi::class)
 class SelectableCardTest : FreeSpec() {
-
     init {
         "clicking the card fires onClick" {
             var clicked = false

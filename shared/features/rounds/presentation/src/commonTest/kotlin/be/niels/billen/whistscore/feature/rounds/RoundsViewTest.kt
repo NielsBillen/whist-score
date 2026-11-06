@@ -20,17 +20,18 @@ import kotlinx.collections.immutable.persistentSetOf
 
 @OptIn(ExperimentalTestApi::class)
 class RoundsViewTest : FreeSpec() {
-
     private val players = DEFAULT_PLAYERS
 
-    private val game = Game(
-        rounds = Rounds(
-            persistentListOf(
-                Round.Regular(playerIds = persistentSetOf(PlayerId.Player1)),
-                Round.Regular(playerIds = persistentSetOf(PlayerId.Player2)),
-            ),
-        ),
-    )
+    private val game =
+        Game(
+            rounds =
+                Rounds(
+                    persistentListOf(
+                        Round.Regular(playerIds = persistentSetOf(PlayerId.Player1)),
+                        Round.Regular(playerIds = persistentSetOf(PlayerId.Player2)),
+                    ),
+                ),
+        )
 
     init {
         "shows a header cell per player" {

@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
+    id(libs.plugins.kotlinJvm.get().pluginId)
     id("compose")
 }
 

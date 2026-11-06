@@ -4,7 +4,6 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 class RoundTypeTest : FreeSpec() {
-
     init {
         "classifies which round types are played by a single bidder" {
             mapOf(

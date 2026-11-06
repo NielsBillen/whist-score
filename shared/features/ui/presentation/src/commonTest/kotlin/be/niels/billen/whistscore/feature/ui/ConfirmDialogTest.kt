@@ -4,18 +4,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SkikoComposeUiTest
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.SkikoComposeUiTest
 import androidx.compose.ui.test.v2.runSkikoComposeUiTest
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 @OptIn(ExperimentalTestApi::class)
 class ConfirmDialogTest : FreeSpec() {
-
     init {
         "confirming fires onConfirm and closes the dialog" {
             var confirmed = false

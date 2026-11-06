@@ -47,7 +47,7 @@ internal fun RoundTypeInputScreen(
 
     AddRoundPanel(
         title = "Select round type",
-        modifier = modifier
+        modifier = modifier,
     ) {
         Grid(
             config = {
@@ -64,7 +64,7 @@ internal fun RoundTypeInputScreen(
                     modifier = Modifier.fillMaxSize(),
                     onClick = {
                         onRoundTypeSelected(roundType)
-                    }
+                    },
                 )
             }
         }
@@ -86,7 +86,7 @@ private fun RoundTypeButton(
         ListItem(
             label = roundType.displayName,
             description = roundType.description,
-            modifier = Modifier.padding(Style.Dimensions.paddingLarge)
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge),
         )
     }
 }

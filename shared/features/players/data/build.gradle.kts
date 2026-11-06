@@ -1,7 +1,7 @@
 plugins {
-    id("kmp")
+    id("kmp-library")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 kotlin {

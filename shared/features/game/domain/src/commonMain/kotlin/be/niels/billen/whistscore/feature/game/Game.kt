@@ -10,7 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 data class Game(
     val rounds: Rounds = Rounds.EMPTY,
-    val order: PersistentList<PlayerId> = DEFAULT_ORDER
+    val order: PersistentList<PlayerId> = DEFAULT_ORDER,
 ) {
     init {
         require(order.toSet().size == 4) { "Each game must have 4 players" }
@@ -32,12 +32,13 @@ data class Game(
     fun score(playerId: PlayerId) = rounds.score(playerId)
 
     companion object {
-        val DEFAULT_ORDER = persistentListOf(
-            PlayerId.Player1,
-            PlayerId.Player2,
-            PlayerId.Player3,
-            PlayerId.Player4,
-        )
+        val DEFAULT_ORDER =
+            persistentListOf(
+                PlayerId.Player1,
+                PlayerId.Player2,
+                PlayerId.Player3,
+                PlayerId.Player4,
+            )
 
         val DEFAULT = Game()
     }

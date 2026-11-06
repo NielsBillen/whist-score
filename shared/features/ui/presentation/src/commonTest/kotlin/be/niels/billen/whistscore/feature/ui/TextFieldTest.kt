@@ -18,7 +18,6 @@ import io.kotest.matchers.shouldBe
 
 @OptIn(ExperimentalTestApi::class)
 class TextFieldTest : FreeSpec() {
-
     init {
         "typing reports the new text" {
             val value = mutableStateOf(TextFieldValue(""))

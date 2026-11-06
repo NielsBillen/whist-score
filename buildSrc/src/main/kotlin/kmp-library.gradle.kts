@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -13,5 +12,4 @@ kotlin {
         minSdk = libs.versions.android.minSdk.get().toInt()
         compilerOptions { jvmTarget = JvmTarget.JVM_11 }
     }
-
 }

@@ -1,11 +1,11 @@
 package be.niels.billen.whistscore.feature.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Surface
@@ -42,29 +42,31 @@ fun IconButton(
     val shape = Style.Shapes.smallRoundedCornerShape
 
     Surface(
-        modifier = modifier
-            .size(size.size)
-            .applyIf(!enabled) { alpha(0.5f) }
-            .applyIf(enabled && isFocused) {
-                drawFocusRing(
-                    cornerRadius = Style.Dimensions.radiusSmall,
-                    color = variant.focusRingColor
-                )
-            },
+        modifier =
+            modifier
+                .size(size.size)
+                .applyIf(!enabled) { alpha(0.5f) }
+                .applyIf(enabled && isFocused) {
+                    drawFocusRing(
+                        cornerRadius = Style.Dimensions.radiusSmall,
+                        color = variant.focusRingColor,
+                    )
+                },
         color = variant.backgroundColor,
         contentColor = variant.contentColor,
         shape = shape,
         tonalElevation = 0.dp,
     ) {
         Box(
-            modifier = Modifier
-                .scale(if (enabled && isPressed) 0.98f else 1f)
-                .clickable(
-                    enabled = enabled,
-                    indication = null,
-                    interactionSource = interactionSource,
-                    onClick = onClick
-                ),
+            modifier =
+                Modifier
+                    .scale(if (enabled && isPressed) 0.98f else 1f)
+                    .clickable(
+                        enabled = enabled,
+                        indication = null,
+                        interactionSource = interactionSource,
+                        onClick = onClick,
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             IconButtonIcon(icon = icon, contentDescription = contentDescription, size = size.iconSize)
@@ -73,7 +75,11 @@ fun IconButton(
 }
 
 @Composable
-private fun IconButtonIcon(icon: ImageVector, contentDescription: String, size: Dp) {
+private fun IconButtonIcon(
+    icon: ImageVector,
+    contentDescription: String,
+    size: Dp,
+) {
     Icon(
         imageVector = icon,
         contentDescription = contentDescription,

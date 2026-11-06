@@ -30,23 +30,26 @@ import androidx.compose.ui.unit.dp
 
 enum class ButtonVariant { Primary, Secondary, Ghost, Destructive }
 
-
 private val focusRingWidth = 2.dp
 private val focusRingGap = 3.dp
 
-internal fun Modifier.drawFocusRing(cornerRadius: Dp, color: Color): Modifier = drawBehind {
-    val gap = focusRingGap.toPx()
-    val width = focusRingWidth.toPx()
-    val offset = gap + width / 2
+internal fun Modifier.drawFocusRing(
+    cornerRadius: Dp,
+    color: Color,
+): Modifier =
+    drawBehind {
+        val gap = focusRingGap.toPx()
+        val width = focusRingWidth.toPx()
+        val offset = gap + width / 2
 
-    drawRoundRect(
-        color = color,
-        topLeft = Offset(-offset, -offset),
-        size = Size(size.width + 2 * offset, size.height + 2 * offset),
-        cornerRadius = CornerRadius((cornerRadius + focusRingGap).toPx()),
-        style = Stroke(width = width)
-    )
-}
+        drawRoundRect(
+            color = color,
+            topLeft = Offset(-offset, -offset),
+            size = Size(size.width + 2 * offset, size.height + 2 * offset),
+            cornerRadius = CornerRadius((cornerRadius + focusRingGap).toPx()),
+            style = Stroke(width = width),
+        )
+    }
 
 @Composable
 fun Button(
@@ -54,7 +57,7 @@ fun Button(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     variant: ButtonVariant = ButtonVariant.Primary,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -62,18 +65,18 @@ fun Button(
     val ringColor = if (enabled && isFocused) variant.focusRingColor else Color.Transparent
 
     Row(
-        modifier = modifier
-            .heightIn(min = 32.dp)
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                indication = null,
-                interactionSource = interactionSource
-            )
-            .drawFocusRing(Style.Dimensions.radiusMedium, ringColor)
-            .clip(shape)
-            .background(color = variant.backgroundColor, shape = shape)
-            .padding(horizontal = Style.Dimensions.paddingMedium, vertical = Style.Dimensions.paddingSmall),
+        modifier =
+            modifier
+                .heightIn(min = 32.dp)
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    indication = null,
+                    interactionSource = interactionSource,
+                ).drawFocusRing(Style.Dimensions.radiusMedium, ringColor)
+                .clip(shape)
+                .background(color = variant.backgroundColor, shape = shape)
+                .padding(horizontal = Style.Dimensions.paddingMedium, vertical = Style.Dimensions.paddingSmall),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -91,7 +94,7 @@ fun TextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     variant: ButtonVariant = ButtonVariant.Primary,
-    text: String
+    text: String,
 ) {
     Button(
         onClick = onClick,
@@ -105,23 +108,32 @@ fun TextButton(
 
 @get:Composable
 internal val ButtonVariant.backgroundColor
-    get() = when (this) {
-        ButtonVariant.Primary -> MaterialTheme.colorScheme.primary
-        // astryx y2k --color-neutral: a 10% white overlay (neutral.dark[95] @ 0x1A).
-        ButtonVariant.Secondary -> Color(0xFF242531) // textPrimary @10% over body, flattened opaque
-        ButtonVariant.Ghost -> Color.Transparent
-        ButtonVariant.Destructive -> MaterialTheme.colorScheme.error
-    }
+    get() =
+        when (this) {
+            ButtonVariant.Primary -> MaterialTheme.colorScheme.primary
+
+            // astryx y2k --color-neutral: a 10% white overlay (neutral.dark[95] @ 0x1A).
+            ButtonVariant.Secondary -> Color(0xFF242531)
+
+            // textPrimary @10% over body, flattened opaque
+            ButtonVariant.Ghost -> Color.Transparent
+
+            ButtonVariant.Destructive -> MaterialTheme.colorScheme.error
+        }
 
 @get:Composable
 internal val ButtonVariant.contentColor
-    get() = when (this) {
-        ButtonVariant.Primary -> MaterialTheme.colorScheme.onPrimary
-        // astryx y2k secondary icon/text color is --color-text-primary.
-        ButtonVariant.Secondary -> Style.Colors.textPrimary
-        ButtonVariant.Ghost -> MaterialTheme.colorScheme.primary
-        ButtonVariant.Destructive -> MaterialTheme.colorScheme.onError
-    }
+    get() =
+        when (this) {
+            ButtonVariant.Primary -> MaterialTheme.colorScheme.onPrimary
+
+            // astryx y2k secondary icon/text color is --color-text-primary.
+            ButtonVariant.Secondary -> Style.Colors.textPrimary
+
+            ButtonVariant.Ghost -> MaterialTheme.colorScheme.primary
+
+            ButtonVariant.Destructive -> MaterialTheme.colorScheme.onError
+        }
 
 // astryx y2k: the focus ring matches the variant it rings — accent for
 // every variant, error for destructive.

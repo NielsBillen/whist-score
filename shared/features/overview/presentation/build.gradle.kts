@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    id("kmp")
+    id(libs.plugins.ksp.get().pluginId)
+    id("kmp-library")
     id("compose")
 }
 
@@ -14,6 +14,9 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(projects.shared.features.core.domain)

@@ -1,10 +1,10 @@
 import com.google.devtools.ksp.gradle.KspAATask
 
 plugins {
-    id("kmp")
+    id("kmp-library")
     id("compose")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
+    id(libs.plugins.ksp.get().pluginId) // already on the classpath via the kmp-test script
     alias(libs.plugins.svg2compose)
 }
 
@@ -15,6 +15,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
             implementation(libs.kotlinx.collections.immutable)
         }
     }

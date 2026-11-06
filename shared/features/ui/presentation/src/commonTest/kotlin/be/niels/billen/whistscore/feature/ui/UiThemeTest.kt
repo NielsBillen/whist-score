@@ -15,7 +15,6 @@ import io.kotest.matchers.shouldNotBe
 
 @OptIn(ExperimentalTestApi::class)
 class UiThemeTest : FreeSpec() {
-
     init {
         "ui theme applies a three-weight custom family to titleLarge" {
             var titleFontFamily: FontFamily? = null
@@ -38,7 +37,6 @@ class UiThemeTest : FreeSpec() {
                     UiTheme {
                         onSurface = MaterialTheme.colorScheme.onSurface
                     }
-
                 }
             }
             onSurface shouldBe Style.Colors.textPrimary

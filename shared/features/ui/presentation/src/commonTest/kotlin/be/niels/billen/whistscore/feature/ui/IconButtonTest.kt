@@ -17,7 +17,6 @@ import io.kotest.matchers.shouldNotBe
 
 @OptIn(ExperimentalTestApi::class)
 class IconButtonTest : FreeSpec() {
-
     init {
         "clicking fires the action" {
             var clicked = false
@@ -62,7 +61,8 @@ class IconButtonTest : FreeSpec() {
                     // room for the ring, which draws 5px beyond the fill
                     IconButton(
                         onClick = {},
-                        modifier = Modifier
+                        modifier =
+                            Modifier
                                 .padding(24.dp)
                                 .semantics { contentDescription = "button" },
                         icon = Trash,

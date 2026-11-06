@@ -45,27 +45,28 @@ fun TextField(
 
     val borderColor = if (isFocused) Style.Colors.textPrimary else Style.Colors.border
     // astryx paints a 2px inset ring: accent-muted on focus, a 30% border on hover.
-    val ringColor = when {
-        isFocused -> Style.Colors.accentMuted
-        enabled && isHovered -> Style.Colors.border.copy(alpha = 0.3f)
-        else -> Color.Transparent
-    }
+    val ringColor =
+        when {
+            isFocused -> Style.Colors.accentMuted
+            enabled && isHovered -> Style.Colors.border.copy(alpha = 0.3f)
+            else -> Color.Transparent
+        }
 
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier
-            .alpha(if (enabled) 1f else 0.5f)
-            .background(color = Style.Colors.surface, shape = shape)
-            .then(
-                if (ringColor == Color.Transparent) {
-                    Modifier
-                } else {
-                    Modifier.border(TextFieldBorderWidth + TextFieldFocusRingWidth, ringColor, shape)
-                }
-            )
-            .border(TextFieldBorderWidth, borderColor, shape)
-            .padding(horizontal = Style.Dimensions.paddingMedium),
+        modifier =
+            modifier
+                .alpha(if (enabled) 1f else 0.5f)
+                .background(color = Style.Colors.surface, shape = shape)
+                .then(
+                    if (ringColor == Color.Transparent) {
+                        Modifier
+                    } else {
+                        Modifier.border(TextFieldBorderWidth + TextFieldFocusRingWidth, ringColor, shape)
+                    },
+                ).border(TextFieldBorderWidth, borderColor, shape)
+                .padding(horizontal = Style.Dimensions.paddingMedium),
         enabled = enabled,
         singleLine = true,
         textStyle = textStyle,

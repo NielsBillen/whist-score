@@ -15,7 +15,6 @@ import io.kotest.matchers.shouldNotBe
 
 @OptIn(ExperimentalTestApi::class)
 class ButtonTest : FreeSpec() {
-
     init {
         "a focused button draws the astryx ring outside its bounds" {
             runSkikoComposeUiTest {

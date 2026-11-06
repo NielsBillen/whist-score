@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kover)
-    alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
-    id("kmp")
-    id("test")
+    id(libs.plugins.kover.get().pluginId)
+    id(libs.plugins.ksp.get().pluginId) // must precede test: kotest's wasm wiring checks for it
+    id("kmp-library")
+    id("kmp-test")
 }
 
 kotlin {

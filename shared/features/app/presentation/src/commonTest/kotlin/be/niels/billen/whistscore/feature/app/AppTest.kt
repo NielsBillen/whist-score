@@ -30,7 +30,6 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalTestApi::class)
 class AppTest : FreeSpec() {
-
     init {
         "shows the overview at startup" {
             withApp {
@@ -172,9 +171,10 @@ class AppTest : FreeSpec() {
                     onNodeWithText("Player 1").performClick()
                     onNodeWithText("Player 2").performClick()
                     waitForIdle()
-                    val restRight = onNodeWithText("Select players", substring = true).fetchSemanticsNode().let { n ->
-                        n.positionInRoot.x + n.size.width
-                    }
+                    val restRight =
+                        onNodeWithText("Select players", substring = true).fetchSemanticsNode().let { n ->
+                            n.positionInRoot.x + n.size.width
+                        }
                     mainClock.autoAdvance = false
                     onNodeWithText("Next").performClick()
                     // The slide must travel past the screen's own width: 1360 px on a 1920 px window,
@@ -232,18 +232,25 @@ class AppTest : FreeSpec() {
                 var prev: Float? = null
                 mainClock.advanceTimeUntil(5000) {
                     runWithoutImplicitWait {
-                        val leftEdge = try {
-                            onNodeWithText("New game").fetchSemanticsNode().positionInRoot.x
-                        } catch (e: AssertionError) {
-                            null
-                        }
+                        val leftEdge =
+                            try {
+                                onNodeWithText("New game").fetchSemanticsNode().positionInRoot.x
+                            } catch (e: AssertionError) {
+                                null
+                            }
                         when {
-                            leftEdge == null -> false // not composed yet, or disposed: keep going
+                            leftEdge == null -> {
+                                false
+                            }
+
+                            // not composed yet, or disposed: keep going
                             else -> {
                                 val previous = prev
                                 prev = leftEdge
                                 if (previous != null && leftEdge - previous > 400f) {
-                                    error("the entering overview jumped from x=$previous to x=$leftEdge instead of sliding to its resting position")
+                                    error(
+                                        "the entering overview jumped from x=$previous to x=$leftEdge instead of sliding to its resting position",
+                                    )
                                 }
                                 leftEdge > 500f // reached the centred resting position (≈ 560 px)
                             }
@@ -288,13 +295,14 @@ class AppTest : FreeSpec() {
 
     private val wideWindow = Size(1920f, 768f)
 
-    private val testAppModule = module {
-        single { FakePlayerRepository() }.bind<PlayerRepository>()
-        single { FakeGameRepository() }.bind<GameRepository>()
-        viewModelOf(::OverviewViewModel)
-        viewModel { AddRoundViewModel(get(), get()) }
-        viewModelOf(::EditPlayersViewModel)
-        viewModelOf(::RoundsViewModel)
-        viewModelOf(::PlayersViewModel)
-    }
+    private val testAppModule =
+        module {
+            single { FakePlayerRepository() }.bind<PlayerRepository>()
+            single { FakeGameRepository() }.bind<GameRepository>()
+            viewModelOf(::OverviewViewModel)
+            viewModel { AddRoundViewModel(get(), get()) }
+            viewModelOf(::EditPlayersViewModel)
+            viewModelOf(::RoundsViewModel)
+            viewModelOf(::PlayersViewModel)
+        }
 }

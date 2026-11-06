@@ -17,17 +17,22 @@ class PlayersViewModel(
     gameRepository: GameRepository,
     playerRepository: PlayerRepository,
 ) : ViewModel() {
-    val players = combine(gameRepository.game, playerRepository.players, ::makeState)
-        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = persistentListOf())
+    val players =
+        combine(gameRepository.game, playerRepository.players, ::makeState)
+            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = persistentListOf())
 }
 
-private fun makeState(game: Game, players: Players): PersistentList<PlayerView> {
+private fun makeState(
+    game: Game,
+    players: Players,
+): PersistentList<PlayerView> {
     val scores = game.rounds.scores
 
-    return game.order.mapIndexed { index, playerId ->
-        val dealer = game.rounds.size % players.size == index
-        val player = players.getValue(playerId)
-        val score = scores.getValue(playerId)
-        PlayerView(name = player.name, color = Color(player.color.argb), score = score, dealer = dealer)
-    }.toPersistentList()
+    return game.order
+        .mapIndexed { index, playerId ->
+            val dealer = game.rounds.size % players.size == index
+            val player = players.getValue(playerId)
+            val score = scores.getValue(playerId)
+            PlayerView(name = player.name, color = Color(player.color.argb), score = score, dealer = dealer)
+        }.toPersistentList()
 }

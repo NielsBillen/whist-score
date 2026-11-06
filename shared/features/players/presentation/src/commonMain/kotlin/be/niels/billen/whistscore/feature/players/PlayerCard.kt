@@ -23,16 +23,21 @@ import be.niels.billen.whistscore.feature.core.icons.PlayingCardsFan
 import be.niels.billen.whistscore.feature.ui.Style
 
 @Composable
-internal fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
-    val textColor = when {
-        player.color.luminance < 0.5f -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.inverseOnSurface
-    }
+internal fun PlayerCard(
+    player: PlayerView,
+    modifier: Modifier = Modifier,
+) {
+    val textColor =
+        when {
+            player.color.luminance < 0.5f -> MaterialTheme.colorScheme.onSurface
+            else -> MaterialTheme.colorScheme.inverseOnSurface
+        }
 
     Column(
-        modifier = modifier
-            .background(color = player.color, shape = Style.Shapes.mediumRoundedCornerShape)
-            .padding(Style.Dimensions.paddingMedium)
+        modifier =
+            modifier
+                .background(color = player.color, shape = Style.Shapes.mediumRoundedCornerShape)
+                .padding(Style.Dimensions.paddingMedium),
     ) {
         PlayerName(name = player.name, textColor = textColor, isDealer = player.dealer)
 
@@ -41,10 +46,14 @@ internal fun PlayerCard(player: PlayerView, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun PlayerName(name: String, textColor: Color, isDealer: Boolean) {
+private fun PlayerName(
+    name: String,
+    textColor: Color,
+    isDealer: Boolean,
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text = name, fontWeight = FontWeight.Medium, color = textColor, modifier = Modifier.weight(1f))
 
@@ -53,20 +62,25 @@ private fun PlayerName(name: String, textColor: Color, isDealer: Boolean) {
 }
 
 @Composable
-private fun PlayerScore(score: Int, textColor: Color) {
+private fun PlayerScore(
+    score: Int,
+    textColor: Color,
+) {
     Text(text = score.toString(), color = textColor, fontWeight = FontWeight.Bold, fontSize = 24.sp)
-
 }
 
 @Composable
-private fun DealerIcon(isDealer: Boolean, color: Color) {
+private fun DealerIcon(
+    isDealer: Boolean,
+    color: Color,
+) {
     Box(modifier = Modifier.requiredSize(24.dp)) {
         if (isDealer) {
             Icon(
                 imageVector = PlayingCardsFan,
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

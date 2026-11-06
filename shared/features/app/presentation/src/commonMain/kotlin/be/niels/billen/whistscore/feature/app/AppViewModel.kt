@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.game.GameRepository
 
-class AppViewModel(private val gameRepository: GameRepository) : ViewModel() {
-
+class AppViewModel(
+    private val gameRepository: GameRepository,
+) : ViewModel() {
     fun onAction(action: AppAction) {
         when (action) {
             is AppAction.AddRound -> addRound(action)

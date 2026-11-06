@@ -13,7 +13,6 @@ kotlin {
 
     jvmToolchain {
         languageVersion = JavaLanguageVersion.of(25)
-        vendor = JvmVendorSpec.JETBRAINS
     }
 
 
@@ -21,7 +20,7 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
-        binaries.executable()
+        nodejs()
+        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
 }

@@ -1,7 +1,5 @@
 package be.niels.billen.whistscore.feature.players
 
-
-
 import be.niels.billen.whistscore.feature.core.DEFAULT_PLAYERS
 import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.game.PlayersDto
@@ -15,22 +13,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.ExperimentalSerializationApi
 
-class DefaultPlayerRepository(private val settings: Settings) : PlayerRepository {
+class DefaultPlayerRepository(
+    private val settings: Settings,
+) : PlayerRepository {
     private val _players = MutableStateFlow(settings.players)
     override val players = _players.asStateFlow()
 
-    override fun update(transform: (Players) -> Players) = _players.update {
-        transform(it).also { players -> settings.players = players }
-    }
+    override fun update(transform: (Players) -> Players) =
+        _players.update {
+            transform(it).also { players -> settings.players = players }
+        }
 }
 
 private const val PLAYERS_KEY = "players"
 
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 private var Settings.players: Players
-    get() = try {
-        decodeValueOrNull<PlayersDto>(key = PLAYERS_KEY)?.value ?: DEFAULT_PLAYERS
-    } catch (_: Exception) {
-        DEFAULT_PLAYERS
-    }
+    get() =
+        try {
+            decodeValueOrNull<PlayersDto>(key = PLAYERS_KEY)?.value ?: DEFAULT_PLAYERS
+        } catch (_: Exception) {
+            DEFAULT_PLAYERS
+        }
     set(value) = encodeValue(key = PLAYERS_KEY, value.toDto())

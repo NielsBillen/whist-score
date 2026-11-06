@@ -1,6 +1,5 @@
 package be.niels.billen.whistscore.feature.editplayers
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,8 +28,8 @@ import be.niels.billen.whistscore.feature.core.icons.ArrowUp
 import be.niels.billen.whistscore.feature.ui.Button
 import be.niels.billen.whistscore.feature.ui.IconButton
 import be.niels.billen.whistscore.feature.ui.Style
-import be.niels.billen.whistscore.feature.ui.TextField
 import be.niels.billen.whistscore.feature.ui.TextButton
+import be.niels.billen.whistscore.feature.ui.TextField
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,7 +47,7 @@ fun EditPlayersView(
         players = players,
         onAction = viewModel::onAction,
         onSave = onSave,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -58,15 +57,17 @@ internal fun EditPlayersView(
     players: Players,
     modifier: Modifier = Modifier,
     onSave: () -> Unit,
-    onAction: (EditPlayersAction) -> Unit
+    onAction: (EditPlayersAction) -> Unit,
 ) {
     // The top and bottom padding are owned by the AppShell content area.
     Column(
-        modifier = modifier.wrapContentWidth()
-            .widthIn(max = 800.dp)
-            .padding(Style.Dimensions.paddingSmall),
+        modifier =
+            modifier
+                .wrapContentWidth()
+                .widthIn(max = 800.dp)
+                .padding(Style.Dimensions.paddingSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingExtraExtraLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingExtraExtraLarge),
     ) {
         Text(text = "Edit player names", style = MaterialTheme.typography.titleLarge)
 
@@ -85,7 +86,7 @@ private fun PlayerNameInputs(
     order: ImmutableList<PlayerId>,
     players: Players,
     onAction: (EditPlayersAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
@@ -98,9 +99,8 @@ private fun PlayerNameInputs(
                 index = index,
                 playerId = playerId,
                 player = player,
-                onAction = onAction
+                onAction = onAction,
             )
-
         }
     }
 }
@@ -114,7 +114,7 @@ private fun PlayerEntry(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         key(playerId) {
             PlayerNameInput(
@@ -127,7 +127,7 @@ private fun PlayerEntry(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
                 enabled = index > 0,
@@ -151,7 +151,7 @@ private fun PlayerNameInput(
     playerId: PlayerId,
     name: String,
     modifier: Modifier = Modifier,
-    onAction: (EditPlayersAction) -> Unit
+    onAction: (EditPlayersAction) -> Unit,
 ) {
     var value by remember { mutableStateOf(TextFieldValue(text = name)) }
 
@@ -164,6 +164,3 @@ private fun PlayerNameInput(
         modifier = modifier,
     )
 }
-
-
-

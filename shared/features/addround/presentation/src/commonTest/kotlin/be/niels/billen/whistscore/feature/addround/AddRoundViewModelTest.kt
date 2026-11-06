@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddRoundViewModelTest : FreeSpec() {
-
     init {
         coroutineTestScope = true
         beforeSpec { Dispatchers.setMain(StandardTestDispatcher()) }
@@ -87,7 +86,8 @@ class AddRoundViewModelTest : FreeSpec() {
 
                     viewModel.onAction(AddRoundAction.SetRoundType(RoundType.Misere))
 
-                    viewModel.state.value.players.isEmpty() shouldBe true
+                    viewModel.state.value.players
+                        .isEmpty() shouldBe true
                     effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SELECT_PLAYERS)
                 }
             }
@@ -131,7 +131,8 @@ class AddRoundViewModelTest : FreeSpec() {
 
                     viewModel.onAction(AddRoundAction.SetPlayerSelected(PlayerId.Player1, false))
 
-                    viewModel.state.value.players.isEmpty() shouldBe true
+                    viewModel.state.value.players
+                        .isEmpty() shouldBe true
                     effects.expectNoEvents()
                 }
             }
@@ -201,10 +202,11 @@ class AddRoundViewModelTest : FreeSpec() {
 
                     viewModel.onAction(AddRoundAction.SetSlams(8))
 
-                    viewModel.state.value.round shouldBe Round.Regular(
-                        persistentSetOf(PlayerId.Player1, PlayerId.Player2),
-                        slams = 8,
-                    )
+                    viewModel.state.value.round shouldBe
+                        Round.Regular(
+                            persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+                            slams = 8,
+                        )
                     effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
                 }
             }
@@ -236,10 +238,11 @@ class AddRoundViewModelTest : FreeSpec() {
 
                     viewModel.onAction(AddRoundAction.SetSlams(0))
 
-                    viewModel.state.value.round shouldBe Round.Regular(
-                        persistentSetOf(PlayerId.Player1, PlayerId.Player2),
-                        slams = 0,
-                    )
+                    viewModel.state.value.round shouldBe
+                        Round.Regular(
+                            persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+                            slams = 0,
+                        )
                     effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
                 }
             }
@@ -255,10 +258,11 @@ class AddRoundViewModelTest : FreeSpec() {
 
                     viewModel.onAction(AddRoundAction.SetSlams(13))
 
-                    viewModel.state.value.round shouldBe Round.Regular(
-                        persistentSetOf(PlayerId.Player1, PlayerId.Player2),
-                        slams = 13,
-                    )
+                    viewModel.state.value.round shouldBe
+                        Round.Regular(
+                            persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+                            slams = 13,
+                        )
                     effects.awaitItem() shouldBe AddRoundEffect.NextScreen(AddRoundScreen.SUMMARY)
                 }
             }
