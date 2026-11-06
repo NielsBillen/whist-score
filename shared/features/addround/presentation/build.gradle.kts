@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
-    id("kmp")
-    id("compose")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
-    id("test")
     alias(libs.plugins.kover)
+    alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
+    id("compose")
+    id("kmp")
+    id("test")
 }
 
 kotlin {
