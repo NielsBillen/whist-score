@@ -77,7 +77,7 @@ internal val ButtonVariant.backgroundColor
     get() = when (this) {
         ButtonVariant.Primary -> MaterialTheme.colorScheme.primary
         // astryx y2k --color-neutral: a 10% white overlay (neutral.dark[95] @ 0x1A).
-        ButtonVariant.Secondary -> Style.Colors.textPrimary.copy(alpha = 0.10f)
+        ButtonVariant.Secondary -> Color(0xFF242531) // textPrimary @10% over body, flattened opaque
         ButtonVariant.Ghost -> Color.Transparent
         ButtonVariant.Destructive -> MaterialTheme.colorScheme.error
     }

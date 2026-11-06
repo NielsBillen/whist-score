@@ -49,11 +49,14 @@ kotlin {
             implementation(libs.compose.ui.test)
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
-            implementation(compose.desktop.currentOs)
             implementation(libs.compose.ui)
             implementation(libs.compose.foundation)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
+        }
+        // JVM-only artifacts: commonTest would resolve them against the wasm test classpath.
+        jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
             implementation(libs.kotest.runner.junit5)
         }
     }

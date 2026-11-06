@@ -50,13 +50,11 @@ kotlin {
             implementation(projects.shared.features.ui.presentation)
         }
         commonTest.dependencies {
-            implementation(compose.desktop.currentOs)
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.test)
             implementation(libs.kotest.assertions.core)
             implementation(libs.kotest.framework.engine)
-            implementation(libs.kotest.runner.junit5)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
@@ -64,6 +62,11 @@ kotlin {
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
+        }
+        // JVM-only artifacts: commonTest would resolve them against the wasm test classpath.
+        jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotest.runner.junit5)
         }
     }
 }
