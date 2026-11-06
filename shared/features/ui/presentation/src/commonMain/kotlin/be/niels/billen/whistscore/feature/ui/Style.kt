@@ -92,6 +92,7 @@ object Style {
 
         val textPrimary = Color(0xFFEDEFFC) // --color-text-primary
         val textSecondary = Color(0xFFA6ACD6) // --color-text-secondary
+        val accentMuted = Color(0x20EDEFFC) // --color-accent-muted
 
         val onAccent = Color(0xFF16182B) // --color-on-accent
         val neonGreen = Color(0xFFC5E17A) // --color-background-green
