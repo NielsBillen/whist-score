@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidMultiplatformLibrary)
+    id(libs.plugins.kotlinMultiplatform.get().pluginId)
+    id(libs.plugins.androidMultiplatformLibrary.get().pluginId)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest)
+    id(libs.plugins.kotest.get().pluginId)
     alias(libs.plugins.ksp)
 }
 

@@ -2,14 +2,15 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
-    // this is necessary to avoid the plugins to be loaded multiple times
-    // in each subproject's classloader
-    alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.androidMultiplatformLibrary) apply false
-    alias(libs.plugins.composeMultiplatform) apply false
-    alias(libs.plugins.composeCompiler) apply false
-    alias(libs.plugins.kotlinJvm) apply false
-    alias(libs.plugins.kotlinMultiplatform) apply false
+    // these come from buildSrc's implementation classpath (no version — a
+    // versioned request would clash with the already-present plugin);
+    // hoisting them here avoids duplicate loads in each subproject's classloader
+    id(libs.plugins.androidApplication.get().pluginId) apply false
+    id(libs.plugins.androidMultiplatformLibrary.get().pluginId) apply false
+    id(libs.plugins.composeMultiplatform.get().pluginId) apply false
+    id(libs.plugins.composeCompiler.get().pluginId) apply false
+    id(libs.plugins.kotlinJvm.get().pluginId) apply false
+    id(libs.plugins.kotlinMultiplatform.get().pluginId) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.detekt)
 }
