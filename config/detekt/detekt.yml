@@ -1,0 +1,8 @@
+naming:
+  FunctionNaming:
+    # composables are PascalCase by code guideline; the default pattern only allows camelCase
+    functionPattern: '[a-z][a-zA-Z0-9]*|[A-Z][a-zA-Z0-9]*'
+
+style:
+  MagicNumber:
+    active: false
