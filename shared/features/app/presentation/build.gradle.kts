@@ -29,42 +29,41 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.material3)
-            implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+            implementation(libs.androidx.nav3.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.uiToolingPreview)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(libs.androidx.nav3.ui)
-            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+            implementation(projects.shared.features.addround.presentation)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
-            implementation(projects.shared.features.ui.presentation)
+            implementation(projects.shared.features.editplayers.presentation)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.overview.presentation)
-            implementation(projects.shared.features.addround.presentation)
-            implementation(projects.shared.features.editplayers.presentation)
+            implementation(projects.shared.features.ui.presentation)
         }
-        jvmTest.dependencies {
+        commonTest.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.compose.ui)
             implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.ui.test)
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.runner.junit5)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
-            implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.turbine)
-            implementation(libs.kotest.runner.junit5)
-        }
-        commonTest.dependencies {
-            implementation(libs.compose.ui.test)
-            implementation(libs.kotest.framework.engine)
-            implementation(libs.kotest.assertions.core)
         }
     }
 }

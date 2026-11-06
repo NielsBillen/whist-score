@@ -1,27 +1,28 @@
 package be.niels.billen.whistscore.feature.app
 
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import io.kotest.matchers.comparables.shouldBeLessThan
-import be.niels.billen.whistscore.feature.game.FakeGameRepository
-import be.niels.billen.whistscore.feature.players.FakePlayerRepository
-import be.niels.billen.whistscore.feature.game.GameRepository
-import be.niels.billen.whistscore.feature.players.PlayerRepository
+import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import be.niels.billen.whistscore.feature.addround.AddRoundViewModel
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersViewModel
+import be.niels.billen.whistscore.feature.game.FakeGameRepository
+import be.niels.billen.whistscore.feature.game.GameRepository
 import be.niels.billen.whistscore.feature.overview.OverviewViewModel
+import be.niels.billen.whistscore.feature.players.FakePlayerRepository
+import be.niels.billen.whistscore.feature.players.PlayerRepository
 import be.niels.billen.whistscore.feature.players.PlayersViewModel
 import be.niels.billen.whistscore.feature.rounds.RoundsViewModel
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.comparables.shouldBeLessThan
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -164,13 +165,14 @@ class AppTest : FreeSpec() {
             "slides the previous screen fully offscreen when navigating forward" {
                 withApp(size = wideWindow) {
                     onNodeWithText("Add round").performClick()
+                    waitUntilAtLeastOneExists(hasText("Regular", substring = true))
                     waitForIdle()
                     onNodeWithText("Regular", substring = true).performClick()
                     waitForIdle()
                     onNodeWithText("Player 1").performClick()
                     onNodeWithText("Player 2").performClick()
                     waitForIdle()
-                    val restRight = onNodeWithText("Regular").fetchSemanticsNode().let { n ->
+                    val restRight = onNodeWithText("Regular", substring = true).fetchSemanticsNode().let { n ->
                         n.positionInRoot.x + n.size.width
                     }
                     mainClock.autoAdvance = false
@@ -199,9 +201,7 @@ class AppTest : FreeSpec() {
                     waitForIdle()
                     onNodeWithText("8").performClick()
                     waitForIdle()
-                    val restLeft = onNodeWithText("Summary").fetchSemanticsNode().let { n ->
-                        n.positionInRoot.x
-                    }
+                    val restLeft = onNodeWithText("Summary").fetchSemanticsNode().positionInRoot.x
                     mainClock.autoAdvance = false
                     onNodeWithText("Back").performClick()
                     // The slide must travel past the screen's own width: 1360 px on a 1920 px window,
