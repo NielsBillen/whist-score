@@ -1,26 +1,21 @@
 package be.niels.billen.whistscore.feature.addround
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
-import androidx.compose.foundation.layout.GridConfigurationScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import be.niels.billen.whistscore.feature.core.RoundType
-import be.niels.billen.whistscore.feature.ui.ListItem
 import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
@@ -59,11 +54,10 @@ internal fun RoundTypeInputScreen(
                 gap(Style.Dimensions.paddingSmall)
                 column(1.fr)
             },
-            modifier =  Modifier.verticalScroll(scrollState),
+            modifier = Modifier.verticalScroll(scrollState),
         ) {
-            RoundType.entries.forEachIndexed { index, roundType ->
+            RoundType.entries.forEach { roundType ->
                 RoundTypeButton(
-                    index = index,
                     roundType = roundType,
                     selected = selectedRoundType == roundType,
                     modifier = Modifier.fillMaxSize(),
@@ -78,7 +72,6 @@ internal fun RoundTypeInputScreen(
 
 @Composable
 private fun RoundTypeButton(
-    index: Int,
     roundType: RoundType,
     selected: Boolean,
     modifier: Modifier = Modifier,
@@ -89,10 +82,14 @@ private fun RoundTypeButton(
         onClick = onClick,
         modifier = modifier,
     ) {
-        ListItem(
-            label = "${index + 1}. ${roundType.displayName}",
-            description = roundType.description,
-            modifier = Modifier.padding(Style.Dimensions.paddingLarge)
-        )
+        Text(text = buildAnnotatedString {
+            withStyle(style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold).toSpanStyle()) {
+                append(roundType.displayName)
+            }
+            append(" - ")
+            withStyle(MaterialTheme.typography.bodyMedium.toSpanStyle()) {
+                append(roundType.description)
+            }
+        }, modifier = Modifier.padding(Style.Dimensions.paddingLarge))
     }
 }
