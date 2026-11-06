@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import be.niels.billen.whistscore.feature.core.Round
+import be.niels.billen.whistscore.feature.ui.Button
+import be.niels.billen.whistscore.feature.ui.ButtonVariant
 import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.TextButton
 import kotlinx.coroutines.flow.SharedFlow
@@ -182,6 +184,7 @@ private fun ButtonRow(
     ) {
         TextButton(
             text = "Back",
+            variant = ButtonVariant.Secondary,
             modifier = Modifier.widthIn(min = 96.dp),
             onClick = {
                 when (screen) {
@@ -226,6 +229,7 @@ private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
         text = "Next",
         enabled = enabled, onClick = onClick,
         modifier = Modifier.widthIn(min = 96.dp),
+        variant = ButtonVariant.Secondary,
     )
 }
 
@@ -233,7 +237,8 @@ private fun NextButton(enabled: Boolean, onClick: () -> Unit) {
 private fun SaveButton(onClick: () -> Unit) {
     TextButton(
         text = "Save", onClick = onClick,
-        modifier = Modifier.widthIn(min = 96.dp)
+        modifier = Modifier.widthIn(min = 96.dp),
+        variant = ButtonVariant.Primary
     )
 }
 

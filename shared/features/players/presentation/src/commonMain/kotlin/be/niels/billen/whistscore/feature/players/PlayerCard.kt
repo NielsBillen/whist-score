@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.niels.billen.whistscore.feature.core.icons.PlayingCard
+import be.niels.billen.whistscore.feature.core.icons.PlayingCardsFan
 import be.niels.billen.whistscore.feature.ui.Style
 
 @Composable
@@ -62,7 +63,7 @@ private fun DealerIcon(isDealer: Boolean, color: Color) {
     Box(modifier = Modifier.requiredSize(24.dp)) {
         if (isDealer) {
             Icon(
-                imageVector = PlayingCard,
+                imageVector = PlayingCardsFan,
                 contentDescription = null,
                 tint = color,
                 modifier = Modifier.fillMaxSize()

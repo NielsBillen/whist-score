@@ -16,6 +16,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import be.niels.billen.whistscore.feature.core.RoundType
+import be.niels.billen.whistscore.feature.ui.ListItem
 import be.niels.billen.whistscore.feature.ui.SelectableCard
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
@@ -82,14 +83,10 @@ private fun RoundTypeButton(
         onClick = onClick,
         modifier = modifier,
     ) {
-        Text(text = buildAnnotatedString {
-            withStyle(style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold).toSpanStyle()) {
-                append(roundType.displayName)
-            }
-            append(" - ")
-            withStyle(MaterialTheme.typography.bodyMedium.toSpanStyle()) {
-                append(roundType.description)
-            }
-        }, modifier = Modifier.padding(Style.Dimensions.paddingLarge))
+        ListItem(
+            label = roundType.displayName,
+            description = roundType.description,
+            modifier = Modifier.padding(Style.Dimensions.paddingLarge)
+        )
     }
 }

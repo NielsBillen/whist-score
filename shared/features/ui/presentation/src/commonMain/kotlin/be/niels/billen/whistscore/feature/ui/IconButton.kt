@@ -1,6 +1,7 @@
 package be.niels.billen.whistscore.feature.ui
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -14,10 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import be.niels.billen.whistscore.feature.util.applyIf
 
 // astryx y2k icon buttons: flat, no border, rounded, no hover state —
 // they scale down 0.98 on press and fade to 50% when disabled.
@@ -33,12 +38,19 @@ fun IconButton(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    val isFocused by interactionSource.collectIsFocusedAsState()
     val shape = Style.Shapes.smallRoundedCornerShape
 
     Surface(
         modifier = modifier
             .size(size.size)
-            .alpha(if (enabled) 1f else 0.5f),
+            .applyIf(!enabled) { alpha(0.5f) }
+            .applyIf(enabled && isFocused) {
+                drawFocusRing(
+                    cornerRadius = Style.Dimensions.radiusSmall,
+                    color = variant.focusRingColor
+                )
+            },
         color = variant.backgroundColor,
         contentColor = variant.contentColor,
         shape = shape,
