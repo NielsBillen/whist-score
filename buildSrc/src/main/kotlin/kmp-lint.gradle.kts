@@ -1,4 +1,5 @@
 import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 
 plugins {
     alias(libs.plugins.ktlint)
@@ -13,10 +14,16 @@ ktlint {
 
 detekt {
     buildUponDefaultConfig = true
-    allRules = true
-    // default src/{main,test}/{java,kotlin} don't exist in KMP modules;
-    // match lazily, targets are declared after this script
-    source.from(kotlin.sourceSets.matching { true }.map { it.kotlin })
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+}
+
+// Full-mode tasks analyze Kotlin compilations, which carry generated sources
+// (compose resources, svg icons) — never lint generated code.
+tasks.withType<Detekt>().configureEach {
+    exclude("**/generated/**")
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    exclude("**/generated/**")
 }
 
 // The plain `detekt` task (light) is already wired to `check`; the full-mode
