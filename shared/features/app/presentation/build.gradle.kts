@@ -1,44 +1,35 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id(libs.plugins.kotlinMultiplatform.get().pluginId)
-    id(libs.plugins.androidMultiplatformLibrary.get().pluginId)
-    id(libs.plugins.composeMultiplatform.get().pluginId)
-    id(libs.plugins.composeCompiler.get().pluginId)
+    id("kmp")
+    id("compose")
     alias(libs.plugins.kotlin.serialization)
-    id(libs.plugins.kotest.get().pluginId)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
+    id("test")
     alias(libs.plugins.kover)
 }
 
 kotlin {
     android {
         namespace = "be.niels.billen.whistscore.feature.app.presentation"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        compilerOptions { jvmTarget = JvmTarget.JVM_11 }
-        androidResources { enable = true }
     }
-//    (iOS block stays commented out, same as shared)
-    jvm()
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodejs()
-        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
+        // not in the kotlin script: skiko wasm cannot load under Node
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
     }
+
     sourceSets {
         commonMain.dependencies {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.androidx.nav3.ui)
-            implementation(libs.compose.components.resources)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material3)
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.uiToolingPreview)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(projects.shared.features.addround.presentation)
@@ -53,8 +44,6 @@ kotlin {
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.test)
-            implementation(libs.kotest.assertions.core)
-            implementation(libs.kotest.framework.engine)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
@@ -63,14 +52,5 @@ kotlin {
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
         }
-        // JVM-only artifacts: commonTest would resolve them against the wasm test classpath.
-        jvmTest.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotest.runner.junit5)
-        }
     }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }

@@ -90,7 +90,7 @@ class AppTest : FreeSpec() {
         "saving a misere round returns to the overview" {
             withApp {
                 onNodeWithText("Add round").performClick()
-                onNodeWithText("5. Misere").performClick()
+                onNodeWithText("Misere").performClick()
                 waitForIdle()
 
                 onNodeWithText("Player 1").performClick()
@@ -172,7 +172,7 @@ class AppTest : FreeSpec() {
                     onNodeWithText("Player 1").performClick()
                     onNodeWithText("Player 2").performClick()
                     waitForIdle()
-                    val restRight = onNodeWithText("Regular", substring = true).fetchSemanticsNode().let { n ->
+                    val restRight = onNodeWithText("Select players", substring = true).fetchSemanticsNode().let { n ->
                         n.positionInRoot.x + n.size.width
                     }
                     mainClock.autoAdvance = false
@@ -181,7 +181,7 @@ class AppTest : FreeSpec() {
                     // leaving no part of the exiting screen visible.
                     mainClock.advanceTimeUntil(5000) {
                         runWithoutImplicitWait {
-                            val node = onNodeWithText("Regular").fetchSemanticsNode()
+                            val node = onNodeWithText("Select players").fetchSemanticsNode()
                             restRight - (node.positionInRoot.x + node.size.width) > 800f + 100f
                         }
                     }
