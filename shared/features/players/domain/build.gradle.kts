@@ -17,13 +17,6 @@ kotlin {
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.game.domain)
         }
-        commonTest.dependencies {
-            implementation(libs.kotest.framework.engine)
-            implementation(libs.kotest.assertions.core)
-        }
-        jvmTest.dependencies {
-            implementation(libs.kotest.runner.junit5)
-        }
     }
 }
 

@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kover)
     alias(libs.plugins.ksp) // must precede test: kotest's wasm wiring checks for it
-    id("compose")
     id("kmp")
+    id("compose")
     id("test")
 }
 

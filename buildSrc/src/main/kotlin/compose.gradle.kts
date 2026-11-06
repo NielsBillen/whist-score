@@ -1,26 +1,19 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
 plugins {
-    id("org.jetbrains.compose")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
-val libs = versionCatalogs.named("libs")
-val sharedComposeDeps = listOf(
-    "compose-runtime",
-    "compose-foundation",
-    "compose-ui",
-    "compose-material3",
-    "compose-components-resources",
-    "compose-uiToolingPreview",
-)
-
-extensions.configure<KotlinMultiplatformExtension> {
-    sourceSets.named("commonMain") {
-        dependencies {
-            sharedComposeDeps.forEach {
-                implementation(libs.findLibrary(it).get())
-            }
-        }
-    }
-}
+//kotlin {
+//    sourceSets {
+//        commonMain {
+//            dependencies {
+//                implementation(libs.compose.runtime)
+//                implementation(libs.compose.foundation)
+//                implementation(libs.compose.ui)
+//                implementation(libs.compose.material3)
+//                implementation(libs.compose.components.resources)
+//                implementation(libs.compose.uiToolingPreview)
+//            }
+//        }
+//    }
+//}
