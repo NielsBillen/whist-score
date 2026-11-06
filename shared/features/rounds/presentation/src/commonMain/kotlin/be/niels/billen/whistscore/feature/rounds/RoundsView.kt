@@ -21,12 +21,12 @@ import be.niels.billen.whistscore.feature.core.Points
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.IconButton
+import be.niels.billen.whistscore.feature.ui.IconButtonSize
 import be.niels.billen.whistscore.feature.ui.Style
 import be.niels.billen.whistscore.feature.ui.Table
 import org.koin.compose.viewmodel.koinViewModel
 
 private val ROUNDS_COLUMN_WIDTH = 32.dp
-private val ICONS_SIZE = 20.dp
 
 @Composable
 fun RoundsView(
@@ -83,7 +83,7 @@ private fun RowScope.RoundHeader(game: Game, players: Players) {
         )
     }
 
-    Spacer(modifier = Modifier.requiredWidth(ICONS_SIZE))
+    Spacer(modifier = Modifier.requiredWidth(IconButtonSize.Sm.size))
 }
 
 @Composable
