@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,7 +60,7 @@ internal fun EditPlayersView(
 ) {
     // The top and bottom padding are owned by the AppShell content area.
     Column(
-        modifier = modifier.padding(horizontal = Style.Dimensions.paddingLarge).widthIn(max = 800.dp).padding(Style.Dimensions.paddingSmall),
+        modifier = modifier.padding(horizontal = Style.Dimensions.paddingLarge).requiredWidthIn(max = 800.dp).padding(Style.Dimensions.paddingSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingExtraExtraLarge)
     ) {

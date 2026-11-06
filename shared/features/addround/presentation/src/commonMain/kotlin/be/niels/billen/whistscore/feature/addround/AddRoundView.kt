@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -176,7 +177,7 @@ private fun ButtonRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .widthIn(max = 800.dp),
+            .requiredWidthIn(max = 800.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TextButton(
@@ -192,7 +193,6 @@ private fun ButtonRow(
                 }
             }
         )
-
 
         when (screen) {
             AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
