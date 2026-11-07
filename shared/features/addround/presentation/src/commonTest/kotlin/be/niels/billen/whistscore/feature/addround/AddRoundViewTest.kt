@@ -9,7 +9,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Round
 import be.niels.billen.whistscore.feature.core.RoundType
@@ -159,7 +159,7 @@ class AddRoundViewTest : FreeSpec() {
 
         startKoin { modules(testModule) }
         try {
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     val viewModel = koinViewModel<AddRoundViewModel>()
                     val state by viewModel.state.collectAsState()

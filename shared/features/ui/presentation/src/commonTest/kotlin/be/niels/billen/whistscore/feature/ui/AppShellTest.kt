@@ -6,7 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -17,7 +17,7 @@ class AppShellTest : FreeSpec() {
         "shows the title and the content, and runs the actions" {
             var actionInvocations = 0
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     UiTheme {
                         AppShell(

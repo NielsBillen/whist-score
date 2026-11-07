@@ -8,7 +8,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.core.icons.Trash
 import io.kotest.core.spec.style.FreeSpec
@@ -21,7 +21,7 @@ class IconButtonTest : FreeSpec() {
         "clicking fires the action" {
             var clicked = false
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     IconButton(
                         onClick = { clicked = true },
@@ -39,7 +39,7 @@ class IconButtonTest : FreeSpec() {
         "a disabled icon button does not fire the action" {
             var clicked = false
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     IconButton(
                         onClick = { clicked = true },
@@ -56,7 +56,7 @@ class IconButtonTest : FreeSpec() {
         }
 
         "a focused icon button draws the astryx ring outside its bounds" {
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     // room for the ring, which draws 5px beyond the fill
                     IconButton(

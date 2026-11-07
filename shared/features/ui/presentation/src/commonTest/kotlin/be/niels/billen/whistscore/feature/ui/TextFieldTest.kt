@@ -10,7 +10,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.kotest.core.spec.style.FreeSpec
@@ -22,7 +22,7 @@ class TextFieldTest : FreeSpec() {
         "typing reports the new text" {
             val value = mutableStateOf(TextFieldValue(""))
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     UiTheme {
                         TextField(value = value.value, onValueChange = { value.value = it })
@@ -37,7 +37,7 @@ class TextFieldTest : FreeSpec() {
         "a disabled text field exposes no text input action" {
             val value = mutableStateOf(TextFieldValue(""))
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     UiTheme {
                         TextField(
@@ -56,7 +56,7 @@ class TextFieldTest : FreeSpec() {
         "keeps its astryx md height inside a taller container" {
             val value = mutableStateOf(TextFieldValue(""))
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     UiTheme {
                         Box(modifier = Modifier.size(width = 400.dp, height = 600.dp)) {
@@ -71,7 +71,7 @@ class TextFieldTest : FreeSpec() {
         "shows the placeholder only while empty" {
             val value = mutableStateOf(TextFieldValue(""))
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     UiTheme {
                         TextField(

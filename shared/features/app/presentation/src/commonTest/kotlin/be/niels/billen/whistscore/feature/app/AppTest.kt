@@ -8,7 +8,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import be.niels.billen.whistscore.feature.addround.AddRoundViewModel
 import be.niels.billen.whistscore.feature.editplayers.EditPlayersViewModel
@@ -284,7 +284,7 @@ class AppTest : FreeSpec() {
     ) {
         startKoin { modules(testAppModule) }
         try {
-            runSkikoComposeUiTest(size = size) {
+            runComposeUiTest(size = size) {
                 setContent { App(viewModel = AppViewModel(FakeGameRepository())) }
                 block()
             }

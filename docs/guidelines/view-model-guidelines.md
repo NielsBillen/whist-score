@@ -292,4 +292,4 @@ with `replay = 0`, an effect emitted before the turbine subscribes is dropped an
 
 **To test the view's *handling* of an effect**, compose the internal
 state-driven overload with a `MutableSharedFlow` and emit from the test inside
-`runSkikoComposeUiTest`.
+`runComposeUiTest`.

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import be.niels.billen.whistscore.feature.core.DEFAULT_PLAYERS
 import be.niels.billen.whistscore.feature.core.PlayerId
 import be.niels.billen.whistscore.feature.core.Players
@@ -77,7 +77,7 @@ private fun withRoundsView(
     onAction: (RoundsViewAction) -> Unit = {},
     block: suspend ComposeUiTest.() -> Unit,
 ) {
-    runSkikoComposeUiTest {
+    runComposeUiTest {
         setContent {
             RoundsView(game = game, players = players, onAction = onAction)
         }

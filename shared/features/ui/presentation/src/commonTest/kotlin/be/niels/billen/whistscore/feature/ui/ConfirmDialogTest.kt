@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -18,7 +18,7 @@ class ConfirmDialogTest : FreeSpec() {
     init {
         "confirming fires onConfirm and closes the dialog" {
             var confirmed = false
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 withConfirmDialog(
                     onConfirm = { confirmed = true },
                 ) {
@@ -32,7 +32,7 @@ class ConfirmDialogTest : FreeSpec() {
 
         "cancelling closes the dialog without confirming" {
             var confirmed = false
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 withConfirmDialog(
                     onConfirm = { confirmed = true },
                 ) {
@@ -46,7 +46,7 @@ class ConfirmDialogTest : FreeSpec() {
 
         "tapping outside closes the dialog without confirming" {
             var confirmed = false
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 withConfirmDialog(
                     onConfirm = { confirmed = true },
                 ) {

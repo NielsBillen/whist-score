@@ -8,7 +8,8 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -18,7 +19,7 @@ class SelectableCardTest : FreeSpec() {
         "clicking the card fires onClick" {
             var clicked = false
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     MaterialTheme {
                         SelectableCard(
@@ -36,7 +37,7 @@ class SelectableCardTest : FreeSpec() {
         }
 
         "exposes its role as a radio button by default" {
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     MaterialTheme {
                         SelectableCard(selected = false, onClick = { }) {
@@ -52,7 +53,7 @@ class SelectableCardTest : FreeSpec() {
         }
 
         "exposes the given role" {
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     MaterialTheme {
                         SelectableCard(selected = false, onClick = { }, role = Role.Checkbox) {
@@ -70,7 +71,7 @@ class SelectableCardTest : FreeSpec() {
         "a disabled card does not fire onClick" {
             var clicked = false
 
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     MaterialTheme {
                         SelectableCard(

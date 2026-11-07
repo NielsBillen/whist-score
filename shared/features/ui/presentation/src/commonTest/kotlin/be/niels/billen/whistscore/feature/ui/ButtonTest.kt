@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runSkikoComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldNotBe
 class ButtonTest : FreeSpec() {
     init {
         "a focused button draws the astryx ring outside its bounds" {
-            runSkikoComposeUiTest {
+            runComposeUiTest {
                 setContent {
                     // room for the ring, which draws 5px beyond the fill
                     Button(onClick = {}, modifier = Modifier.padding(24.dp)) { Text("Save") }
