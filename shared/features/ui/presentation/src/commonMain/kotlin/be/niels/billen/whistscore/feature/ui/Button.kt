@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -67,7 +66,6 @@ fun Button(
         modifier =
             modifier
                 .heightIn(min = 32.dp)
-                .clip(shape)
                 .background(color = variant.backgroundColor, shape = shape)
                 .clickable(
                     onClick = onClick,
