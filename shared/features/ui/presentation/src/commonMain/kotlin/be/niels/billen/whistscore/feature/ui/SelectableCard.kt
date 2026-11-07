@@ -24,15 +24,21 @@ fun SelectableCard(
         modifier =
             modifier
                 .background(
-                    color = if (state.selected)
-                        MaterialTheme.colorScheme.surfaceBright
-                    else MaterialTheme.colorScheme.surface,
+                    color =
+                        if (state.selected) {
+                            MaterialTheme.colorScheme.surfaceBright
+                        } else {
+                            MaterialTheme.colorScheme.surface
+                        },
                     shape = shape,
                 ).border(
                     width = 1.dp,
                     color =
-                        if (state.selected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.outlineVariant,
+                        if (state.selected) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outlineVariant
+                        },
                     shape = shape,
                 ).semantics { this.role = state.role }
                 .clickable(

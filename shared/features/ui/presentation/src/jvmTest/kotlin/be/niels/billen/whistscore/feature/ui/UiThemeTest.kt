@@ -26,7 +26,7 @@ class UiThemeTest : FreeSpec() {
                 }
             }
             titleFontFamily.shouldNotBeNull()
-            val fonts = (titleFontFamily as? FontListFontFamily)?.fonts ?: emptyList()
+            val fonts = (titleFontFamily as? FontListFontFamily)?.fonts.orEmpty()
             fonts.shouldHaveSize(3)
         }
 

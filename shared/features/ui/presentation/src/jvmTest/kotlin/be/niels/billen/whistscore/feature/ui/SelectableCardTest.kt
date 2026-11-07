@@ -3,13 +3,13 @@ package be.niels.billen.whistscore.feature.ui
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.semantics.Role
-import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -56,7 +56,10 @@ class SelectableCardTest : FreeSpec() {
             runComposeUiTest {
                 setContent {
                     MaterialTheme {
-                        SelectableCard(state = SelectableCardState(selected = false, role = Role.Checkbox), onClick = { }) {
+                        SelectableCard(
+                            state = SelectableCardState(selected = false, role = Role.Checkbox),
+                            onClick = { },
+                        ) {
                             Text(text = "Alpha")
                         }
                     }

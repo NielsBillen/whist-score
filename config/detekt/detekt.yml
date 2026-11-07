@@ -6,3 +6,11 @@ naming:
 style:
   MagicNumber:
     active: false
+
+Compose:
+  # route composables receive the ViewModel/backStack to wire callbacks into the app
+  # screen — the forwarding is intentional, not a layering smell
+  ViewModelForwarding:
+    active: false
+  MutableParams:
+    active: false

@@ -19,23 +19,13 @@ detekt {
 
 // Full-mode tasks analyze Kotlin compilations, which carry generated sources
 // (compose resources, svg icons) — never lint generated code. The generated
-// dir is itself a source root, so `exclude("**/generated/**")` (relative to
-// each root) can't match; filter by absolute path instead.
-//
-// `ConfigurableFileCollection.filter` returns a new collection (no mutation),
-// so capture first and reassign via `setFrom`.
-private fun filterGeneratedSources(source: ConfigurableFileCollection) {
-    val filtered = source.filter { file ->
-        !file.absolutePath.replace('\\', '/').contains("/build/generated/")
-    }
-    source.setFrom(filtered)
-}
-
+// dir is itself a source root, so Ant patterns (relative to each root) can't
+// match it; exclude by absolute path instead.
 tasks.withType<Detekt>().configureEach {
-    filterGeneratedSources(source)
+    exclude { it.file.absolutePath.replace('\\', '/').contains("/build/generated/") }
 }
 tasks.withType<DetektCreateBaselineTask>().configureEach {
-    filterGeneratedSources(source)
+    exclude { it.file.absolutePath.replace('\\', '/').contains("/build/generated/") }
 }
 
 // The plain `detekt` task (light) is already wired to `check`; the full-mode

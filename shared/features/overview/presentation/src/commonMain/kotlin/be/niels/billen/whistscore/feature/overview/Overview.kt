@@ -86,7 +86,6 @@ internal fun Overview(
 private fun NewGameDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     ConfirmDialog(
         title = "New game",
@@ -94,7 +93,6 @@ private fun NewGameDialog(
         confirmText = "Start new game",
         onConfirm = onConfirm,
         onDismiss = onDismiss,
-        modifier = modifier,
     )
 }
 
