@@ -17,11 +17,10 @@ dependencies {
     implementation(projects.shared.features.players.data)
 
     implementation(libs.compose.ui)
-    implementation(libs.compose.foundation)
+    implementation(libs.compose.runtime)
     implementation(libs.kotlinx.coroutines.swing)
 
     implementation(libs.koin)
-    implementation(libs.compose.uiToolingPreview)
     implementation(libs.multiplatform.settings)
     implementation(compose.desktop.currentOs)
 }

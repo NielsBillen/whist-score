@@ -3,8 +3,8 @@ package be.niels.billen.whistscore.feature.ui
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.SkikoComposeUiTest
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -65,9 +65,9 @@ class ConfirmDialogTest : FreeSpec() {
 }
 
 @OptIn(ExperimentalTestApi::class)
-private suspend fun SkikoComposeUiTest.withConfirmDialog(
+private suspend fun ComposeUiTest.withConfirmDialog(
     onConfirm: () -> Unit,
-    block: suspend SkikoComposeUiTest.() -> Unit,
+    block: suspend ComposeUiTest.() -> Unit,
 ) {
     setContent {
         val visible = remember { mutableStateOf(true) }

@@ -172,7 +172,6 @@ class AddRoundViewTest : FreeSpec() {
                         },
                         effects = viewModel.effects,
                         state = state,
-                        initialState = initialState,
                     )
                 }
                 block()

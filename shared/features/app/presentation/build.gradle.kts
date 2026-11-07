@@ -26,15 +26,17 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.compose.runtime.saveable)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.androidx.nav3.ui)
+            implementation(libs.compose.animation)
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
             implementation(libs.compose.ui)
-            implementation(libs.koin.compose)
+            implementation(libs.koin)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.core.viewmodel)
             implementation(projects.shared.features.addround.presentation)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
@@ -44,16 +46,19 @@ kotlin {
             implementation(projects.shared.features.ui.presentation)
         }
         commonTest.dependencies {
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.ui)
             implementation(libs.compose.ui.test)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.turbine)
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.koin)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)
+        }
+        androidMain.dependencies {
+            runtimeOnly(libs.kotlinx.coroutines.android)
         }
     }
 }

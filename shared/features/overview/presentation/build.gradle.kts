@@ -12,15 +12,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
             implementation(libs.compose.ui)
-            implementation(libs.koin.compose)
+            implementation(libs.koin)
             implementation(libs.koin.compose.viewmodel)
-            implementation(projects.shared.features.core.domain)
-            implementation(projects.shared.features.core.presentation)
+            implementation(libs.koin.core.viewmodel)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)

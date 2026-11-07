@@ -28,34 +28,33 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AddRoundView(
-    modifier: Modifier = Modifier,
-    viewModel: AddRoundViewModel = koinViewModel(),
     onCancel: () -> Unit,
     onSave: (Round) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: AddRoundViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
 
     AddRoundView(
-        modifier = modifier,
         onCancel = onCancel,
         onSave = onSave,
-        state = state,
         onAction = viewModel::onAction,
         effects = viewModel.effects,
+        state = state,
+        modifier = modifier,
     )
 }
 
 @Composable
 internal fun AddRoundView(
-    modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     onSave: (Round) -> Unit,
     onAction: (AddRoundAction) -> Unit,
     effects: SharedFlow<AddRoundEffect>,
     state: AddRoundState,
-    initialState: AddRoundState = AddRoundState(),
+    modifier: Modifier = Modifier,
 ) {
-    val backStack = remember { mutableStateListOf(initialState.screen) }
+    val backStack = remember { mutableStateListOf(state.screen) }
 
     Column(
         modifier = modifier,
@@ -71,22 +70,17 @@ internal fun AddRoundView(
 
         backStack.lastOrNull()?.let { screen ->
             ButtonRow(
-                state = state,
                 screen = screen,
                 onBack = {
-                    if (!backStack.isEmpty()) {
-                        backStack.removeLast()
+                    when (screen) {
+                        AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
+
+                        else -> if (backStack.isNotEmpty()) backStack.removeLast()
                     }
                 },
                 onSave = { state.round?.let(onSave) },
+                state = state,
                 onAction = onAction,
-                onCancel = onCancel,
-                modifier =
-                    Modifier.fillMaxWidth().padding(
-                        start = Style.Dimensions.paddingSmall,
-                        end = Style.Dimensions.paddingSmall,
-                        bottom = Style.Dimensions.paddingSmall,
-                    ),
             )
         }
     }
@@ -101,10 +95,10 @@ private val screenModifier =
 
 @Composable
 private fun AddRoundScreens(
-    modifier: Modifier = Modifier,
     onAction: (AddRoundAction) -> Unit,
     effects: SharedFlow<AddRoundEffect>,
     backStack: SnapshotStateList<AddRoundScreen>,
+    modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(effects) {
         effects.collect { effect ->
@@ -119,76 +113,66 @@ private fun AddRoundScreens(
         backStack = backStack,
         modifier = modifier,
         contentAlignment = Alignment.Center,
-        entryProvider = { key ->
-            when (key) {
-                AddRoundScreen.SELECT_ROUND_TYPE -> {
-                    NavEntry(key) {
-                        RoundTypeInputScreen(
-                            modifier = screenModifier,
-                            onRoundTypeSelected = { onAction(AddRoundAction.SetRoundType(it)) },
-                        )
-                    }
-                }
-
-                AddRoundScreen.SELECT_PLAYERS -> {
-                    NavEntry(key) {
-                        PlayerSelectionScreen(
-                            modifier = screenModifier,
-                            onSelectionChange = { id, selected ->
-                                onAction(
-                                    AddRoundAction.SetPlayerSelected(
-                                        playerId = id,
-                                        selected = selected,
-                                    ),
-                                )
-                            },
-                        )
-                    }
-                }
-
-                AddRoundScreen.SELECT_SLAMS -> {
-                    NavEntry(key) {
-                        SlamInputScreen(
-                            modifier = screenModifier,
-                            onSlamsSelected = { onAction(AddRoundAction.SetSlams(it)) },
-                        )
-                    }
-                }
-
-                AddRoundScreen.SELECT_BID_ACHIEVED -> {
-                    NavEntry(key) {
-                        BidAchievedInput(
-                            modifier = screenModifier,
-                            onBidAchievedSelected = { onAction(AddRoundAction.SetBidAchieved(it)) },
-                        )
-                    }
-                }
-
-                AddRoundScreen.SUMMARY -> {
-                    NavEntry(key) {
-                        SummaryScreen(modifier = screenModifier)
-                    }
-                }
-            }
-        },
+        entryProvider = { key -> screenEntry(key, onAction) },
         transitionSpec = slideTransition(1),
         popTransitionSpec = slideTransition(-1),
     )
 }
 
+private fun screenEntry(
+    key: AddRoundScreen,
+    onAction: (AddRoundAction) -> Unit,
+): NavEntry<AddRoundScreen> =
+    NavEntry(key) {
+        when (key) {
+            AddRoundScreen.SELECT_ROUND_TYPE -> RoundTypeInputScreen(
+                modifier = screenModifier,
+                onRoundTypeSelected = { type -> onAction(AddRoundAction.SetRoundType(type)) },
+            )
+
+            AddRoundScreen.SELECT_PLAYERS -> PlayerSelectionScreen(
+                modifier = screenModifier,
+                onSelectionChange = { id, selected ->
+                    onAction(
+                        AddRoundAction.SetPlayerSelected(
+                            playerId = id,
+                            selected = selected,
+                        ),
+                    )
+                },
+            )
+
+            AddRoundScreen.SELECT_SLAMS -> SlamInputScreen(
+                modifier = screenModifier,
+                onSlamsSelected = { slams -> onAction(AddRoundAction.SetSlams(slams)) },
+            )
+
+            AddRoundScreen.SELECT_BID_ACHIEVED -> BidAchievedInput(
+                modifier = screenModifier,
+                onBidAchievedSelected = { achieved -> onAction(AddRoundAction.SetBidAchieved(achieved)) },
+            )
+
+            AddRoundScreen.SUMMARY -> SummaryScreen(modifier = screenModifier)
+        }
+    }
+
 @Composable
 private fun ButtonRow(
     screen: AddRoundScreen,
-    state: AddRoundState,
     onBack: () -> Unit,
-    onCancel: () -> Unit,
     onSave: () -> Unit,
+    state: AddRoundState,
     onAction: (AddRoundAction) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
-            modifier
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = Style.Dimensions.paddingSmall,
+                    end = Style.Dimensions.paddingSmall,
+                    bottom = Style.Dimensions.paddingSmall,
+                )
                 .fillMaxWidth()
                 .requiredWidthIn(max = 800.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -197,45 +181,24 @@ private fun ButtonRow(
             text = "Back",
             variant = ButtonVariant.Secondary,
             modifier = Modifier.widthIn(min = 96.dp),
-            onClick = {
-                when (screen) {
-                    AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
-
-                    AddRoundScreen.SELECT_PLAYERS,
-                    AddRoundScreen.SELECT_SLAMS,
-                    AddRoundScreen.SELECT_BID_ACHIEVED,
-                    AddRoundScreen.SUMMARY,
-                    -> onBack()
-                }
-            },
+            onClick = onBack,
         )
 
         when (screen) {
             AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
 
-            AddRoundScreen.SELECT_PLAYERS -> SelectPlayersNextButton(state = state, onAction = onAction)
+            AddRoundScreen.SELECT_PLAYERS ->
+                if (state.roundType?.singlePlayer != true) {
+                    NextButton(
+                        enabled = state.players.isNotEmpty(),
+                        onClick = { onAction(AddRoundAction.ConfirmPlayers) },
+                    )
+                }
 
             AddRoundScreen.SELECT_ROUND_TYPE,
             AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SELECT_BID_ACHIEVED,
             -> Unit
-        }
-    }
-}
-
-@Composable
-private fun SelectPlayersNextButton(
-    state: AddRoundState,
-    onAction: (AddRoundAction) -> Unit,
-) {
-    when (state.roundType?.singlePlayer == true) {
-        true -> {}
-
-        false -> {
-            NextButton(
-                enabled = state.players.isNotEmpty(),
-                onClick = { onAction(AddRoundAction.ConfirmPlayers) },
-            )
         }
     }
 }

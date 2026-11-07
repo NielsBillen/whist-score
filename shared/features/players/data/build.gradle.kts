@@ -19,7 +19,6 @@ kotlin {
             implementation(libs.multiplatform.settings.serialization)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.game.data)
-            implementation(projects.shared.features.game.domain)
             implementation(projects.shared.features.players.domain)
         }
     }

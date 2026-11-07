@@ -13,9 +13,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // not in the extracted compose set: this module applies no Compose plugin
-            implementation(libs.compose.runtime)
+            implementation(libs.androidx.compose.runtime.annotation)
             implementation(libs.kotlinx.collections.immutable)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.framework.engine)
+        }
+        androidMain.dependencies {
+            runtimeOnly(libs.kotlinx.coroutines.android)
         }
     }
 }
