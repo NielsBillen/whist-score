@@ -74,7 +74,6 @@ internal fun AddRoundView(
                 onBack = {
                     when (screen) {
                         AddRoundScreen.SELECT_ROUND_TYPE -> onCancel()
-
                         else -> if (backStack.isNotEmpty()) backStack.removeLast()
                     }
                 },
@@ -125,34 +124,44 @@ private fun screenEntry(
 ): NavEntry<AddRoundScreen> =
     NavEntry(key) {
         when (key) {
-            AddRoundScreen.SELECT_ROUND_TYPE -> RoundTypeInputScreen(
-                modifier = screenModifier,
-                onRoundTypeSelected = { type -> onAction(AddRoundAction.SetRoundType(type)) },
-            )
+            AddRoundScreen.SELECT_ROUND_TYPE -> {
+                RoundTypeInputScreen(
+                    modifier = screenModifier,
+                    onRoundTypeSelected = { type -> onAction(AddRoundAction.SetRoundType(type)) },
+                )
+            }
 
-            AddRoundScreen.SELECT_PLAYERS -> PlayerSelectionScreen(
-                modifier = screenModifier,
-                onSelectionChange = { id, selected ->
-                    onAction(
-                        AddRoundAction.SetPlayerSelected(
-                            playerId = id,
-                            selected = selected,
-                        ),
-                    )
-                },
-            )
+            AddRoundScreen.SELECT_PLAYERS -> {
+                PlayerSelectionScreen(
+                    modifier = screenModifier,
+                    onSelectionChange = { id, selected ->
+                        onAction(
+                            AddRoundAction.SetPlayerSelected(
+                                playerId = id,
+                                selected = selected,
+                            ),
+                        )
+                    },
+                )
+            }
 
-            AddRoundScreen.SELECT_SLAMS -> SlamInputScreen(
-                modifier = screenModifier,
-                onSlamsSelected = { slams -> onAction(AddRoundAction.SetSlams(slams)) },
-            )
+            AddRoundScreen.SELECT_SLAMS -> {
+                SlamInputScreen(
+                    modifier = screenModifier,
+                    onSlamsSelected = { slams -> onAction(AddRoundAction.SetSlams(slams)) },
+                )
+            }
 
-            AddRoundScreen.SELECT_BID_ACHIEVED -> BidAchievedInput(
-                modifier = screenModifier,
-                onBidAchievedSelected = { achieved -> onAction(AddRoundAction.SetBidAchieved(achieved)) },
-            )
+            AddRoundScreen.SELECT_BID_ACHIEVED -> {
+                BidAchievedInput(
+                    modifier = screenModifier,
+                    onBidAchievedSelected = { achieved -> onAction(AddRoundAction.SetBidAchieved(achieved)) },
+                )
+            }
 
-            AddRoundScreen.SUMMARY -> SummaryScreen(modifier = screenModifier)
+            AddRoundScreen.SUMMARY -> {
+                SummaryScreen(modifier = screenModifier)
+            }
         }
     }
 
@@ -172,8 +181,7 @@ private fun ButtonRow(
                     start = Style.Dimensions.paddingSmall,
                     end = Style.Dimensions.paddingSmall,
                     bottom = Style.Dimensions.paddingSmall,
-                )
-                .fillMaxWidth()
+                ).fillMaxWidth()
                 .requiredWidthIn(max = 800.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -185,20 +193,25 @@ private fun ButtonRow(
         )
 
         when (screen) {
-            AddRoundScreen.SUMMARY -> SaveButton(onClick = onSave)
+            AddRoundScreen.SUMMARY -> {
+                SaveButton(onClick = onSave)
+            }
 
-            AddRoundScreen.SELECT_PLAYERS ->
+            AddRoundScreen.SELECT_PLAYERS -> {
                 if (state.roundType?.singlePlayer != true) {
                     NextButton(
                         enabled = state.players.isNotEmpty(),
                         onClick = { onAction(AddRoundAction.ConfirmPlayers) },
                     )
                 }
+            }
 
             AddRoundScreen.SELECT_ROUND_TYPE,
             AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SELECT_BID_ACHIEVED,
-            -> Unit
+            -> {
+                Unit
+            }
         }
     }
 }

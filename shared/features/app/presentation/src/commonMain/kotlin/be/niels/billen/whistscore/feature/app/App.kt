@@ -59,16 +59,22 @@ fun App(
                     ),
                 entryProvider = { key ->
                     when (key) {
-                        is AppNavigation.OverviewRoute -> NavEntry(key) {
-                            OverviewRoute(viewModel = viewModel, backStack = backStack)
+                        is AppNavigation.OverviewRoute -> {
+                            NavEntry(key) {
+                                OverviewRoute(viewModel = viewModel, backStack = backStack)
+                            }
                         }
 
-                        is AppNavigation.AddRoundRoute -> NavEntry(key) {
-                            AddRoundRoute(viewModel = viewModel, backStack = backStack)
+                        is AppNavigation.AddRoundRoute -> {
+                            NavEntry(key) {
+                                AddRoundRoute(viewModel = viewModel, backStack = backStack)
+                            }
                         }
 
-                        is AppNavigation.EditPlayersRoute -> NavEntry(key) {
-                            EditPlayersRoute(backStack = backStack)
+                        is AppNavigation.EditPlayersRoute -> {
+                            NavEntry(key) {
+                                EditPlayersRoute(backStack = backStack)
+                            }
                         }
                     }
                 },
