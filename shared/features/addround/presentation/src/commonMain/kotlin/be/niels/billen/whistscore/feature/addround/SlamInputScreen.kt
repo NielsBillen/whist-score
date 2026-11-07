@@ -12,29 +12,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SlamInputScreen(
+    onSlamsChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onSlamsSelected: (Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     SlamInputScreen(
-        modifier = modifier,
         selectedSlams = state.slams,
-        onSlamsSelected = onSlamsSelected,
+        onSlamsChange = onSlamsChange,
+        modifier = modifier,
     )
 }
 
 @Composable
 internal fun SlamInputScreen(
     selectedSlams: Int?,
+    onSlamsChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onSlamsSelected: (Int) -> Unit,
 ) {
     AddRoundPanel(
         title = "Select slams",
@@ -43,26 +44,28 @@ internal fun SlamInputScreen(
     ) {
         FlowRow(
             maxItemsInEachRow = 7,
-            horizontalArrangement = Arrangement.spacedBy(
-                Style.Dimensions.paddingLarge,
-                Alignment.CenterHorizontally
-            ),
-            verticalArrangement = Arrangement.spacedBy(
-                Style.Dimensions.paddingLarge,
-                Alignment.CenterVertically
-            )
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    Style.Dimensions.paddingLarge,
+                    Alignment.CenterHorizontally,
+                ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    Style.Dimensions.paddingLarge,
+                    Alignment.CenterVertically,
+                ),
         ) {
             for (slams in 0..13) {
                 val selected = selectedSlams == slams
 
                 SelectableCard(
-                    selected = selected,
-                    onClick = { onSlamsSelected(slams) },
-                    modifier = Modifier.requiredSize(56.dp)
+                    state = SelectableCardState(selected = selected),
+                    onClick = { onSlamsChange(slams) },
+                    modifier = Modifier.requiredSize(56.dp),
                 ) {
                     Text(
                         text = "$slams",
-                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center),
                     )
                 }
             }

@@ -1,43 +1,39 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidMultiplatformLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    id("kmp-library")
+    id("compose")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest)
-    alias(libs.plugins.ksp)
+    id(libs.plugins.ksp.get().pluginId) // must precede test: kotest's wasm wiring checks for it
+    id("kmp-test")
 }
 
 kotlin {
     android {
         namespace = "be.niels.billen.whistscore.feature.rounds.presentation"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        compilerOptions { jvmTarget = JvmTarget.JVM_11 }
-        androidResources { enable = true }
     }
-//    (iOS block stays commented out, same as shared)
-    jvm()
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodejs()
-        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
+        // not in the kotlin script: skiko wasm cannot load under Node
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
     }
+
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.compose.components.resources)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.runtime)
             implementation(libs.compose.ui)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.koin.compose)
+            implementation(libs.koin)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.core.viewmodel)
             implementation(libs.kotlinx.collections.immutable)
             implementation(projects.shared.features.core.domain)
             implementation(projects.shared.features.core.presentation)
@@ -46,22 +42,20 @@ kotlin {
             implementation(projects.shared.features.ui.presentation)
         }
         commonTest.dependencies {
-            implementation(libs.compose.ui.test)
-            implementation(libs.kotest.framework.engine)
-            implementation(libs.kotest.assertions.core)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.foundation)
             implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.turbine)
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.framework.engine)
         }
-        // JVM-only artifacts: commonTest would resolve them against the wasm test classpath.
+        // UI tests only run on the jvm target: Compose MP does not put skiko's
+        // native runtime on a plain KMP test classpath, so the desktop library
+        // must be declared here (upstream: JetBrains/compose-multiplatform#1352).
         jvmTest.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotest.runner.junit5)
+            implementation(libs.compose.desktop)
+            implementation(libs.compose.ui.test)
+            implementation(libs.skiko.awt.runtime.linux.x64)
+        }
+        androidMain.dependencies {
+            runtimeOnly(libs.kotlinx.coroutines.android)
         }
     }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }

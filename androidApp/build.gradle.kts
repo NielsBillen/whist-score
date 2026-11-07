@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    id(libs.plugins.androidApplication.get().pluginId)
+    id(libs.plugins.composeMultiplatform.get().pluginId)
+    id(libs.plugins.composeCompiler.get().pluginId)
 }
 
 
@@ -26,10 +26,14 @@ kotlin {
         implementation(projects.shared.features.players.presentation)
         implementation(projects.shared.features.rounds.presentation)
 
+        implementation(libs.androidx.activity)
         implementation(libs.androidx.activity.compose)
-        implementation(libs.compose.uiToolingPreview)
+        implementation(libs.androidx.compose.ui)
+        implementation(libs.androidx.compose.ui.tooling.preview)
+        implementation(libs.compose.runtime)
         implementation(libs.koin)
         implementation(libs.multiplatform.settings)
+        debugImplementation(libs.multiplatform.settings.android.debug)
     }
 }
 

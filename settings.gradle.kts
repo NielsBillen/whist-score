@@ -15,6 +15,18 @@ pluginManagement {
     }
 }
 
+plugins {
+    // Dependency analysis — auto-applies to every project; configured in the root build file
+    id("com.autonomousapps.build-health") version "3.20.1"
+
+    // Classloader requirement: the Kotlin/Android plugins must load in the same
+    // (or parent) classloader as the analysis plugin, or analysis fails with
+    // TypeNotPresentException. Versions must match the modules.
+    id("org.jetbrains.kotlin.multiplatform") version "2.4.21" apply false
+    id("org.jetbrains.kotlin.android") version "2.4.21" apply false
+    id("com.android.application") version "9.3.3" apply false
+}
+
 dependencyResolutionManagement {
     repositories {
         google {

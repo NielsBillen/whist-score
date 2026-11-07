@@ -34,9 +34,10 @@ fun AppShell(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Style.Colors.body),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(Style.Colors.body),
     ) {
         TopBar(
             title = title,
@@ -50,13 +51,16 @@ fun AppShell(
 }
 
 @Composable
-private fun AppContent(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
+private fun AppContent(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Box(modifier = modifier) {
         Background(modifier = Modifier.fillMaxSize(), tint = Style.Colors.surface)
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            content = content
+            content = content,
         )
     }
 }
@@ -73,10 +77,12 @@ private fun TopBar(
         contentAlignment = Alignment.Center,
     ) {
         Row(
-            modifier = Modifier.padding(
-                vertical = Style.Dimensions.paddingSmall,
-                horizontal = Style.Dimensions.paddingLarge
-            ).widthIn(max = 800.dp),
+            modifier =
+                Modifier
+                    .padding(
+                        vertical = Style.Dimensions.paddingSmall,
+                        horizontal = Style.Dimensions.paddingLarge,
+                    ).widthIn(max = 800.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -96,17 +102,18 @@ private fun AppTitle(
     Row(
         horizontalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingSmall),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         appIcon?.let {
             Icon(
                 imageVector = appIcon,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(color = Color.White, shape = CircleShape)
-                    .padding(4.dp),
-                tint = Style.Colors.body
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .background(color = Color.White, shape = CircleShape)
+                        .padding(4.dp),
+                tint = Style.Colors.body,
             )
         }
 

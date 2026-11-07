@@ -189,7 +189,7 @@ there is visible to consumers.
 
 ## Compose UI tests
 
-**Compose UI tests run on the `jvm` target** via `runSkikoComposeUiTest`
+**Compose UI tests run on the `jvm` target** via `runComposeUiTest`
 (`androidx.compose.ui.test.v2`), with kotest assertions inside them, and match
 nodes by their visible text (`onNodeWithText`) or content description
 (`onNodeWithContentDescription`) — never by tags.

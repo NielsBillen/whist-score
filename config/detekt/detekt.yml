@@ -1,0 +1,16 @@
+naming:
+  FunctionNaming:
+    # composables are PascalCase by code guideline; the default pattern only allows camelCase
+    functionPattern: '[a-z][a-zA-Z0-9]*|[A-Z][a-zA-Z0-9]*'
+
+style:
+  MagicNumber:
+    active: false
+
+Compose:
+  # route composables receive the ViewModel/backStack to wire callbacks into the app
+  # screen — the forwarding is intentional, not a layering smell
+  ViewModelForwarding:
+    active: false
+  MutableParams:
+    active: false

@@ -11,21 +11,21 @@ import kotlinx.coroutines.flow.stateIn
 
 class RoundsViewModel(
     private val gameRepository: GameRepository,
-    playerRepository: PlayerRepository
-) :
-    ViewModel() {
-    val game = gameRepository.game.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = Game.DEFAULT
-    )
+    playerRepository: PlayerRepository,
+) : ViewModel() {
+    val game =
+        gameRepository.game.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = Game.DEFAULT,
+        )
 
-
-    val players = playerRepository.players.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = DEFAULT_PLAYERS
-    )
+    val players =
+        playerRepository.players.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = DEFAULT_PLAYERS,
+        )
 
     fun onAction(action: RoundsViewAction) {
         when (action) {

@@ -1,47 +1,27 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidMultiplatformLibrary)
+    id("kmp-library")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kover)
+    id(libs.plugins.ksp.get().pluginId) // must precede test: kotest's wasm wiring checks for it
+    id("kmp-test")
+    id(libs.plugins.kover.get().pluginId)
 }
 
 kotlin {
     android {
         namespace = "be.niels.billen.whistscore.feature.core.domain"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        compilerOptions { jvmTarget = JvmTarget.JVM_11 }
-        androidResources { enable = true }
-    }
-//    (iOS block stays commented out, same as shared)
-    jvm()
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        nodejs()
-        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.runtime)
+            implementation(libs.androidx.compose.runtime.annotation)
             implementation(libs.kotlinx.collections.immutable)
         }
-
         commonTest.dependencies {
-            implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.framework.engine)
         }
-        jvmTest.dependencies {
-            implementation(libs.kotest.runner.junit5)
+        androidMain.dependencies {
+            runtimeOnly(libs.kotlinx.coroutines.android)
         }
     }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }

@@ -8,13 +8,13 @@ import io.kotest.matchers.shouldBe
 import kotlinx.collections.immutable.persistentSetOf
 
 class AddRoundStateTest : FreeSpec() {
-
     private val twoPlayers = persistentSetOf(PlayerId.Player1, PlayerId.Player2)
     private val playerOne = persistentSetOf(PlayerId.Player1)
-    private val regularPlayers = AddRoundState(
-        roundType = RoundType.Regular,
-        players = twoPlayers,
-    )
+    private val regularPlayers =
+        AddRoundState(
+            roundType = RoundType.Regular,
+            players = twoPlayers,
+        )
 
     init {
         "an empty state builds no round" {
@@ -65,21 +65,23 @@ class AddRoundStateTest : FreeSpec() {
 
         "an abandonce round builds once the bid outcome is known" - {
             "a made bid builds a won abandonce" {
-                val state = AddRoundState(
-                    roundType = RoundType.Abandonce,
-                    players = playerOne,
-                    bidAchieved = true,
-                )
+                val state =
+                    AddRoundState(
+                        roundType = RoundType.Abandonce,
+                        players = playerOne,
+                        bidAchieved = true,
+                    )
 
                 state.round shouldBe Round.Abandonce(PlayerId.Player1, playerWon = true)
             }
 
             "a missed bid builds a failed abandonce" {
-                val state = AddRoundState(
-                    roundType = RoundType.Abandonce,
-                    players = playerOne,
-                    bidAchieved = false,
-                )
+                val state =
+                    AddRoundState(
+                        roundType = RoundType.Abandonce,
+                        players = playerOne,
+                        bidAchieved = false,
+                    )
 
                 state.round shouldBe Round.Abandonce(PlayerId.Player1, playerWon = false)
             }
@@ -92,11 +94,12 @@ class AddRoundStateTest : FreeSpec() {
         }
 
         "an abandonce in trump round builds the same abandonce from its first player" {
-            val state = AddRoundState(
-                roundType = RoundType.AbandonceInTrump,
-                players = playerOne,
-                bidAchieved = true,
-            )
+            val state =
+                AddRoundState(
+                    roundType = RoundType.AbandonceInTrump,
+                    players = playerOne,
+                    bidAchieved = true,
+                )
 
             state.round shouldBe Round.Abandonce(PlayerId.Player1, playerWon = true)
         }
@@ -123,21 +126,23 @@ class AddRoundStateTest : FreeSpec() {
 
         "an open misere round builds once the bid outcome is known" - {
             "taking no slams builds a won open misere" {
-                val state = AddRoundState(
-                    roundType = RoundType.OpenMisere,
-                    players = playerOne,
-                    bidAchieved = true,
-                )
+                val state =
+                    AddRoundState(
+                        roundType = RoundType.OpenMisere,
+                        players = playerOne,
+                        bidAchieved = true,
+                    )
 
                 state.round shouldBe Round.OpenMisere(PlayerId.Player1, playerWon = true)
             }
 
             "taking a slam builds a failed open misere" {
-                val state = AddRoundState(
-                    roundType = RoundType.OpenMisere,
-                    players = playerOne,
-                    bidAchieved = false,
-                )
+                val state =
+                    AddRoundState(
+                        roundType = RoundType.OpenMisere,
+                        players = playerOne,
+                        bidAchieved = false,
+                    )
 
                 state.round shouldBe Round.OpenMisere(PlayerId.Player1, playerWon = false)
             }

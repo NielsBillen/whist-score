@@ -43,8 +43,8 @@ fun RoundsView(
 fun RoundsView(
     game: Game,
     players: Players,
-    modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Table(
         rows = game.rounds.rounds,
@@ -57,12 +57,15 @@ fun RoundsView(
             )
         },
         emptyContent = ::NoRoundsMessage,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
 @Composable
-private fun RowScope.RoundHeader(game: Game, players: Players) {
+private fun RowScope.RoundHeader(
+    game: Game,
+    players: Players,
+) {
     Text(
         text = "#",
         modifier = Modifier.width(ROUNDS_COLUMN_WIDTH),
@@ -102,7 +105,7 @@ private fun RowScope.RoundRow(
     for (playerId in game.order) {
         Points(
             points = game.rounds.points(index, playerId),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 

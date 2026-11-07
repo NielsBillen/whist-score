@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,19 +27,19 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun Overview(
-    modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = koinViewModel(),
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: OverviewViewModel = koinViewModel(),
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
     var showNewGameDialog by remember { mutableStateOf(false) }
 
     Overview(
         canStartNewGame = canStartNewGame,
-        onNewGameRequested = { showNewGameDialog = true },
+        onNewGameRequest = { showNewGameDialog = true },
         onAddRound = onAddRound,
-        modifier = modifier.padding(Style.Dimensions.paddingSmall)
+        modifier = modifier.padding(Style.Dimensions.paddingSmall),
     )
 
     if (showNewGameDialog) {
@@ -47,7 +48,7 @@ fun Overview(
                 showNewGameDialog = false
                 onResetGame()
             },
-            onDismiss = { showNewGameDialog = false }
+            onDismiss = { showNewGameDialog = false },
         )
     }
 }
@@ -55,16 +56,17 @@ fun Overview(
 @Composable
 internal fun Overview(
     canStartNewGame: Boolean,
-    onNewGameRequested: () -> Unit,
+    onNewGameRequest: () -> Unit,
     onAddRound: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .wrapContentWidth()
-            .widthIn(max = 800.dp),
+        modifier =
+            modifier
+                .wrapContentWidth()
+                .widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
     ) {
         PlayersView()
 
@@ -72,36 +74,34 @@ internal fun Overview(
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
-            onNewGameRequested = onNewGameRequested,
+            onNewGameRequest = onNewGameRequest,
             onAddRound = onAddRound,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
 
 @Composable
+@NonRestartableComposable
 private fun NewGameDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     ConfirmDialog(
         title = "New game",
         body = "Starting a new game will discard all recorded rounds and reset the scoreboard.",
         confirmText = "Start new game",
-        dismissText = "Cancel",
         onConfirm = onConfirm,
         onDismiss = onDismiss,
-        modifier = modifier
     )
 }
 
 @Composable
 private fun ButtonRow(
     canStartNewGame: Boolean,
-    onNewGameRequested: () -> Unit,
+    onNewGameRequest: () -> Unit,
     onAddRound: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val buttonModifier = Modifier.widthIn(min = 96.dp)
 
@@ -112,15 +112,15 @@ private fun ButtonRow(
         TextButton(
             variant = ButtonVariant.Destructive,
             enabled = canStartNewGame,
-            onClick = onNewGameRequested,
+            onClick = onNewGameRequest,
             modifier = buttonModifier,
-            text = "New game"
+            text = "New game",
         )
 
         TextButton(
             onClick = onAddRound,
             modifier = buttonModifier,
-            text = "Add round"
+            text = "Add round",
         )
     }
 }

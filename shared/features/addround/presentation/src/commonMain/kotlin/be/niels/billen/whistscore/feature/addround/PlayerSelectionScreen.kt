@@ -16,25 +16,25 @@ import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlayerSelectionScreen(
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val game by viewModel.game.collectAsState()
     val players by viewModel.players.collectAsState()
 
     PlayerSelectionScreen(
-        roundType = requireNotNull(state.roundType),
         game = game,
         players = players,
-        selection = state.players,
+        state = state,
         modifier = modifier,
         onSelectionChange = onSelectionChange,
     )
@@ -42,57 +42,62 @@ fun PlayerSelectionScreen(
 
 @Composable
 internal fun PlayerSelectionScreen(
-    roundType: RoundType,
     game: Game,
     players: Players,
-    selection: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
+    state: AddRoundState,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val roundType = requireNotNull(state.roundType)
+
     AddRoundPanel(
         title = "Select players",
-        description = when (roundType) {
-            RoundType.Pass -> "Everyone passed"
-            RoundType.Regular -> "Select one or two players"
-            RoundType.AbandonceInTrump,
-            RoundType.Misere,
-            RoundType.OpenMisere,
-            RoundType.SoloSlim,
-            RoundType.Abandonce -> "Select the player"
+        description =
+            when (roundType) {
+                RoundType.Pass -> "Everyone passed"
 
-            RoundType.Treble -> "Select the player with three aces and the player with the last ace"
-        },
-        modifier = modifier
+                RoundType.Regular -> "Select one or two players"
+
+                RoundType.AbandonceInTrump,
+                RoundType.Misere,
+                RoundType.OpenMisere,
+                RoundType.SoloSlim,
+                RoundType.Abandonce,
+                -> "Select the player"
+
+                RoundType.Treble -> "Select the player with three aces and the player with the last ace"
+            },
+        modifier = modifier,
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
                 game = game,
                 players = players,
-                selectedPlayers = selection,
-                onSelection = { onSelectionChange(it, true) })
+                selectedPlayers = state.players,
+                onSelection = { onSelectionChange(it, true) },
+            )
         } else {
             MultiPlayerChoice(
                 game = game,
                 players = players,
-                selectedPlayers = selection,
-                onSelectionChange = onSelectionChange
+                selectedPlayers = state.players,
+                onSelectionChange = onSelectionChange,
             )
         }
     }
 }
-
 
 @Composable
 private fun MultiPlayerChoice(
     game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge),
     ) {
         game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
@@ -104,12 +109,11 @@ private fun MultiPlayerChoice(
                 player = player,
                 selected = checked,
                 enabled = enabled,
-                onSelectionChange = onSelectionChange
+                onSelectionChange = onSelectionChange,
             )
         }
     }
 }
-
 
 @Composable
 private fun PlayerCheckBox(
@@ -120,11 +124,9 @@ private fun PlayerCheckBox(
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     SelectableCard(
-        selected = selected,
-        enabled = enabled,
+        state = SelectableCardState(selected = selected, enabled = enabled, role = Role.Checkbox),
         onClick = { onSelectionChange(playerId, !selected) },
         modifier = Modifier.fillMaxWidth(),
-        role = Role.Checkbox,
     ) {
         Text(
             text = player.name,
@@ -138,12 +140,12 @@ private fun SinglePlayerChoice(
     game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
     onSelection: (PlayerId) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge),
     ) {
         game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
@@ -151,9 +153,8 @@ private fun SinglePlayerChoice(
                 playerId = playerId,
                 player = player,
                 selected = playerId in selectedPlayers,
-                onSelection = onSelection
+                onSelection = onSelection,
             )
-
         }
     }
 }
@@ -163,10 +164,10 @@ private fun PlayerRadioButton(
     playerId: PlayerId,
     player: Player,
     selected: Boolean,
-    onSelection: (PlayerId) -> Unit
+    onSelection: (PlayerId) -> Unit,
 ) {
     SelectableCard(
-        selected = selected,
+        state = SelectableCardState(selected = selected),
         onClick = { onSelection(playerId) },
         modifier = Modifier.fillMaxWidth(),
     ) {

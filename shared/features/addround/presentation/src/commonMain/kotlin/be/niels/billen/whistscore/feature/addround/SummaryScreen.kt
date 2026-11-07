@@ -22,7 +22,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SummaryScreen(
     modifier: Modifier = Modifier,
-    viewModel: AddRoundViewModel = koinViewModel()
+    viewModel: AddRoundViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     val game by viewModel.game.collectAsState()
@@ -33,10 +33,10 @@ fun SummaryScreen(
 
 @Composable
 internal fun SummaryScreen(
-    modifier: Modifier = Modifier,
     game: Game,
     players: Players,
     round: Round?,
+    modifier: Modifier = Modifier,
 ) {
     AddRoundPanel(
         title = "Summary",
@@ -52,10 +52,14 @@ internal fun SummaryScreen(
 }
 
 @Composable
-private fun RoundSummary(game: Game, round: Round, players: Players) {
+private fun RoundSummary(
+    game: Game,
+    round: Round,
+    players: Players,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
     ) {
         val nextGame = game + round
         val roundIndex = nextGame.rounds.lastIndex
@@ -69,7 +73,7 @@ private fun RoundSummary(game: Game, round: Round, players: Players) {
                     Text(
                         text = players.getValue(playerId).name,
                         modifier = Modifier.weight(1f),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Points(points = points)
                 }

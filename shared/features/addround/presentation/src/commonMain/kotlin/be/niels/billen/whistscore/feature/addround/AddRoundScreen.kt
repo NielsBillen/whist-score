@@ -7,5 +7,5 @@ enum class AddRoundScreen : NavKey {
     SELECT_PLAYERS,
     SELECT_SLAMS,
     SELECT_BID_ACHIEVED,
-    SUMMARY
+    SUMMARY,
 }

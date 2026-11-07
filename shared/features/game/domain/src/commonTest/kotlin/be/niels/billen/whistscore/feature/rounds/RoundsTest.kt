@@ -8,7 +8,6 @@ import kotlinx.collections.immutable.persistentHashSetOf
 import kotlinx.collections.immutable.persistentListOf
 
 class RoundsTest : FreeSpec() {
-
     private val regular = Round.Regular(playerIds = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2), slams = 8)
 
     init {

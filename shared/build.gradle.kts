@@ -1,46 +1,14 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidMultiplatformLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest)
-    alias(libs.plugins.ksp)
+    id("kmp-library")
+    id("compose")
+    // ksp must precede kotest: kotest's wasm wiring checks for it when the wasmJs
+    // target is created by the kotlin script, i.e. before later plugins are applied
+    id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.kotest.get().pluginId)
 }
 
 kotlin {
     android {
         namespace = "be.niels.billen.shared"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
-        androidResources {
-            enable = true
-        }
-    }
-
-//    listOf(
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "Shared"
-//            isStatic = true
-//        }
-//    }
-
-    jvm()
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        nodejs()
-        compilerOptions { optIn.add("kotlin.js.ExperimentalWasmJsInterop") }
     }
 }
-

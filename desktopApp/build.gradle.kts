@@ -1,10 +1,10 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    alias(libs.plugins.kotlinJvm)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    id(libs.plugins.kotlinJvm.get().pluginId)
+    id("compose")
 }
+
 
 dependencies {
     implementation(projects.shared.features.app.presentation)
@@ -17,11 +17,10 @@ dependencies {
     implementation(projects.shared.features.players.data)
 
     implementation(libs.compose.ui)
-    implementation(libs.compose.foundation)
+    implementation(libs.compose.runtime)
     implementation(libs.kotlinx.coroutines.swing)
 
     implementation(libs.koin)
-    implementation(libs.compose.uiToolingPreview)
     implementation(libs.multiplatform.settings)
     implementation(compose.desktop.currentOs)
 }

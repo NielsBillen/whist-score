@@ -15,11 +15,11 @@ fun ListItem(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingTight)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingTight),
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
         )
 
         description?.let {

@@ -6,56 +6,59 @@ enum class RoundType(
 ) {
     Pass(
         displayName = "Pass",
-        description = "None of the player placed a bid"
+        description = "None of the player placed a bid",
     ),
     Regular(
         displayName = "Regular",
-        description = "Two players bid 8 slams together or one player bids 5 slams if no partner is found"
+        description = "Two players bid 8 slams together or one player bids 5 slams if no partner is found",
     ),
     Abandonce(
         displayName = "Abandonce",
-        description = "A player bids between 9 and 12 slams on their own and in the trump of their choice"
+        description = "A player bids between 9 and 12 slams on their own and in the trump of their choice",
     ),
     AbandonceInTrump(
         displayName = "Abandonce in Trump",
-        description = "A player bids between 9 and 12 slams on their own in the dealt trump suit"
+        description = "A player bids between 9 and 12 slams on their own in the dealt trump suit",
     ),
     Misere(
         displayName = "Misere",
-        description = "One player bids to achieve no slams"
+        description = "One player bids to achieve no slams",
     ),
     Treble(
         displayName = "Treble",
-        description = "The player with three aces joins the player with the last ace to achieve 8 slams"
+        description = "The player with three aces joins the player with the last ace to achieve 8 slams",
     ),
     OpenMisere(
         displayName = "Open Misere",
-        description = "A player bids to achieve no slams with open cards"
+        description = "A player bids to achieve no slams with open cards",
     ),
     SoloSlim(
         displayName = "Solo Slim",
-        description = "A player bids 13 slams"
-    );
+        description = "A player bids 13 slams",
+    ),
+    ;
 
     val singlePlayer: Boolean
-        get() = when (this) {
-            Pass, Regular, Treble -> false
-            Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> true
-        }
+        get() =
+            when (this) {
+                Pass, Regular, Treble -> false
+                Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> true
+            }
 
     val winCondition: WinCondition
-        get() = when (this) {
-            Pass -> WinCondition.NONE
-            Regular, Treble -> WinCondition.SLAMS
-            Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> WinCondition.BID_ACHIEVED
-        }
+        get() =
+            when (this) {
+                Pass -> WinCondition.NONE
+                Regular, Treble -> WinCondition.SLAMS
+                Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> WinCondition.BID_ACHIEVED
+            }
 
     val playerCountRange: IntRange
-        get() = when (this) {
-            Pass -> 4..4
-            Regular -> 1..2
-            Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> 1..1
-            Treble -> 2..2
-        }
-
+        get() =
+            when (this) {
+                Pass -> 4..4
+                Regular -> 1..2
+                Abandonce, AbandonceInTrump, Misere, OpenMisere, SoloSlim -> 1..1
+                Treble -> 2..2
+            }
 }

@@ -1,8 +1,8 @@
 package be.niels.billen.whistscore.feature.core
 
-enum class PlayerId{
+enum class PlayerId {
     Player1,
     Player2,
     Player3,
-    Player4
+    Player4,
 }

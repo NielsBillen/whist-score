@@ -52,39 +52,29 @@ fun App(
                 onBack = { backStack.removeLastOrNull() },
                 transitionSpec = slideTransition(1),
                 popTransitionSpec = slideTransition(-1),
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()
-                ),
+                entryDecorators =
+                    listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(),
+                    ),
                 entryProvider = { key ->
                     when (key) {
-                        is AppNavigation.OverviewRoute -> NavEntry(key) {
-                            Overview(
-                                onResetGame = { viewModel.onAction(AppAction.ResetGame) },
-                                onAddRound = {
-                                    if (backStack.last() != AppNavigation.AddRoundRoute) {
-                                        backStack.add(AppNavigation.AddRoundRoute)
-                                    }
-                                },
-                            )
+                        is AppNavigation.OverviewRoute -> {
+                            NavEntry(key) {
+                                OverviewRoute(viewModel = viewModel, backStack = backStack)
+                            }
                         }
 
-                        is AppNavigation.AddRoundRoute -> NavEntry(key) {
-                            AddRoundView(
-                                onCancel = {
-                                    backStack.back()
-                                },
-                                onSave = { round ->
-                                    viewModel.onAction(AppAction.AddRound(round))
-                                    backStack.back()
-                                },
-                            )
+                        is AppNavigation.AddRoundRoute -> {
+                            NavEntry(key) {
+                                AddRoundRoute(viewModel = viewModel, backStack = backStack)
+                            }
                         }
 
-                        is AppNavigation.EditPlayersRoute -> NavEntry(key) {
-                            EditPlayersView(
-                                onSave = { backStack.back() },
-                            )
+                        is AppNavigation.EditPlayersRoute -> {
+                            NavEntry(key) {
+                                EditPlayersRoute(backStack = backStack)
+                            }
                         }
                     }
                 },
@@ -93,10 +83,46 @@ fun App(
     }
 }
 
-private fun MutableList<AppNavigation>.back() = apply {
-    when {
-        size > 1 -> removeLastOrNull()
-        else -> Unit
-    }
+@Composable
+private fun OverviewRoute(
+    viewModel: AppViewModel,
+    backStack: MutableList<AppNavigation>,
+) {
+    Overview(
+        onResetGame = { viewModel.onAction(AppAction.ResetGame) },
+        onAddRound = {
+            if (backStack.last() != AppNavigation.AddRoundRoute) {
+                backStack.add(AppNavigation.AddRoundRoute)
+            }
+        },
+    )
 }
 
+@Composable
+private fun AddRoundRoute(
+    viewModel: AppViewModel,
+    backStack: MutableList<AppNavigation>,
+) {
+    AddRoundView(
+        onCancel = { backStack.back() },
+        onSave = { round ->
+            viewModel.onAction(AppAction.AddRound(round))
+            backStack.back()
+        },
+    )
+}
+
+@Composable
+private fun EditPlayersRoute(backStack: MutableList<AppNavigation>) {
+    EditPlayersView(
+        onSave = { backStack.back() },
+    )
+}
+
+private fun MutableList<AppNavigation>.back() =
+    apply {
+        when {
+            size > 1 -> removeLastOrNull()
+            else -> Unit
+        }
+    }
