@@ -46,13 +46,20 @@ kotlin {
             implementation(projects.shared.features.ui.presentation)
         }
         commonTest.dependencies {
-            implementation(libs.compose.ui.test)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotest.assertions.core)
             implementation(libs.kotest.framework.engine)
-            implementation(libs.koin)
             implementation(projects.shared.features.game.domain)
+        }
+        // UI tests only run on the jvm target: Compose MP does not put skiko's
+        // native runtime on a plain KMP test classpath, so the desktop library
+        // must be declared here (upstream: JetBrains/compose-multiplatform#1352).
+        jvmTest.dependencies {
+            implementation(libs.compose.desktop)
+            implementation(libs.compose.ui.test)
+            implementation(libs.koin)
+            implementation(libs.skiko.awt.runtime.linux.x64)
             implementation(projects.shared.features.players.domain)
             implementation(projects.shared.features.players.presentation)
             implementation(projects.shared.features.rounds.presentation)

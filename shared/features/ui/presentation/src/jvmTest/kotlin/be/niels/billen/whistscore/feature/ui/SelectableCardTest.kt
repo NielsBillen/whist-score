@@ -3,6 +3,7 @@ package be.niels.billen.whistscore.feature.ui
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.semantics.Role
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -22,7 +23,7 @@ class SelectableCardTest : FreeSpec() {
                 setContent {
                     MaterialTheme {
                         SelectableCard(
-                            selected = false,
+                            state = SelectableCardState(selected = false),
                             onClick = { clicked = true },
                         ) {
                             Text(text = "Alpha")
@@ -39,7 +40,7 @@ class SelectableCardTest : FreeSpec() {
             runComposeUiTest {
                 setContent {
                     MaterialTheme {
-                        SelectableCard(selected = false, onClick = { }) {
+                        SelectableCard(state = SelectableCardState(selected = false), onClick = { }) {
                             Text(text = "Alpha")
                         }
                     }
@@ -55,7 +56,7 @@ class SelectableCardTest : FreeSpec() {
             runComposeUiTest {
                 setContent {
                     MaterialTheme {
-                        SelectableCard(selected = false, onClick = { }, role = Role.Checkbox) {
+                        SelectableCard(state = SelectableCardState(selected = false, role = Role.Checkbox), onClick = { }) {
                             Text(text = "Alpha")
                         }
                     }
@@ -74,8 +75,7 @@ class SelectableCardTest : FreeSpec() {
                 setContent {
                     MaterialTheme {
                         SelectableCard(
-                            selected = false,
-                            enabled = false,
+                            state = SelectableCardState(selected = false, enabled = false),
                             onClick = { clicked = true },
                         ) {
                             Text(text = "Alpha")

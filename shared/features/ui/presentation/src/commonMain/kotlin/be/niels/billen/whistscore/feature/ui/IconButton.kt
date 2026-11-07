@@ -15,10 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -29,17 +26,16 @@ import be.niels.billen.whistscore.feature.util.applyIf
 @Composable
 fun IconButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    size: IconButtonSize = IconButtonSize.Sm,
-    variant: ButtonVariant = ButtonVariant.Secondary,
     icon: ImageVector,
     contentDescription: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val isFocused by interactionSource.collectIsFocusedAsState()
     val shape = Style.Shapes.smallRoundedCornerShape
+    val size = IconButtonSize.Sm
 
     Surface(
         modifier =
@@ -49,11 +45,11 @@ fun IconButton(
                 .applyIf(enabled && isFocused) {
                     drawFocusRing(
                         cornerRadius = Style.Dimensions.radiusSmall,
-                        color = variant.focusRingColor,
+                        color = ButtonVariant.Secondary.focusRingColor,
                     )
                 },
-        color = variant.backgroundColor,
-        contentColor = variant.contentColor,
+        color = ButtonVariant.Secondary.backgroundColor,
+        contentColor = ButtonVariant.Secondary.contentColor,
         shape = shape,
         tonalElevation = 0.dp,
     ) {

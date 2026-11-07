@@ -27,20 +27,16 @@ fun ConfirmDialog(
     title: String,
     body: String,
     confirmText: String,
-    dismissText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Scrim(onDismiss = onDismiss) {
         DialogContent(
             title = title,
             body = body,
             confirmText = confirmText,
-            dismissText = dismissText,
             onConfirm = onConfirm,
             onDismiss = onDismiss,
-            modifier = modifier,
         )
     }
 }
@@ -66,14 +62,12 @@ private fun DialogContent(
     title: String,
     body: String,
     confirmText: String,
-    dismissText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-            modifier
+            Modifier
                 .widthIn(max = 320.dp)
                 .wrapContentSize()
                 .background(
@@ -93,7 +87,6 @@ private fun DialogContent(
 
         ButtonRow(
             confirmText = confirmText,
-            dismissText = dismissText,
             onConfirm = onConfirm,
             onDismiss = onDismiss,
             modifier = Modifier.fillMaxWidth(),
@@ -104,7 +97,6 @@ private fun DialogContent(
 @Composable
 private fun ButtonRow(
     confirmText: String,
-    dismissText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -116,7 +108,7 @@ private fun ButtonRow(
         TextButton(
             variant = ButtonVariant.Ghost,
             onClick = onDismiss,
-            text = dismissText,
+            text = "Cancel",
         )
 
         TextButton(

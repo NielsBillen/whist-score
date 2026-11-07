@@ -11,28 +11,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BidAchievedInput(
+    onBidAchievedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onBidAchievedSelected: (Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     BidAchievedInput(
-        modifier = modifier,
         bidAchieved = state.bidAchieved,
-        onBidAchievedSelected = onBidAchievedSelected,
+        onBidAchievedChange = onBidAchievedChange,
+        modifier = modifier,
     )
 }
 
 @Composable
 internal fun BidAchievedInput(
     bidAchieved: Boolean?,
+    onBidAchievedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    onBidAchievedSelected: (Boolean) -> Unit,
 ) {
     AddRoundPanel(
         title = "Bid Achieved",
@@ -43,8 +44,8 @@ internal fun BidAchievedInput(
             verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge),
         ) {
             SelectableCard(
-                selected = bidAchieved == true,
-                onClick = { onBidAchievedSelected(true) },
+                state = SelectableCardState(selected = bidAchieved == true),
+                onClick = { onBidAchievedChange(true) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
@@ -54,8 +55,8 @@ internal fun BidAchievedInput(
             }
 
             SelectableCard(
-                selected = bidAchieved == false,
-                onClick = { onBidAchievedSelected(false) },
+                state = SelectableCardState(selected = bidAchieved == false),
+                onClick = { onBidAchievedChange(false) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(

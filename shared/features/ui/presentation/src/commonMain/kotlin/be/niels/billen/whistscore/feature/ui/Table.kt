@@ -48,7 +48,7 @@ fun <T> Table(
         TableRow(content = header)
 
         if (rows.isNotEmpty()) {
-            TableRows(rows = rows, rowContent = rowContent, modifier = modifier.weight(1f))
+            TableRows(rows = rows, rowContent = rowContent, modifier = Modifier.weight(1f))
         } else if (emptyContent != null) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f)) {
                 emptyContent()
@@ -85,7 +85,7 @@ private fun TableRow(
     Column(modifier = modifier) {
         Row(
             modifier =
-                modifier.padding(
+                Modifier.padding(
                     vertical = TableRowVerticalPadding,
                     horizontal = TableRowHorizontalPadding,
                 ),

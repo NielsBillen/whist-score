@@ -77,7 +77,6 @@ private suspend fun ComposeUiTest.withConfirmDialog(
                 title = "New game",
                 body = "Starting a new game will discard all recorded rounds and reset the scoreboard.",
                 confirmText = "Start new game",
-                dismissText = "Cancel",
                 onConfirm = {
                     visible.value = false
                     onConfirm()

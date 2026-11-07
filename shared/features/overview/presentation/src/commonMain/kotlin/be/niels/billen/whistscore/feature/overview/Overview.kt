@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,17 +27,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun Overview(
-    modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = koinViewModel(),
     onResetGame: () -> Unit,
     onAddRound: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: OverviewViewModel = koinViewModel(),
 ) {
     val canStartNewGame by viewModel.canStartNewGame.collectAsState()
     var showNewGameDialog by remember { mutableStateOf(false) }
 
     Overview(
         canStartNewGame = canStartNewGame,
-        onNewGameRequested = { showNewGameDialog = true },
+        onNewGameRequest = { showNewGameDialog = true },
         onAddRound = onAddRound,
         modifier = modifier.padding(Style.Dimensions.paddingSmall),
     )
@@ -55,7 +56,7 @@ fun Overview(
 @Composable
 internal fun Overview(
     canStartNewGame: Boolean,
-    onNewGameRequested: () -> Unit,
+    onNewGameRequest: () -> Unit,
     onAddRound: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -73,7 +74,7 @@ internal fun Overview(
 
         ButtonRow(
             canStartNewGame = canStartNewGame,
-            onNewGameRequested = onNewGameRequested,
+            onNewGameRequest = onNewGameRequest,
             onAddRound = onAddRound,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -81,6 +82,7 @@ internal fun Overview(
 }
 
 @Composable
+@NonRestartableComposable
 private fun NewGameDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
@@ -90,7 +92,6 @@ private fun NewGameDialog(
         title = "New game",
         body = "Starting a new game will discard all recorded rounds and reset the scoreboard.",
         confirmText = "Start new game",
-        dismissText = "Cancel",
         onConfirm = onConfirm,
         onDismiss = onDismiss,
         modifier = modifier,
@@ -100,7 +101,7 @@ private fun NewGameDialog(
 @Composable
 private fun ButtonRow(
     canStartNewGame: Boolean,
-    onNewGameRequested: () -> Unit,
+    onNewGameRequest: () -> Unit,
     onAddRound: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -113,7 +114,7 @@ private fun ButtonRow(
         TextButton(
             variant = ButtonVariant.Destructive,
             enabled = canStartNewGame,
-            onClick = onNewGameRequested,
+            onClick = onNewGameRequest,
             modifier = buttonModifier,
             text = "New game",
         )

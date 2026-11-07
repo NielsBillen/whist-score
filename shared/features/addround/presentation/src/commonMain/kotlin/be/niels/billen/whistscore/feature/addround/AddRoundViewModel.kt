@@ -111,9 +111,10 @@ class AddRoundViewModel(
 
     private fun setRoundType(action: AddRoundAction.SetRoundType) {
         _state.update {
+            val singlePlayer = action.roundType.singlePlayer
             it.copy(
                 roundType = action.roundType,
-                players = if (action.roundType.singlePlayer != it.roundType?.singlePlayer) persistentSetOf() else it.players,
+                players = if (singlePlayer != it.roundType?.singlePlayer) persistentSetOf() else it.players,
             )
         }
 

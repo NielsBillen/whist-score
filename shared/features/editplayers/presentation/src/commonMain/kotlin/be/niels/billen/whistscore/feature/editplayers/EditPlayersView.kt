@@ -35,9 +35,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditPlayersView(
+    onSave: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditPlayersViewModel = koinViewModel(),
-    onSave: () -> Unit,
 ) {
     val order by viewModel.order.collectAsState()
     val players by viewModel.players.collectAsState()
@@ -55,9 +55,9 @@ fun EditPlayersView(
 internal fun EditPlayersView(
     order: ImmutableList<PlayerId>,
     players: Players,
-    modifier: Modifier = Modifier,
     onSave: () -> Unit,
     onAction: (EditPlayersAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     // The top and bottom padding are owned by the AppShell content area.
     Column(
@@ -150,8 +150,8 @@ private fun PlayerEntry(
 private fun PlayerNameInput(
     playerId: PlayerId,
     name: String,
-    modifier: Modifier = Modifier,
     onAction: (EditPlayersAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var value by remember { mutableStateOf(TextFieldValue(text = name)) }
 

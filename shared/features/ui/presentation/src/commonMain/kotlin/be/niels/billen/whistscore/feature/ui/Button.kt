@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,8 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
-enum class ButtonVariant { Primary, Secondary, Ghost, Destructive }
 
 private val focusRingWidth = 2.dp
 private val focusRingGap = 3.dp
@@ -68,14 +67,14 @@ fun Button(
         modifier =
             modifier
                 .heightIn(min = 32.dp)
+                .clip(shape)
+                .background(color = variant.backgroundColor, shape = shape)
                 .clickable(
                     onClick = onClick,
                     enabled = enabled,
                     indication = null,
                     interactionSource = interactionSource,
                 ).drawFocusRing(Style.Dimensions.radiusMedium, ringColor)
-                .clip(shape)
-                .background(color = variant.backgroundColor, shape = shape)
                 .padding(horizontal = Style.Dimensions.paddingMedium, vertical = Style.Dimensions.paddingSmall),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -91,10 +90,10 @@ fun Button(
 @Composable
 fun TextButton(
     onClick: () -> Unit,
+    text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     variant: ButtonVariant = ButtonVariant.Primary,
-    text: String,
 ) {
     Button(
         onClick = onClick,
@@ -107,6 +106,7 @@ fun TextButton(
 }
 
 @get:Composable
+@get:ReadOnlyComposable
 internal val ButtonVariant.backgroundColor
     get() =
         when (this) {
@@ -122,6 +122,7 @@ internal val ButtonVariant.backgroundColor
         }
 
 @get:Composable
+@get:ReadOnlyComposable
 internal val ButtonVariant.contentColor
     get() =
         when (this) {
@@ -138,5 +139,6 @@ internal val ButtonVariant.contentColor
 // astryx y2k: the focus ring matches the variant it rings — accent for
 // every variant, error for destructive.
 @get:Composable
+@get:ReadOnlyComposable
 internal val ButtonVariant.focusRingColor
     get() = if (this == ButtonVariant.Destructive) MaterialTheme.colorScheme.error else Style.Colors.accent

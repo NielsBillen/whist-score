@@ -16,25 +16,25 @@ import be.niels.billen.whistscore.feature.core.Players
 import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.game.Game
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import kotlinx.collections.immutable.PersistentSet
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlayerSelectionScreen(
+    onSelectionChange: (PlayerId, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val game by viewModel.game.collectAsState()
     val players by viewModel.players.collectAsState()
 
     PlayerSelectionScreen(
-        roundType = requireNotNull(state.roundType),
         game = game,
         players = players,
-        selection = state.players,
+        state = state,
         modifier = modifier,
         onSelectionChange = onSelectionChange,
     )
@@ -42,13 +42,14 @@ fun PlayerSelectionScreen(
 
 @Composable
 internal fun PlayerSelectionScreen(
-    roundType: RoundType,
     game: Game,
     players: Players,
-    selection: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
+    state: AddRoundState,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val roundType = requireNotNull(state.roundType)
+
     AddRoundPanel(
         title = "Select players",
         description =
@@ -72,14 +73,14 @@ internal fun PlayerSelectionScreen(
             SinglePlayerChoice(
                 game = game,
                 players = players,
-                selectedPlayers = selection,
+                selectedPlayers = state.players,
                 onSelection = { onSelectionChange(it, true) },
             )
         } else {
             MultiPlayerChoice(
                 game = game,
                 players = players,
-                selectedPlayers = selection,
+                selectedPlayers = state.players,
                 onSelectionChange = onSelectionChange,
             )
         }
@@ -91,8 +92,8 @@ private fun MultiPlayerChoice(
     game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
     onSelectionChange: (PlayerId, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
@@ -123,11 +124,9 @@ private fun PlayerCheckBox(
     onSelectionChange: (PlayerId, Boolean) -> Unit,
 ) {
     SelectableCard(
-        selected = selected,
-        enabled = enabled,
+        state = SelectableCardState(selected = selected, enabled = enabled, role = Role.Checkbox),
         onClick = { onSelectionChange(playerId, !selected) },
         modifier = Modifier.fillMaxWidth(),
-        role = Role.Checkbox,
     ) {
         Text(
             text = player.name,
@@ -141,8 +140,8 @@ private fun SinglePlayerChoice(
     game: Game,
     players: Players,
     selectedPlayers: PersistentSet<PlayerId>,
-    modifier: Modifier = Modifier,
     onSelection: (PlayerId) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
@@ -168,7 +167,7 @@ private fun PlayerRadioButton(
     onSelection: (PlayerId) -> Unit,
 ) {
     SelectableCard(
-        selected = selected,
+        state = SelectableCardState(selected = selected),
         onClick = { onSelection(playerId) },
         modifier = Modifier.fillMaxWidth(),
     ) {

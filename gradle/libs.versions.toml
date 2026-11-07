@@ -23,6 +23,7 @@ ktlint = "1.8.0"
 ktlint-gradle = "0.14.0"
 multiplatform-settings = "1.3.0"
 proguard = "7.10.0"
+skiko = "0.150.2"
 stability-analyzer = "0.15.0"
 svg2compose = "2.2.1"
 turbine = "1.2.1"
@@ -41,6 +42,7 @@ androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecy
 androidx-nav3-ui = { group = "org.jetbrains.androidx.navigation3", name = "navigation3-ui", version.ref = "androidx-nav3" }
 compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "composeMultiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+compose-desktop = { module = "org.jetbrains.compose.desktop:desktop", version.ref = "composeMultiplatform" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
@@ -64,6 +66,7 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-android-debug = { module = "com.russhwolf:multiplatform-settings-android-debug", version.ref = "multiplatform-settings" }
 multiplatform-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatform-settings" }
+skiko-awt-runtime-linux-x64 = { module = "org.jetbrains.skiko:skiko-awt-runtime-linux-x64", version.ref = "skiko" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]

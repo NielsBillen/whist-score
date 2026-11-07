@@ -18,21 +18,22 @@ import androidx.compose.ui.text.withStyle
 import be.niels.billen.whistscore.feature.core.RoundType
 import be.niels.billen.whistscore.feature.ui.ListItem
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RoundTypeInputScreen(
+    onRoundTypeChange: (RoundType) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onRoundTypeSelected: (RoundType) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     RoundTypeInputScreen(
         selectedRoundType = state.roundType,
+        onRoundTypeChange = onRoundTypeChange,
         modifier = modifier,
-        onRoundTypeSelected = onRoundTypeSelected,
     )
 }
 
@@ -40,8 +41,8 @@ fun RoundTypeInputScreen(
 @Composable
 internal fun RoundTypeInputScreen(
     selectedRoundType: RoundType?,
+    onRoundTypeChange: (RoundType) -> Unit,
     modifier: Modifier = Modifier,
-    onRoundTypeSelected: (RoundType) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -61,10 +62,10 @@ internal fun RoundTypeInputScreen(
                 RoundTypeButton(
                     roundType = roundType,
                     selected = selectedRoundType == roundType,
-                    modifier = Modifier.fillMaxSize(),
                     onClick = {
-                        onRoundTypeSelected(roundType)
+                        onRoundTypeChange(roundType)
                     },
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -75,11 +76,11 @@ internal fun RoundTypeInputScreen(
 private fun RoundTypeButton(
     roundType: RoundType,
     selected: Boolean,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SelectableCard(
-        selected = selected,
+        state = SelectableCardState(selected = selected),
         onClick = onClick,
         modifier = modifier,
     ) {

@@ -12,29 +12,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import be.niels.billen.whistscore.feature.ui.SelectableCard
+import be.niels.billen.whistscore.feature.ui.SelectableCardState
 import be.niels.billen.whistscore.feature.ui.Style
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SlamInputScreen(
+    onSlamsChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
-    onSlamsSelected: (Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     SlamInputScreen(
-        modifier = modifier,
         selectedSlams = state.slams,
-        onSlamsSelected = onSlamsSelected,
+        onSlamsChange = onSlamsChange,
+        modifier = modifier,
     )
 }
 
 @Composable
 internal fun SlamInputScreen(
     selectedSlams: Int?,
+    onSlamsChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onSlamsSelected: (Int) -> Unit,
 ) {
     AddRoundPanel(
         title = "Select slams",
@@ -58,8 +59,8 @@ internal fun SlamInputScreen(
                 val selected = selectedSlams == slams
 
                 SelectableCard(
-                    selected = selected,
-                    onClick = { onSlamsSelected(slams) },
+                    state = SelectableCardState(selected = selected),
+                    onClick = { onSlamsChange(slams) },
                     modifier = Modifier.requiredSize(56.dp),
                 ) {
                     Text(

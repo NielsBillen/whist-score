@@ -38,7 +38,7 @@ fun PlayersView(
             columns = GridCells.Fixed(columns),
         ) {
             items(players) { player ->
-                PlayerCard(player = player, modifier = modifier)
+                PlayerCard(player = player)
             }
         }
     }

@@ -43,8 +43,8 @@ fun RoundsView(
 fun RoundsView(
     game: Game,
     players: Players,
-    modifier: Modifier = Modifier,
     onAction: (RoundsViewAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Table(
         rows = game.rounds.rounds,

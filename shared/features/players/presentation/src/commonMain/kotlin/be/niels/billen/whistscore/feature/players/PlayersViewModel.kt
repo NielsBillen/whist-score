@@ -19,7 +19,11 @@ class PlayersViewModel(
 ) : ViewModel() {
     val players =
         combine(gameRepository.game, playerRepository.players, ::makeState)
-            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = persistentListOf())
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = persistentListOf(),
+            )
 }
 
 private fun makeState(

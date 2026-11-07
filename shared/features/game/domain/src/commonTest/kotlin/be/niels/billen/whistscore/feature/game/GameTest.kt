@@ -11,7 +11,8 @@ import kotlinx.collections.immutable.persistentListOf
 class GameTest : FreeSpec() {
     init {
         "Game.score accumulates a regular round's points and ignores the pass flag on a pass round" {
-            val game = Game.DEFAULT + Round.Regular(playerIds = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2), slams = 8)
+            val players = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2)
+            val game = Game.DEFAULT + Round.Regular(playerIds = players, slams = 8)
 
             PlayerId.entries.associateWith { game.score(it) } shouldBe
                 mapOf(
@@ -63,7 +64,8 @@ class GameTest : FreeSpec() {
         }
 
         "clearRounds resets every score to zero" {
-            val game = (Game.DEFAULT + Round.Regular(persistentHashSetOf(PlayerId.Player1, PlayerId.Player2), 8)).clearRounds()
+            val players = persistentHashSetOf(PlayerId.Player1, PlayerId.Player2)
+            val game = (Game.DEFAULT + Round.Regular(playerIds = players, slams = 8)).clearRounds()
             PlayerId.entries.associateWith { game.score(it) } shouldBe
                 mapOf(
                     PlayerId.Player1 to 0,

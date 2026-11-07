@@ -1,7 +1,5 @@
 package be.niels.billen.whistscore.feature.addround
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -162,7 +160,6 @@ class AddRoundViewTest : FreeSpec() {
             runComposeUiTest {
                 setContent {
                     val viewModel = koinViewModel<AddRoundViewModel>()
-                    val state by viewModel.state.collectAsState()
                     AddRoundView(
                         onCancel = onCancel,
                         onSave = onSave,
@@ -170,8 +167,7 @@ class AddRoundViewTest : FreeSpec() {
                             onAction(action)
                             viewModel.onAction(action)
                         },
-                        effects = viewModel.effects,
-                        state = state,
+                        viewModel = viewModel,
                     )
                 }
                 block()

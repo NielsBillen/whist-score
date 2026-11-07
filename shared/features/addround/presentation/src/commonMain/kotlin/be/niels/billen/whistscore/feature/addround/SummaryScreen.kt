@@ -33,10 +33,10 @@ fun SummaryScreen(
 
 @Composable
 internal fun SummaryScreen(
-    modifier: Modifier = Modifier,
     game: Game,
     players: Players,
     round: Round?,
+    modifier: Modifier = Modifier,
 ) {
     AddRoundPanel(
         title = "Summary",

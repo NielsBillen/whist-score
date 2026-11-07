@@ -33,14 +33,11 @@ fun AddRoundView(
     modifier: Modifier = Modifier,
     viewModel: AddRoundViewModel = koinViewModel(),
 ) {
-    val state by viewModel.state.collectAsState()
-
     AddRoundView(
         onCancel = onCancel,
         onSave = onSave,
         onAction = viewModel::onAction,
-        effects = viewModel.effects,
-        state = state,
+        viewModel = viewModel,
         modifier = modifier,
     )
 }
@@ -50,10 +47,10 @@ internal fun AddRoundView(
     onCancel: () -> Unit,
     onSave: (Round) -> Unit,
     onAction: (AddRoundAction) -> Unit,
-    effects: SharedFlow<AddRoundEffect>,
-    state: AddRoundState,
+    viewModel: AddRoundViewModel,
     modifier: Modifier = Modifier,
 ) {
+    val state by viewModel.state.collectAsState()
     val backStack = remember { mutableStateListOf(state.screen) }
 
     Column(
@@ -63,7 +60,7 @@ internal fun AddRoundView(
     ) {
         AddRoundScreens(
             onAction = onAction,
-            effects = effects,
+            effects = viewModel.effects,
             backStack = backStack,
             modifier = Modifier.weight(1f),
         )
@@ -127,7 +124,7 @@ private fun screenEntry(
             AddRoundScreen.SELECT_ROUND_TYPE -> {
                 RoundTypeInputScreen(
                     modifier = screenModifier,
-                    onRoundTypeSelected = { type -> onAction(AddRoundAction.SetRoundType(type)) },
+                    onRoundTypeChange = { type -> onAction(AddRoundAction.SetRoundType(type)) },
                 )
             }
 
@@ -148,14 +145,14 @@ private fun screenEntry(
             AddRoundScreen.SELECT_SLAMS -> {
                 SlamInputScreen(
                     modifier = screenModifier,
-                    onSlamsSelected = { slams -> onAction(AddRoundAction.SetSlams(slams)) },
+                    onSlamsChange = { slams -> onAction(AddRoundAction.SetSlams(slams)) },
                 )
             }
 
             AddRoundScreen.SELECT_BID_ACHIEVED -> {
                 BidAchievedInput(
                     modifier = screenModifier,
-                    onBidAchievedSelected = { achieved -> onAction(AddRoundAction.SetBidAchieved(achieved)) },
+                    onBidAchievedChange = { achieved -> onAction(AddRoundAction.SetBidAchieved(achieved)) },
                 )
             }
 
@@ -209,9 +206,7 @@ private fun ButtonRow(
             AddRoundScreen.SELECT_ROUND_TYPE,
             AddRoundScreen.SELECT_SLAMS,
             AddRoundScreen.SELECT_BID_ACHIEVED,
-            -> {
-                Unit
-            }
+            -> {}
         }
     }
 }
