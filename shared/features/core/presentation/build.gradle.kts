@@ -35,7 +35,7 @@ svgToCompose {
             }
         }
 
-        val icons by creating {
+        create("icons") {
             from(layout.projectDirectory.dir("src/commonMain/composeResources/drawable"))
             destinationPackage("be.niels.billen.whistscore.feature.core.icons")
         }

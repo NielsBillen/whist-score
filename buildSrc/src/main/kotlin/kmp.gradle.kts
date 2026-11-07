@@ -15,7 +15,6 @@ kotlin {
         languageVersion = JavaLanguageVersion.of(25)
     }
 
-
     jvm()
 
     @OptIn(ExperimentalWasmDsl::class)
