@@ -2,8 +2,8 @@ package be.niels.billen.whistscore.feature.addround
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -29,11 +29,11 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalTestApi::class)
 class AddRoundViewTest : FreeSpec() {
-
-    private val regularTwoPlayers = AddRoundState(
-        roundType = RoundType.Regular,
-        players = persistentSetOf(PlayerId.Player1, PlayerId.Player2),
-    )
+    private val regularTwoPlayers =
+        AddRoundState(
+            roundType = RoundType.Regular,
+            players = persistentSetOf(PlayerId.Player1, PlayerId.Player2),
+        )
 
     init {
         "backing out of the round type screen cancels the round" {
@@ -49,7 +49,7 @@ class AddRoundViewTest : FreeSpec() {
             withAddRound {
                 onNodeWithText("Regular", substring = true).assertIsDisplayed()
                 onNodeWithText("Treble", substring = true).assertIsDisplayed()
-                onNodeWithText("5. Misere").assertIsDisplayed()
+                onNodeWithText("Misere").assertIsDisplayed()
                 onNodeWithText("Pass", substring = true).assertIsDisplayed()
             }
         }
@@ -150,11 +150,12 @@ class AddRoundViewTest : FreeSpec() {
         onAction: (AddRoundAction) -> Unit = {},
         block: suspend ComposeUiTest.() -> Unit,
     ) {
-        val testModule = module {
-            single { FakeGameRepository() }.bind<GameRepository>()
-            single { FakePlayerRepository() }.bind<PlayerRepository>()
-            viewModel { AddRoundViewModel(get(), get(), initialState) }
-        }
+        val testModule =
+            module {
+                single { FakeGameRepository() }.bind<GameRepository>()
+                single { FakePlayerRepository() }.bind<PlayerRepository>()
+                viewModel { AddRoundViewModel(get(), get(), initialState) }
+            }
 
         startKoin { modules(testModule) }
         try {
@@ -165,7 +166,10 @@ class AddRoundViewTest : FreeSpec() {
                     AddRoundView(
                         onCancel = onCancel,
                         onSave = onSave,
-                        onAction = { action -> onAction(action); viewModel.onAction(action) },
+                        onAction = { action ->
+                            onAction(action)
+                            viewModel.onAction(action)
+                        },
                         effects = viewModel.effects,
                         state = state,
                         initialState = initialState,

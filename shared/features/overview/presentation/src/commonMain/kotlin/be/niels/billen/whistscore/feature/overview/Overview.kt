@@ -38,7 +38,7 @@ fun Overview(
         canStartNewGame = canStartNewGame,
         onNewGameRequested = { showNewGameDialog = true },
         onAddRound = onAddRound,
-        modifier = modifier.padding(Style.Dimensions.paddingSmall)
+        modifier = modifier.padding(Style.Dimensions.paddingSmall),
     )
 
     if (showNewGameDialog) {
@@ -47,7 +47,7 @@ fun Overview(
                 showNewGameDialog = false
                 onResetGame()
             },
-            onDismiss = { showNewGameDialog = false }
+            onDismiss = { showNewGameDialog = false },
         )
     }
 }
@@ -60,11 +60,12 @@ internal fun Overview(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .wrapContentWidth()
-            .widthIn(max = 800.dp),
+        modifier =
+            modifier
+                .wrapContentWidth()
+                .widthIn(max = 800.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
     ) {
         PlayersView()
 
@@ -74,7 +75,7 @@ internal fun Overview(
             canStartNewGame = canStartNewGame,
             onNewGameRequested = onNewGameRequested,
             onAddRound = onAddRound,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -92,7 +93,7 @@ private fun NewGameDialog(
         dismissText = "Cancel",
         onConfirm = onConfirm,
         onDismiss = onDismiss,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -101,7 +102,7 @@ private fun ButtonRow(
     canStartNewGame: Boolean,
     onNewGameRequested: () -> Unit,
     onAddRound: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val buttonModifier = Modifier.widthIn(min = 96.dp)
 
@@ -114,13 +115,13 @@ private fun ButtonRow(
             enabled = canStartNewGame,
             onClick = onNewGameRequested,
             modifier = buttonModifier,
-            text = "New game"
+            text = "New game",
         )
 
         TextButton(
             onClick = onAddRound,
             modifier = buttonModifier,
-            text = "Add round"
+            text = "Add round",
         )
     }
 }

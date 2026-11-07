@@ -1,10 +1,10 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    alias(libs.plugins.kotlinJvm)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    id(libs.plugins.kotlinJvm.get().pluginId)
+    id("compose")
 }
+
 
 dependencies {
     implementation(projects.shared.features.app.presentation)

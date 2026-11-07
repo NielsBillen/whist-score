@@ -52,39 +52,46 @@ fun App(
                 onBack = { backStack.removeLastOrNull() },
                 transitionSpec = slideTransition(1),
                 popTransitionSpec = slideTransition(-1),
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()
-                ),
+                entryDecorators =
+                    listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(),
+                    ),
                 entryProvider = { key ->
                     when (key) {
-                        is AppNavigation.OverviewRoute -> NavEntry(key) {
-                            Overview(
-                                onResetGame = { viewModel.onAction(AppAction.ResetGame) },
-                                onAddRound = {
-                                    if (backStack.last() != AppNavigation.AddRoundRoute) {
-                                        backStack.add(AppNavigation.AddRoundRoute)
-                                    }
-                                },
-                            )
+                        is AppNavigation.OverviewRoute -> {
+                            NavEntry(key) {
+                                Overview(
+                                    onResetGame = { viewModel.onAction(AppAction.ResetGame) },
+                                    onAddRound = {
+                                        if (backStack.last() != AppNavigation.AddRoundRoute) {
+                                            backStack.add(AppNavigation.AddRoundRoute)
+                                        }
+                                    },
+                                )
+                            }
                         }
 
-                        is AppNavigation.AddRoundRoute -> NavEntry(key) {
-                            AddRoundView(
-                                onCancel = {
-                                    backStack.back()
-                                },
-                                onSave = { round ->
-                                    viewModel.onAction(AppAction.AddRound(round))
-                                    backStack.back()
-                                },
-                            )
+                        is AppNavigation.AddRoundRoute -> {
+                            NavEntry(key) {
+                                AddRoundView(
+                                    onCancel = {
+                                        backStack.back()
+                                    },
+                                    onSave = { round ->
+                                        viewModel.onAction(AppAction.AddRound(round))
+                                        backStack.back()
+                                    },
+                                )
+                            }
                         }
 
-                        is AppNavigation.EditPlayersRoute -> NavEntry(key) {
-                            EditPlayersView(
-                                onSave = { backStack.back() },
-                            )
+                        is AppNavigation.EditPlayersRoute -> {
+                            NavEntry(key) {
+                                EditPlayersView(
+                                    onSave = { backStack.back() },
+                                )
+                            }
                         }
                     }
                 },
@@ -93,10 +100,10 @@ fun App(
     }
 }
 
-private fun MutableList<AppNavigation>.back() = apply {
-    when {
-        size > 1 -> removeLastOrNull()
-        else -> Unit
+private fun MutableList<AppNavigation>.back() =
+    apply {
+        when {
+            size > 1 -> removeLastOrNull()
+            else -> Unit
+        }
     }
-}
-

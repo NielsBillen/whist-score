@@ -43,14 +43,16 @@ internal fun SlamInputScreen(
     ) {
         FlowRow(
             maxItemsInEachRow = 7,
-            horizontalArrangement = Arrangement.spacedBy(
-                Style.Dimensions.paddingLarge,
-                Alignment.CenterHorizontally
-            ),
-            verticalArrangement = Arrangement.spacedBy(
-                Style.Dimensions.paddingLarge,
-                Alignment.CenterVertically
-            )
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    Style.Dimensions.paddingLarge,
+                    Alignment.CenterHorizontally,
+                ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    Style.Dimensions.paddingLarge,
+                    Alignment.CenterVertically,
+                ),
         ) {
             for (slams in 0..13) {
                 val selected = selectedSlams == slams
@@ -58,11 +60,11 @@ internal fun SlamInputScreen(
                 SelectableCard(
                     selected = selected,
                     onClick = { onSlamsSelected(slams) },
-                    modifier = Modifier.requiredSize(56.dp)
+                    modifier = Modifier.requiredSize(56.dp),
                 ) {
                     Text(
                         text = "$slams",
-                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center)
+                        modifier = Modifier.padding(Style.Dimensions.paddingLarge).align(Alignment.Center),
                     )
                 }
             }

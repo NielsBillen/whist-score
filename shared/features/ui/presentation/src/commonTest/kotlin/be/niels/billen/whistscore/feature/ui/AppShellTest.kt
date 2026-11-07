@@ -13,7 +13,6 @@ import io.kotest.matchers.shouldBe
 
 @OptIn(ExperimentalTestApi::class)
 class AppShellTest : FreeSpec() {
-
     init {
         "shows the title and the content, and runs the actions" {
             var actionInvocations = 0

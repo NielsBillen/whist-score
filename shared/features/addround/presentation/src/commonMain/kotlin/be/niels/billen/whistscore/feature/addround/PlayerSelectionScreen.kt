@@ -51,36 +51,40 @@ internal fun PlayerSelectionScreen(
 ) {
     AddRoundPanel(
         title = "Select players",
-        description = when (roundType) {
-            RoundType.Pass -> "Everyone passed"
-            RoundType.Regular -> "Select one or two players"
-            RoundType.AbandonceInTrump,
-            RoundType.Misere,
-            RoundType.OpenMisere,
-            RoundType.SoloSlim,
-            RoundType.Abandonce -> "Select the player"
+        description =
+            when (roundType) {
+                RoundType.Pass -> "Everyone passed"
 
-            RoundType.Treble -> "Select the player with three aces and the player with the last ace"
-        },
-        modifier = modifier
+                RoundType.Regular -> "Select one or two players"
+
+                RoundType.AbandonceInTrump,
+                RoundType.Misere,
+                RoundType.OpenMisere,
+                RoundType.SoloSlim,
+                RoundType.Abandonce,
+                -> "Select the player"
+
+                RoundType.Treble -> "Select the player with three aces and the player with the last ace"
+            },
+        modifier = modifier,
     ) {
         if (roundType.singlePlayer) {
             SinglePlayerChoice(
                 game = game,
                 players = players,
                 selectedPlayers = selection,
-                onSelection = { onSelectionChange(it, true) })
+                onSelection = { onSelectionChange(it, true) },
+            )
         } else {
             MultiPlayerChoice(
                 game = game,
                 players = players,
                 selectedPlayers = selection,
-                onSelectionChange = onSelectionChange
+                onSelectionChange = onSelectionChange,
             )
         }
     }
 }
-
 
 @Composable
 private fun MultiPlayerChoice(
@@ -92,7 +96,7 @@ private fun MultiPlayerChoice(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge),
     ) {
         game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
@@ -104,12 +108,11 @@ private fun MultiPlayerChoice(
                 player = player,
                 selected = checked,
                 enabled = enabled,
-                onSelectionChange = onSelectionChange
+                onSelectionChange = onSelectionChange,
             )
         }
     }
 }
-
 
 @Composable
 private fun PlayerCheckBox(
@@ -143,7 +146,7 @@ private fun SinglePlayerChoice(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge)
+        verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingLarge),
     ) {
         game.order.forEach { playerId ->
             val player = players[playerId] ?: return@forEach
@@ -151,9 +154,8 @@ private fun SinglePlayerChoice(
                 playerId = playerId,
                 player = player,
                 selected = playerId in selectedPlayers,
-                onSelection = onSelection
+                onSelection = onSelection,
             )
-
         }
     }
 }
@@ -163,7 +165,7 @@ private fun PlayerRadioButton(
     playerId: PlayerId,
     player: Player,
     selected: Boolean,
-    onSelection: (PlayerId) -> Unit
+    onSelection: (PlayerId) -> Unit,
 ) {
     SelectableCard(
         selected = selected,

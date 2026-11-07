@@ -102,43 +102,49 @@ sealed interface RoundDto {
     }
 }
 
-fun Round.toDto(): RoundDto = when (this) {
-    is Round.PassRound -> RoundDto.PassRound
-    is Round.Regular -> toDto()
-    is Round.Treble -> toDto()
-    is Round.Abandonce -> toDto()
-    is Round.Misere -> toDto()
-    is Round.OpenMisere -> toDto()
-    is Round.SoloSlim -> toDto()
-}
+fun Round.toDto(): RoundDto =
+    when (this) {
+        is Round.PassRound -> RoundDto.PassRound
+        is Round.Regular -> toDto()
+        is Round.Treble -> toDto()
+        is Round.Abandonce -> toDto()
+        is Round.Misere -> toDto()
+        is Round.OpenMisere -> toDto()
+        is Round.SoloSlim -> toDto()
+    }
 
-private fun Round.Regular.toDto() = RoundDto.Regular(
-    players = playerIds,
-    slams = slams,
-)
+private fun Round.Regular.toDto() =
+    RoundDto.Regular(
+        players = playerIds,
+        slams = slams,
+    )
 
-private fun Round.Abandonce.toDto() = RoundDto.Abandonce(
-    playerId = playerId,
-    playerWon = playerWon,
-)
+private fun Round.Abandonce.toDto() =
+    RoundDto.Abandonce(
+        playerId = playerId,
+        playerWon = playerWon,
+    )
 
-private fun Round.Misere.toDto() = RoundDto.Misere(
-    playerId = playerId,
-    playerWon = playerWon,
-)
+private fun Round.Misere.toDto() =
+    RoundDto.Misere(
+        playerId = playerId,
+        playerWon = playerWon,
+    )
 
-private fun Round.OpenMisere.toDto() = RoundDto.OpenMisere(
-    playerId = playerId,
-    playerWon = playerWon,
-)
+private fun Round.OpenMisere.toDto() =
+    RoundDto.OpenMisere(
+        playerId = playerId,
+        playerWon = playerWon,
+    )
 
-private fun Round.SoloSlim.toDto() = RoundDto.SoloSlim(
-    playerId = playerId,
-    playerWon = playerWon,
-)
+private fun Round.SoloSlim.toDto() =
+    RoundDto.SoloSlim(
+        playerId = playerId,
+        playerWon = playerWon,
+    )
 
-private fun Round.Treble.toDto() = RoundDto.Treble(
-    playerIds = playerIds,
-    slams = slams,
-)
-
+private fun Round.Treble.toDto() =
+    RoundDto.Treble(
+        playerIds = playerIds,
+        slams = slams,
+    )

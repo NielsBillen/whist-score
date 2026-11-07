@@ -19,7 +19,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalTestApi::class)
 class TableTest : FreeSpec() {
-
     private val rows: ImmutableList<String> = persistentListOf("alpha", "beta", "gamma")
 
     init {

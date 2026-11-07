@@ -40,20 +40,24 @@ fun ConfirmDialog(
             dismissText = dismissText,
             onConfirm = onConfirm,
             onDismiss = onDismiss,
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
 
 @Composable
-private fun Scrim(onDismiss: () -> Unit, content: @Composable BoxScope.() -> Unit) {
+private fun Scrim(
+    onDismiss: () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
+) {
     Box(
         contentAlignment = Alignment.Center,
         content = content,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.3f))
-            .pointerInput(Unit) { detectTapGestures { onDismiss() } },
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.3f))
+                .pointerInput(Unit) { detectTapGestures { onDismiss() } },
     )
 }
 
@@ -68,20 +72,19 @@ private fun DialogContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .widthIn(max = 320.dp)
-            .wrapContentSize()
-            .background(
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                shape = Style.Shapes.mediumRoundedCornerShape
-            )
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
-                shape = Style.Shapes.mediumRoundedCornerShape
-            )
-            .clip(Style.Shapes.mediumRoundedCornerShape)
-            .padding(Style.Dimensions.paddingLarge),
+        modifier =
+            modifier
+                .widthIn(max = 320.dp)
+                .wrapContentSize()
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    shape = Style.Shapes.mediumRoundedCornerShape,
+                ).border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = Style.Shapes.mediumRoundedCornerShape,
+                ).clip(Style.Shapes.mediumRoundedCornerShape)
+                .padding(Style.Dimensions.paddingLarge),
         verticalArrangement = Arrangement.spacedBy(Style.Dimensions.paddingMedium),
     ) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
@@ -93,7 +96,7 @@ private fun DialogContent(
             dismissText = dismissText,
             onConfirm = onConfirm,
             onDismiss = onDismiss,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -108,18 +111,18 @@ private fun ButtonRow(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.End,
     ) {
         TextButton(
             variant = ButtonVariant.Ghost,
             onClick = onDismiss,
-            text = dismissText
+            text = dismissText,
         )
 
         TextButton(
             variant = ButtonVariant.Destructive,
             onClick = onConfirm,
-            text = confirmText
+            text = confirmText,
         )
     }
 }

@@ -1,8 +1,8 @@
 package be.niels.billen.whistscore.feature.core
 
 import androidx.compose.runtime.Immutable
-import kotlin.math.abs
 import kotlinx.collections.immutable.PersistentSet
+import kotlin.math.abs
 
 @Immutable
 sealed interface Round {
@@ -12,7 +12,6 @@ sealed interface Round {
 
     @Immutable
     data object PassRound : Round {
-
         override fun points(playerId: PlayerId) = 0
 
         override fun won(playerId: PlayerId) = false
@@ -23,10 +22,11 @@ sealed interface Round {
         val playerIds: PersistentSet<PlayerId>
         val playersWon: Boolean
 
-        override fun won(playerId: PlayerId) = when (playersWon) {
-            true -> playerId in playerIds
-            else -> playerId !in playerIds
-        }
+        override fun won(playerId: PlayerId) =
+            when (playersWon) {
+                true -> playerId in playerIds
+                else -> playerId !in playerIds
+            }
 
         override fun points(playerId: PlayerId) =
             when (playerId in playerIds) {
@@ -46,13 +46,13 @@ sealed interface Round {
         val playerWon: Boolean
         val penaltyPoints: Int
 
-        override fun won(playerId: PlayerId) =
-            if (playerWon) this.playerId == playerId else this.playerId != playerId
+        override fun won(playerId: PlayerId) = if (playerWon) this.playerId == playerId else this.playerId != playerId
 
-        override fun points(playerId: PlayerId) = when (this.playerId == playerId) {
-            true -> if (playerWon) 3 * penaltyPoints else -penaltyPoints * 3
-            false -> if (playerWon) -penaltyPoints else penaltyPoints
-        }
+        override fun points(playerId: PlayerId) =
+            when (this.playerId == playerId) {
+                true -> if (playerWon) 3 * penaltyPoints else -penaltyPoints * 3
+                false -> if (playerWon) -penaltyPoints else penaltyPoints
+            }
     }
 
     @Immutable
@@ -60,7 +60,6 @@ sealed interface Round {
         override val playerIds: PersistentSet<PlayerId>,
         val slams: Int = 0,
     ) : MultiPlayerRound {
-
         val requiredSlams = if (playerIds.size == 1) 5 else 8
         override val playersWon = slams >= requiredSlams
 
@@ -68,7 +67,6 @@ sealed interface Round {
             require(playerIds.size in 1..2) { "the number of players must be between 1 and 2" }
             require(slams in 0..13) { "the number of slams must be between 0 and 13 " }
         }
-
 
         override val basePoints: Int
             get() = 2 + abs(slams - requiredSlams)
@@ -86,8 +84,7 @@ sealed interface Round {
     data class Misere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
-    ) :
-        SinglePlayerRound {
+    ) : SinglePlayerRound {
         override val penaltyPoints = 5
     }
 
@@ -95,8 +92,7 @@ sealed interface Round {
     data class OpenMisere(
         override val playerId: PlayerId,
         override val playerWon: Boolean = true,
-    ) :
-        SinglePlayerRound {
+    ) : SinglePlayerRound {
         override val penaltyPoints = 10
     }
 

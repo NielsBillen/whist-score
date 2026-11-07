@@ -24,23 +24,22 @@ fun SelectableCard(
 ) {
     val shape = Style.Shapes.mediumRoundedCornerShape
     Box(
-        modifier = modifier
-            .background(
-                color = if (selected) MaterialTheme.colorScheme.surfaceBright else MaterialTheme.colorScheme.surface,
-                shape = shape,
-            )
-            .border(
-                width = 1.dp,
-                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-                shape = shape,
-            )
-            .semantics { this.role = role }
-            .clickable(
-                enabled = enabled,
-                onClick = onClick,
-                indication = null,
-                interactionSource = null
-            ),
+        modifier =
+            modifier
+                .background(
+                    color = if (selected) MaterialTheme.colorScheme.surfaceBright else MaterialTheme.colorScheme.surface,
+                    shape = shape,
+                ).border(
+                    width = 1.dp,
+                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+                    shape = shape,
+                ).semantics { this.role = role }
+                .clickable(
+                    enabled = enabled,
+                    onClick = onClick,
+                    indication = null,
+                    interactionSource = null,
+                ),
         content = content,
     )
 }

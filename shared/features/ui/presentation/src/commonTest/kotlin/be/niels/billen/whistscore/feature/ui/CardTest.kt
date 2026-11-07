@@ -10,7 +10,6 @@ import io.kotest.core.spec.style.FreeSpec
 
 @OptIn(ExperimentalTestApi::class)
 class CardTest : FreeSpec() {
-
     init {
         "renders its content" {
             runSkikoComposeUiTest {

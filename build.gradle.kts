@@ -1,58 +1,9 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
 plugins {
-    // this is necessary to avoid the plugins to be loaded multiple times
-    // in each subproject's classloader
-    alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.androidMultiplatformLibrary) apply false
-    alias(libs.plugins.composeMultiplatform) apply false
-    alias(libs.plugins.composeCompiler) apply false
-    alias(libs.plugins.kotlinJvm) apply false
-    alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.kover)
-    alias(libs.plugins.detekt)
-}
-
-// Treat every Kotlin compiler warning as an error in all modules.
-subprojects {
-    plugins.withId("org.jetbrains.kotlin.multiplatform") {
-        extensions.configure<KotlinMultiplatformExtension> {
-            compilerOptions {
-                allWarningsAsErrors = true
-            }
-        }
-    }
-    plugins.withId("org.jetbrains.kotlin.jvm") {
-        extensions.configure<KotlinJvmProjectExtension> {
-            compilerOptions {
-                allWarningsAsErrors = true
-            }
-        }
-    }
-}
-
-dependencies {
-    kover(projects.shared.features.core.domain)
-    kover(projects.shared.features.game.domain)
-    kover(projects.shared.features.addround.presentation)
-    kover(projects.shared.features.app.presentation)
-    detektPlugins(libs.composeRules)
-}
-
-kover {
-    reports {
-        filters {
-            excludes {
-                // *Kt = file-facade classes (top-level declarations, e.g. composables).
-                classes("*Kt")
-            }
-        }
-    }
+    id("kmp-root")
 }
 
 
-detekt {
-    buildUponDefaultConfig = true
-    allRules = true
-}
+//dependencies {
+//    detektPlugins(libs.composeRules)
+//}
+

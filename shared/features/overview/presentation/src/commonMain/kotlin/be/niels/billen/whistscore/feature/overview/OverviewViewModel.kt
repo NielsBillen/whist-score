@@ -8,11 +8,15 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class OverviewViewModel(gameRepository: GameRepository) : ViewModel() {
-    val canStartNewGame = gameRepository.game.map(Game::hasRounds)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = false
-        )
+class OverviewViewModel(
+    gameRepository: GameRepository,
+) : ViewModel() {
+    val canStartNewGame =
+        gameRepository.game
+            .map(Game::hasRounds)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = false,
+            )
 }

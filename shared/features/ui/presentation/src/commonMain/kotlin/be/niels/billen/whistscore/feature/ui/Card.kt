@@ -17,9 +17,10 @@ fun Card(
     val shape = Style.Shapes.mediumRoundedCornerShape
 
     Box(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface, shape)
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape),
-        content = content
+        modifier =
+            modifier
+                .background(MaterialTheme.colorScheme.surface, shape)
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape),
+        content = content,
     )
 }
